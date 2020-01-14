@@ -1,0 +1,32 @@
+<!-- Esse cabeçalho abaixo do DOCTYPE é obrigatório, afim de evitar futuros erros. -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!-- Abaixo esses xmlns, são semelhantes aos taglibs das paginas JSP. Elas são obrigatórias para o uso de prefixos do Java Server Faces. -->
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core">
+<head>
+
+<!-- O campo meta abaixo diferente do orignal é importante para a visualização desta página. -->
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<title>Digite o seu texto.</title>
+</head>
+<body>
+
+<!-- O prefixo f abaixo, do <f:view>, refere-se ao (xmlns:f="http://java.sun.com/jsf/core") -->
+<f:view>
+
+<!-- O prefixo h abaixo do <h:form>, refere-se aos componentes, e ao: (xmlns:h="http://java.sun.com/jsf/html") -->
+<h:form id="form">
+<table align="center"><tr>
+<td>Digite o seu texto: </td>
+<td><h:inputText id="texto" value="#{beans.text}"/></td>
+<td><h:commandButton id="enviar" value="Enviar"/></td>
+</tr></table>
+</h:form>
+<hr/> <br />
+
+<!-- Repare no campo value="#{beans.text}". O Beans faz menção ao valor name, encontrada na anotação @ManagedBean, o ".text" refere-se a variável privada text.  -->
+<center><h1><h:outputText value="#{beans.text}"/></h1></center>
+</f:view>
+</body>
+</html>

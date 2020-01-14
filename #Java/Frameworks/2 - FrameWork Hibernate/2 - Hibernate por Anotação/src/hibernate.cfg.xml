@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+ <hibernate-configuration>
+  <session-factory>
+  <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+   <property name="hibernate.connection.password">123456</property>
+    <property name="hibernate.connection.url">jdbc:mysql://localhost/rel</property>
+     <property name="hibernate.connection.username">root</property> 
+     <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+      <property name="hibernate.show_sql">true</property>
+       <property name="hbm2ddl.auto">update</property> <!-- Com esse campo, o hibernate cria uma tabela automaticamente, altamente recomendável deixar-lo. Existe duas opções create(ao qual o hibernate apaga e cria uma nova tabela, a cada vez que os dados são persistidos e o update que cria a tabela, e uma criada, apenas periste os dados. -->
+        <mapping class="pkg.all.Classe" />
+  </session-factory>
+   </hibernate-configuration>
+

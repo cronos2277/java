@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?> <!-- Codificação do xml. -->
+
+<!-- Abaixo todo o cabeçalho da persistencia. As configurações começam dentro do
+	persistence-unit, que são as unidades de persistencia, cada unidade de persis-
+	tência equivale a uma entidade. O número para entidades de persistencias são,
+	ilimitados. Em relação ao cabeçãolho, de um CTRL+C mais CTRL+V e já era.
+-->
+ 
+<persistence version="1.0"
+xmlns="http://java.sun.com/xml/ns/persistence"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="http://java.sun.com/xml/ns/persistence
+http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd">
+<!-- persistence-unit name="String", bom veja bem o nome que você vai colocar ai, pois o EntityManagerFactory, vai usar esse valor como parâmetro. Do mais é o nome da entidade. -->
+<!-- persistence-unit transaction-type="RESOURCE_LOCAL ou JTA", RESOURCE_LOCAL, significa que é um arquivo da biblioteca do projeto, no caso de JTA já é fornecido pelo conteiner EJB. No caso de JTA, deve especificar o provider que é o provedor e o jta-data-source. -->
+
+<!-- O primeiro persistence-unit está configurado para o linux. -->
+<persistence-unit name="MySql_Linux" transaction-type="RESOURCE_LOCAL">
+<class>pkg.entidade.MainEntity</class> <!-- Local do arquivo .java, contendo a entidade. -->
+<properties>
+<property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" /> <!-- O Driver a ser carregado no caso o Mysql-connectior-java-5.1.34-bin.jar -->
+<property name="javax.persistence.jdbc.url" value="jdbc:mysql://127.0.0.1:3306/java_ee" /><!-- quando for rodar no linux, deve especificar a porta após o ip. Ou seja IP:PortaTCP -->
+<property name="javax.persistence.jdbc.user" value="root" /> <!-- Usuário, no caso o root -->
+<property name="javax.persistence.jdbc.password" value="123456" /><!-- Senha, altere se a senha do seu SGBD, for diferente. -->
+</properties>
+</persistence-unit>
+
+<!-- Agora o Windows. -->
+<persistence-unit name="MySql_Windows" transaction-type="RESOURCE_LOCAL">
+<class>pkg.entidade.MainEntity</class>
+<properties>
+<property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
+<property name="javax.persistence.jdbc.url" value="jdbc:mysql://127.0.0.1/java_ee" /><!-- No Windows, não se especifica a porta TCP. -->
+<property name="javax.persistence.jdbc.user" value="root" />
+<property name="javax.persistence.jdbc.password" value="123456" />
+</properties>
+</persistence-unit>
+</persistence>

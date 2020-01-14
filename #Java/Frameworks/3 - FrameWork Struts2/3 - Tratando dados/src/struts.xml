@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+	<constant name="struts.enable.DynamicMethodInvocation" value="false" />
+	<constant name="struts.devMode" value="false" />	
+	<package name="default" extends="struts-default">	
+		<default-action-ref name="index"/>
+		<action name="index">
+			<result>index.jsp</result>
+		</action>		
+		<action name="form" class="pkg.Form">
+			<result>/WEB-INF/pages/form.jsp</result>
+			
+		</action>
+		<action name="print" class="pkg.Form" method="check">			
+			<result name="success">/WEB-INF/pages/print.jsp</result>
+			<result name="error">/WEB-INF/pages/error.jsp</result>			
+		</action>
+		
+	</package>
+</struts>
+<!-- 
+Os dois outros métodos do action, já foram explicados. Agora o campo method, nele você pode adicionar
+um método na classe, informado no class para se os dados sejam devidamente tratados. O result neste 
+caso, ele se refere ao retorno do método. No caso da classe check ela retorna o conteúdo da constante
+SUCCESS ou ERROR, e quando acontece ambos o retorno o mesmo é tratado no result. Quando por exemplo é 
+retornado a constante  ERROR, o seu valor é "error". Quando o retorno do método check for error, o
+mesmo executa o comando com o result name="error".
+
+
+ -->

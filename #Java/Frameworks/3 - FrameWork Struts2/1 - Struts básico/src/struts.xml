@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+<constant name="struts.enable.DynamicMethodInvocation" value="false" />
+<constant name="struts.devMode" value="false" /> 
+<package name="default" extends="struts-default"> <!-- Pacote padrão, de um ctrl + c e ctrl + v, que é o melhor a fazer -->
+    
+    <default-action-ref name="main"/> <!-- Aqui define a ação padrão, ou seja quando não existir determinada action, o que ele faz? -->
+    
+    <action name="main"> <!-- Explicado no arquivo "main.jsp", na pasta ~/WEB-INF/pages -->
+    <result>/WEB-INF/pages/main.jsp</result>
+    </action>
+    
+    <action name="mensagem" class="pkg.struts.Actions"> <!-- Explicado no arquivo "actions.jsp", na pasta ~/WEB-INF/pages -->
+    <result>/WEB-INF/pages/actions.jsp</result>
+    </action>
+</package>
+</struts>
+<!-- 
+Necessita de uma modificação no arquivo web.xml para funcionar. As seguintes bibliotecas são requeridas:
+commons-fileupload-1.3.1.jar
+commons-lang3-3.2.jar
+commons-logging-1.1.3.jar
+freemarker-2.3.19.jar
+javassist-3.11.0.GA.jar
+ognl-3.0.6.jar
+struts2-core-2.3.20.jar
+xwork-core-2.3.20.jar
+ -->

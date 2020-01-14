@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+<constant name="struts.enable.DynamicMethodInvocation" value="false" />
+<constant name="struts.devMode" value="false" /> 
+<!-- 
+	No caso do Constrant abaixo, repare que no campo valor não tem o underline _en, ou _pt ou _es.
+	No caso o language, ele escolhe o arquivo de idioma de acordo com o browser do cliente. Se o
+	browser estiver no padrão brasileiro será escolhido o _pt. Ou seja será incluído o _pt, no
+	nome do arquivo properties a ser chamado.	
+ -->
+<constant name="struts.custom.i18n.resources" value="language" />
+<package name="default" extends="struts-default"> 
+    <default-action-ref name="main"/>    
+    <action name="main"> 
+    <result>index.jsp</result>
+    </action>    
+    <action name="form" class="pkg.StrutsClass">
+    <result>/WEB-INF/pages/form.jsp</result>
+    </action>      
+    <action name="persist" class="pkg.StrutsClass" method="cadastrar">
+    <result name="success">WEB-INF/pages/success.jsp</result>
+    <result name="error">WEB-INF/pages/error.jsp</result>
+    </action> 
+    <action name="enter" class="pkg.StrutsClass" method="enter">
+    <result name="success">WEB-INF/pages/logged.jsp</result>
+    <result name="error">WEB-INF/pages/error.jsp</result>
+    </action>
+    <action name="delete" class="pkg.StrutsClass" method="drop">
+    <result name="success">index.jsp</result>
+    <result name="error">WEB-INF/pages/error.jsp</result>    
+    </action>
+    <action name="editar" class="pkg.StrutsClass" method="localizar">
+    	<result name="success">WEB-INF/pages/edit.jsp</result>
+    	<result name="error">WEB-INF/pages/error.jsp</result>
+    </action>
+    <action name="edt" class="pkg.StrutsClass" method="modify">
+    <result name="success">index.jsp</result>
+    <result name="error">WEB-INF/pages/error.jsp</result>
+    </action>
+</package>
+</struts>

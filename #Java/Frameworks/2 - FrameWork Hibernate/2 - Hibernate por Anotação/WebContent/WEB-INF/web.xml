@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd" id="WebApp_ID" version="3.1">
+  <display-name>Hibernate</display-name>
+  <welcome-file-list>
+    <welcome-file>index.jsp</welcome-file>
+  </welcome-file-list>
+  <servlet>
+    <servlet-name>index</servlet-name>
+    <jsp-file>/Index.jsp</jsp-file>
+  </servlet>
+  <servlet>
+    <servlet-name>novo</servlet-name>
+    <servlet-class>pkg.servlet.Novo</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>excluir</servlet-name>
+    <servlet-class>pkg.servlet.Excluir</servlet-class>
+  </servlet>
+  <servlet>
+  <servlet-name>editar</servlet-name>
+  <servlet-class>pkg.servlet.Editar</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>excluir</servlet-name>
+    <url-pattern>/del/*</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>index</servlet-name>
+    <url-pattern>/home.jsp</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>novo</servlet-name>
+    <url-pattern>/new/*</url-pattern>
+  </servlet-mapping>
+   <servlet-mapping>
+    <servlet-name>editar</servlet-name>
+    <url-pattern>/edt/*</url-pattern>
+  </servlet-mapping>
+  
+</web-app>

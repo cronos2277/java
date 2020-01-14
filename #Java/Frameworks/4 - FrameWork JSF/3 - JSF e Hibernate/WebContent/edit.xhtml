@@ -1,0 +1,78 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" 
+xmlns:h="http://java.sun.com/jsf/html" 
+xmlns:f="http://java.sun.com/jsf/core">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<title>Novo Usuário</title>
+</head>
+
+
+<body>
+<h4 align="right">
+<!-- Com relação a esta tag, ela tem a mesma função que o <a href value="esse aqui corresponde a parte outcome">aqui a parte value da tag abaixo. -->
+<h:link value="Voltar a página Inicial" outcome="index.jsp"/></h4>
+<h2 align="center"> Adicionar um Novo usuário.</h2>
+<f:view>
+<table>
+<tr>
+<td>Usuário ID:</td>
+<td><h:outputText value="#{bean.this_id}"/></td>
+</tr>
+</table> 
+<h:form>
+<table>
+<tr>
+<td>Informe um novo nome: </td>
+<td><h:inputText value="#{bean.this_name}" required="true"/>
+	</td>
+</tr>
+<tr>
+<td>Informe a idade: </td>
+<td>
+<h:inputText value="#{bean.this_age}" required="true"/></td>
+</tr>
+<tr>
+<td>Informe a data de nascimento: </td>
+<!-- 
+	O <f:convertDateTime pattern="formato de data. dd, corresponde a day, mm a mouth, e yyyy a year. 
+	Você pode mudar a formatação, alterando essa sequencia. O padrão no JSF é uma string, por isso se faz
+	necessário a conversão para o formto de Data."/>
+-->
+<td><h:inputText value="#{bean.this_born}" required="true">
+<f:convertDateTime pattern="dd/MM/yyyy"/></h:inputText></td>
+</tr>
+<tr>
+<td>Informe o nome da cidade: </td>
+<td><h:inputText value="#{bean.this_city}" required="true"/></td>
+</tr>
+<tr>
+<td>Informe o endereço: </td>
+<td><h:inputText value="#{bean.this_address}" required="true"/></td>
+</tr>
+<tr>
+<td>Informe um número de telefone: </td>
+<td><h:inputText value="#{bean.this_phone}" required="true"/></td>
+</tr>
+<tr>
+<td>Informe a sua função: </td>
+<td><h:inputText value="#{bean.this_function}" required="true"/></td>
+</tr>
+<tr>
+<td>Informe o seu salário: </td>
+<td><h:inputText value="#{bean.this_salary}" required="true"/></td>
+</tr>
+<tr>
+<td><h:commandButton name="edit" action="#{bean.userEdit}" value= "Para atualizar um usuário cadastrado, clique aqui."/></td>
+</tr>
+</table>
+</h:form>
+</f:view>
+
+<br />
+<h:outputFormat value="#{bean.info}"/>
+</body>
+<h:outputText value = "#{bean.this_status}"/>
+</html>

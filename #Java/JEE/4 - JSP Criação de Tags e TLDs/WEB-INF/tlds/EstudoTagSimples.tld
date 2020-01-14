@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<taglib version="2.0" xmlns="http://java.sun.com/xml/ns/j2ee [3]" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee 
+web-jsptaglibrary_2_0.xsd"> 
+  
+<tlib-version>1.0</tlib-version> <!-- Aqui é a versão da tag criada -->
+   <short-name>tsimple</short-name> <!-- Prefixo padrão, apenas uma sugestão o autor pode usar outro -->
+   <uri>TagSimples</uri> <!-- URI que identifica o prefixo (O autor da página tem que usar exatamente esta uri). -->
+
+   <tag> 
+      <name>tsimple</name> <!-- define o nome curto que poderá ser usado para disparar o código no método doTag() da tag; -->
+      <tag-class>pkg.tag.simple.JavaCustomSimpleTag</tag-class> <!-- Local aonde está a classe. -->
+      <body-content>empty</body-content> <!-- Aqui informa que a tag, empty não tem corpo -->
+   </tag> 
+</taglib>

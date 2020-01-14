@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
+  version="2.0" xmlns="http://java.sun.com/xml/ns/persistence">
+  
+  <!-- Acima as o cabeçalho do xml, como versão e esse tipo de coisa. -->
+ <!-- A coisa começa aqui, no campo name abaixo o mesmo será definido como parametro
+ 	 String quando for criar um EntityManagerFactory. O valor RESOURCE_LOCAL significa que o resource é local. -->
+ 	 <persistence-unit name="Cliente" transaction-type="RESOURCE_LOCAL">
+   
+   <class>pkg.persistence.Cliente</class><!-- Aqui é informado o pacote, ponto a classe da entidade.  -->
+    <properties>
+      <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" /><!-- O driver a ser carregado, no caso o MySql -->
+      <property name="javax.persistence.jdbc.url" value="jdbc:mysql://127.0.0.1:3306/java_ee" /> <!-- jdbc:mysql://IP do banco de dados, dois pontos a porta, caso seja linux, windows nem coloque. Então o banco de dados.-->
+      <property name="javax.persistence.jdbc.user" value="root" /><!-- Usuário. -->
+      <property name="javax.persistence.jdbc.password" value="123456" /><!-- Senha. -->
+    </properties>
+  </persistence-unit>
+</persistence>
+<!-- * Observação: este arquivo deve obrigatóriamente se chamar Persistence.xml,
+		 e o mesmo deve ficar dentro da pasta META-INF dentro da pasta src. -->

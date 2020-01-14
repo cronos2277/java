@@ -1,0 +1,54 @@
+package br.com.treinaweb.javaee;
+import java.sql.*;
+import java.util.HashMap;
+public class ClasseMysql {
+public static String Status = ""; 
+public static HashMap<String,String> BancoD = new HashMap<String,String>();
+public Connection Conexao (Connection Con){
+	try{
+	 Class.forName("com.mysql.jdbc.Driver").newInstance();
+	 String url = "jdbc:mysql://127.0.0.1/java_ee?user=root&password=123456";
+	Con = DriverManager.getConnection(url);	
+	}catch(Exception e){Status = "Erro na conex�o com o banco de dados!";}
+	return Con;
+}
+
+public Statement Conexao (Connection con, Statement st){
+	con = this.Conexao(con);
+	try{
+	st = con.createStatement();
+	Status = "Conectado ao banco de dados com sucesso.";
+	}catch(Exception e){Status = "Erro na cria��o do Statement!";}
+	return st;
+}
+
+public boolean Consulta (String login, String password){ //Use esse m�todo quando for consultar no Mysql.
+	boolean status = false;
+	try{
+	Connection Con = null;Statement St = null;
+	Con = this.Conexao(Con); 
+	St = (this.Conexao(Con, St));
+	ResultSet rs = St.executeQuery("select * from usuarios");
+	while(rs.next()){
+	BancoD.put(rs.getString("login"), rs.getString("senha"));}
+	if(BancoD.get(login).equals(password)){status = true;}else{Status = "Senha incorreta!";}
+	return status;
+	}catch(Exception e){Status = "Usu�rio inexistente!";return status;}
+	
+}
+
+
+public boolean Cadastro(String nome, String login, String senha){
+	boolean c;
+	try{
+	Connection Con = null;
+	Statement St = null;
+	Con = this.Conexao(Con);
+	St = this.Conexao(Con, St);
+	String sql = "insert into usuarios (nome, login, senha) values('"+nome+"','"+login+"', '"+senha+"');";
+	St.execute(sql);
+	return c = true;
+	}catch(Exception e){Status= "Erro ao criar o cadastro!";return c = false;}
+}
+
+}//Fim da Classe.

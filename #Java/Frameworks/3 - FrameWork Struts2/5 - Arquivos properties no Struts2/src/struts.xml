@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+<constant name="struts.enable.DynamicMethodInvocation" value="false" />
+<constant name="struts.devMode" value="false" />
+
+<!-- observe que uma Constant é especificada com o nome struts.custom.i18n.resources.
+	 Essa constante especifica o arquivo resource bundle que nós criamos nos passos acima.
+	  Nós apenas precisamos especificar o nome do arquivo resource bundle,
+	  sem a extensão (ApplicationResources sem o .properties).   --> 
+	  
+<constant name="struts.custom.i18n.resources" value="propriedades" />
+<package name="default" extends="struts-default"> 
+<action name="main" class="pkg.acao">
+<result>/WEB-INF/page/resultado.jsp</result>
+</action>     
+    
+</package>
+</struts>

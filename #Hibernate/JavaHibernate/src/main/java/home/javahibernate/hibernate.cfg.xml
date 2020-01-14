@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE alias PUBLIC '-//SPRING//DTD BEAN 2.0//EN' 'null'>
+<hibernate-configuration>
+    <session-factory>
+        <!-- Aqui carrega o driver do hibernate -->
+        <property name="hibernate.connection.driver.class">
+            org.postgresql.Driver
+        </property>
+        <!-- 
+            Aqui é informado o nome do banco usando o driver JDBC, ou seja
+            jdbc:seuBancoDeDados://SEUHOST/SEUBANCODEDADOS
+        -->
+        <property name="hibernate.connection.url">
+            jdbc:postgresql://localhost/Hibernate
+        </property>
+        <!-- Username no banco de dados. -->
+        <property name="hibernate.connection.username">
+            postgres
+        </property>
+        <!-- Password no banco de dados. -->
+        <property name="hibernate.connection.password">
+            123456
+        </property>
+        <!-- É o dialeto do Banco de dados, cada banco de dados tem um. -->
+        <property name="hibernate.connection.dialect">
+            org.hibernate.dialect.postgreSQLDialect
+        </property>
+    </session-factory>
+</hibernate-configuration>
+

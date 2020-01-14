@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+    xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+    id="WebApp_ID" version="3.1">
+    <display-name>ProjetoWeb</display-name>
+    <servlet>
+        <servlet-name>Jersey REST Service</servlet-name><!-- O nome do servlet, o mesmo não pode repetir. -->
+        <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class> <!-- O driver é o mesmo para todo mundo, de um ctrl+c e ctrl+v e já era. -->
+        <init-param>
+            <param-name>jersey.config.server.provider.packages</param-name> <!-- Aqui carrega os pacotes do java webservice RS Jersey -->
+            <param-value>pkg.classes</param-value> <!-- O Pacote contendo as classes de recurso.-->
+            </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Jersey REST Service</servlet-name>
+        <url-pattern>/usr/*</url-pattern> <!-- Aqui o caminho até chegar ao webservice, por exemplo "localhost:8080/nome do seu projeto dinamico"/usr/(ou qualquer coisa definido aqui)."/+o conteudo do @path do seu webservice." -->
+    </servlet-mapping>
+    <welcome-file-list>
+        <welcome-file>index.jsp</welcome-file>
+        </welcome-file-list>
+</web-app>
+<!-- Caso de dúvidas sobre o caminho do diretório dá uma olhada no valor do href,
+	 na página index.jsp desse mesmo projeto. -->

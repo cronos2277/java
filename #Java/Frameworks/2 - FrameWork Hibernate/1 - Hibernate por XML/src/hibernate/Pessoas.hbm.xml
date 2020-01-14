@@ -1,0 +1,48 @@
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+  <class name="hibernate.Pessoas" table="pessoas">
+    <id name="id" column="codigo" type="int">
+      <generator class="native"/>
+    </id>
+    <!-- 
+    Em <hibernate-mapping> fica as configurações da entidade Pessoas.
+   no <class> temos o 
+   	
+   	name="que é informado o local e o nome da classe que será a entidade".
+   	 
+   	table= "equivale a tabela no SGBD, que será relacionada com a entidade. Identico ao @Table
+    Falaremos agora da tag
+     
+    <id> Aqui faleremos sobre a tag id.
+    name="é o nome do atibuto na entidade".
+    type="o tipo de dado que é esse atributo".
+    <generator class="native"> Bom este aqui equivale ao GenerationValue(strategy = GenerationType.AUTO)
+    no caso é como que é gerado a chave primária.
+    </id>  
+    -->  
+    
+    <property name="nome" type="java.lang.String"> <!-- Nome da variável na entidade, e o seu tipo -->
+    <column name="nome"/> <!-- A qual atributo no SGBD, corresponde a variável acima. -->
+    </property>
+    
+    <property name="login" type="java.lang.String">
+    <column name="login"/>
+    </property>
+    
+    <property name="senha" type="java.lang.String">
+    <column name="senha"/>
+    </property>
+    
+    <property name="registrado" type="java.lang.String"> <!-- Aqui temos algo interessante -->
+    <column name="desde"/>
+    <!-- 
+    Analise que aqui diferente dos campos acima, o valor name="String" do property está diferente do name="String" do colunm 
+    No caso o atributo registrado da entidade Pessoa, como é o caso corresponde ao atributo desde no Banco de Dados.
+    Quando o property name="String" é igual, ao colunm name="String", o colunm pode ser omitido,mas quando diferente, deve ser declarado.
+     -->
+    </property>
+    
+  </class>
+</hibernate-mapping>

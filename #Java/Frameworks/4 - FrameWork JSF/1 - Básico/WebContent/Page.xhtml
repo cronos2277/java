@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:jsftag="http://java.sun.com/jsf/html">
+<!-- 
+Repare na tag html. Tem um atributo chamado xmlns, este é equivalente aos uri das taglibs no jsp.
+quando tem o xmlns:jsftag, significa que o que vem depois dos dois ponto seria o equivalente prefix
+da taglib. Repare que todos os componentes dessa página tem um campo semelhante ao html, mas ele é
+chamado por um prefixo, em outras palavras, este corresponde aos componentes do JavaServerFace.
+ -->
+<jsftag:head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+
+<title>Inicio</title>
+</jsftag:head>
+<jsftag:body>
+<jsftag:inputTextarea value="Digite o seu texto"/>
+<jsftag:commandButton value="Clique Aqui!"/>
+</jsftag:body>
+</html>
+
+<!-- 
+Esse é o primeiro projeto em JSF. Ao ser executado este projeto nada será mostrado, a não
+ser que na url quando executado a aplicação, coloque entre o nome deste projeto na url e o nome
+do arquivo o seguinte "/faces/". Por padrão é executado apenas "localhost:8080/NomedoProjeto/nomedoarquivo.xhtml",
+quando ocorre isto, o navegador tenta abaixar o arquivo. mas se na url for colocado o seguinte.
+"localhost:8080/NomedoProjeto/faces/nomedoarquivo.xhtml, ai será exibido algo na tela. Por padrão é assim, mas isso
+pode ser alterado. Analise o arquivo "index.jsp" e entenda na prática.-->

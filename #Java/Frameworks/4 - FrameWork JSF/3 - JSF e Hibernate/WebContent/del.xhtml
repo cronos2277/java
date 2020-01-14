@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" 
+xmlns:h="http://java.sun.com/jsf/html" 
+xmlns:f="http://java.sun.com/jsf/core"
+>
+<!-- 
+	Cuidado quando for criar um formulário. <form> é diferente de <h:form>, 
+o segundo cria muito obstaculos. A tag <f:view> é obrigatório para que seja exibido 
+na tela os métodos correspondente. Esta página se conecta a um servlet.
+ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<title>Página de Exclusão.</title>
+</head>
+<body>
+<h4 align="right"><h:link value="Voltar a página Inicial" outcome="index.jsp"/></h4>
+<h2 align="center"> Você Deseja excluir o seguinte usuário? </h2>
+<f:view>
+<center>
+<table>
+<tr>
+<td><h3>Nome:<h:outputText value="#{param['nomerem']}" />, ID: <h:outputText value="#{param['idrem']}"/></h3>
+</td>
+</tr>
+</table>
+</center>
+<center>
+<form action="action.del" method="post">
+<table>
+<tr>
+<td>
+<input type="hidden" value="#{param['idrem']}" name="idrem"/>
+<input type="submit" value="Prosseguir com o processo de Exclusão" name="sbm"/>
+</td>
+</tr>
+</table>
+</form>
+</center>
+</f:view>
+
+<br />
+<h:outputFormat value="#{bean.info}"/>
+</body>
+<h:outputText value = "#{bean.this_status}"/>
+</html>

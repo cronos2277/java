@@ -1,0 +1,18 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Página de Erro.</title>
+</head>
+<body>
+ <!-- Aqui no caso o Java Server Faces direciona em caso de erro. -->
+<f:view>
+<h2>
+Ocorreu o seguinte erro: <h:outputText id="result" value="#{bean.info}"/><br />
+<h:outputText id="rest" value="#{Hibernate.Status}"/>
+</h2><br />
+<h:link value="Voltar a página Inicial" outcome="index.jsp"/>
+</f:view>
+</body>
+</html>
