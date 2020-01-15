@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE alias PUBLIC '-//SPRING//DTD BEAN 2.0//EN' 'null'>
+
+<hibernate-mapping>
+    <class name="hibernate.java.Aluno" tables="alunos">
+         <!-- name é a variavel da classe mapeada, colunm é a correspondente no BD -->
+        <id name="alu_codigo" colunm="alu_codigo" type="integer">        
+            <!-- Estratégia de criação de ID via incremento. -->
+            <generatior class="increment"/>
+        </id>
+        <property name="alu_nome" colunm="alu_nome" type="String"/>
+        <property name="alu_cidade" colunm="alu_cidade" type="String"/>
+        <property name="alu_fone" colunm="alu_fone" type="String"/>
+    </class>
+</hibernate-mapping>

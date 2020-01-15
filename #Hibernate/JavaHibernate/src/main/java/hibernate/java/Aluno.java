@@ -1,21 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package home.javahibernate;
+package hibernate.java;
 
-/**
- *
- * @author crono
- */
-public class Aluno {
-
+public class Aluno {   
     private int alu_codigo;
     private String alu_nome;
     private String alu_cidade;
-    private String alu_fone;
-    private String alu_curso;
+    private String alu_fone;    
     public Aluno(){
         
     }    
@@ -49,15 +38,7 @@ public class Aluno {
 
     public void setAlu_fone(String alu_fone) {
         this.alu_fone = alu_fone;
-    }
-
-    public String getAlu_curso() {
-        return alu_curso;
-    }
-
-    public void setAlu_curso(String alu_curso) {
-        this.alu_curso = alu_curso;
-    }
+    }  
     
     
 }
