@@ -3,7 +3,7 @@
 <hibernate-configuration>
     <session-factory>
         <!-- Aqui carrega o driver do hibernate -->
-        <property name="hibernate.connection.driver.class">
+        <property name="hibernate.connection.driver_class">
             org.postgresql.Driver
         </property>
         <!-- 

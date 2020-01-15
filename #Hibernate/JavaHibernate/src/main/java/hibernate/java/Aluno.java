@@ -7,13 +7,20 @@ public class Aluno {
     private String alu_fone;    
     public Aluno(){
         
-    }    
+    } 
+    
+    
+    public Aluno(String alu_nome, String alu_cidade, String alu_fone){        
+        this.alu_nome = alu_nome;
+        this.alu_cidade = alu_cidade;
+        this.alu_fone = alu_fone;
+    }
     public int getAlu_codigo() {
         return alu_codigo;
     }
 
     public void setAlu_codigo(int alu_codigo) {
-        this.alu_codigo = alu_codigo;
+        this.alu_codigo = alu_codigo;        
     }
 
     public String getAlu_nome() {
