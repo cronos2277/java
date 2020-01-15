@@ -25,6 +25,8 @@
         <property name="hibernate.connection.dialect">
             org.hibernate.dialect.postgreSQLDialect
         </property>
+        <!-- Mapeamento de classes -->
+        <mapping resource="aluno.hbm.xml" />
     </session-factory>
 </hibernate-configuration>
 
