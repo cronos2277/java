@@ -1,4 +1,4 @@
-package hibernate.java;
+
 
 public class Aluno {   
     private int alu_codigo;

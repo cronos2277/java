@@ -1,4 +1,3 @@
-package hibernate.java;
 import javax.swing.JOptionPane;
 import org.hibernate.*;
 import org.hibernate.cfg.Configuration;

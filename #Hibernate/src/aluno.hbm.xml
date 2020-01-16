@@ -2,7 +2,7 @@
 <!DOCTYPE alias PUBLIC '-//SPRING//DTD BEAN 2.0//EN' 'null'>
 
 <hibernate-mapping>
-    <class name="hibernate.java.Aluno" tables="alunos">
+    <class name="Aluno" tables="alunos">
          <!-- name é a variavel da classe mapeada, colunm é a correspondente no BD -->
         <id name="alu_codigo" colunm="alu_codigo" type="integer">        
             <!-- Estratégia de criação de ID via incremento. -->
