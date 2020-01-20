@@ -42,6 +42,8 @@
         <property name="hibernate.connection.dialect">
             org.hibernate.dialect.postgreSQLDialect
         </property>
+        <!-- Exibir as queries do sql no console? -->
+        <property name="show_sql">true</property>
         <!-- Mapeamento de classes -->
         <mapping resource="aluno.hbm.xml" />
     </session-factory>
