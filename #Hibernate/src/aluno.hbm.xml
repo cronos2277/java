@@ -4,9 +4,11 @@
     "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
     <class name="Aluno" table="alunos">         
-        <id name="alu_codigo"/>                    
-        <property name="alu_nome" />
-        <property name="alu_cidade"/>
-        <property name="alu_fone"/>
+        <id name="alu_codigo" column="alu_codigo">
+            <generator class="increment"/>
+        </id>                    
+        <property name="alu_nome" column="alu_nome" />
+        <property name="alu_cidade" column="alu_cidade"/>
+        <property name="alu_fone" column="alu_fone"/>
     </class>
 </hibernate-mapping>
