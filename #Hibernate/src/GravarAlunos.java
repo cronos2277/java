@@ -1,7 +1,7 @@
 import javax.swing.JOptionPane;
 import org.hibernate.*;
 import org.hibernate.cfg.Configuration;
-public class GravaAluno {
+public class GravarAlunos {
 	//Hibernate: insert into alunos (alu_nome, alu_cidade, alu_fone, alu_codigo) values (?, ?, ?, ?)
     public static void main(String args[]){
         try{
