@@ -16,7 +16,7 @@ public class GravaAluno {
             transaction.commit();
             session.close();
         }catch(Exception erro){
-            JOptionPane.showMessageDialog(null, "Erro na inserção: "+erro.toString());
+            JOptionPane.showMessageDialog(null, "Erro na gravcacao: "+erro.toString());
             System.out.println(erro.toString());
         }
     }

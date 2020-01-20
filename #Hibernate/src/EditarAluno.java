@@ -1,7 +1,7 @@
 import javax.swing.JOptionPane;
 import org.hibernate.*;
 import org.hibernate.cfg.Configuration;
-public class editarAluno {
+public class EditarAluno {
 	//Hibernate: update alunos set alu_nome=?, alu_cidade=?, alu_fone=? where alu_codigo=?
     public static void main(String args[]){
         try{
@@ -18,7 +18,7 @@ public class editarAluno {
             transaction.commit();
             session.close();
         }catch(Exception erro){
-            JOptionPane.showMessageDialog(null, "Erro na inserção: "+erro.toString());
+            JOptionPane.showMessageDialog(null, "Erro na edicao: "+erro.toString());
             System.out.println(erro.toString());
         }
     }
