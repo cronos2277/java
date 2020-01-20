@@ -30,6 +30,8 @@
         </property>
         <!-- Exibir as queries do sql no console? -->
         <property name="hibernate.show_sql">true</property>
+        <!-- Qual é o numero máximo de conexões?-->
+        <property name="hibernate.pool_size">10</property>
         <!-- Mapeamento de classes -->
         <mapping resource="aluno.hbm.xml" />
     </session-factory>
