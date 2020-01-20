@@ -1,16 +1,12 @@
-<!DOCTYPE hibernate-mapping PUBLIC
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE hibernate-mapping PUBLIC 
     "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
-    "http://www.hibernate.org/dtd/hibernate-mapping">
-
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-    <class name="Aluno" table="alunos">
-         <!-- name é a variavel da classe mapeada, colunm é a correspondente no BD -->
-        <id name="alu_codigo" colunm="alu_codigo" type="integer">        
-            <!-- Estratégia de criação de ID via incremento. -->
-            <generatior class="increment"/>
-        </id>
-        <property name="alu_nome" colunm="alu_nome" type="java.lang.String"/>
-        <property name="alu_cidade" colunm="alu_cidade" type="java.lang.String"/>
-        <property name="alu_fone" colunm="alu_fone" type="java.lang.String"/>
+    <class name="Aluno" table="alunos">         
+        <id name="alu_codigo"/>                    
+        <property name="alu_nome" />
+        <property name="alu_cidade"/>
+        <property name="alu_fone"/>
     </class>
 </hibernate-mapping>
