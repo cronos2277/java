@@ -8,3 +8,4 @@ podem ter centenas de megabytes.
 <p>Esse projeto foi feito usando a IDE eclipse, você pode importar o diretório inteiro, que deve funcionar sem problemas.</p>
 <p>Caso esteja com problemas, veja o readme.md da pasta src, ou se ainda estiver aqui no github, apenas abra a pasta e leia
 como contonar alguns erros.</p>
+<p>o arquivo '<b>hibernate.sql</b>' é um backup do banco de dados usado nesse projeto.</p>
