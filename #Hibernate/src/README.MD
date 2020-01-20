@@ -14,6 +14,6 @@
     esse é a pasta padrão para esse arquivo, algumas IDEs podem por exemplo não colocar esse arquivo
     no local certo.</p>
     <p> Tambem temos os erros do tipo "<b>Error accessing stax stream</b>", para contonar esse erro,
-    verifique se o banco de dados foi inicializado. Aqui no caso eu resolvi esse erro abrindo e conectando
-    no cliente do PostGres<p>
+    verifique se o banco de dados foi inicializado, ou se o seu hibernate.cfg.xml esta bem formatado, ou se não tem
+    comentários nos lugares errados. Propriedades mal configuradas ou comentários costuma a dar esse erro. <p>
     Esses são os dois detalhes que mais pegam na configuração do Hibernate.

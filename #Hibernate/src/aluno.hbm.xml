@@ -1,9 +1,3 @@
-<!-- 
-    PRESTE TOOTAL ATENÇÃO NO DOCTYPE, ISSO É VALIDADO POR UM DTD, 
-    VERIFIQUE SE O MESMO AINDA EXISTE E ESTA ONLINE SE POSSIVEL.
-    ALEM DISSO NÃO OMITA A TAG XML ABAIXO TAMBÉM, POIS É ASSIM QUE
-    É IDENTIFICADO.
--->
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE hibernate-mapping PUBLIC 
     "-//Hibernate/Hibernate Mapping DTD 3.0//EN"

@@ -1,23 +1,9 @@
-<!-- 
-    PRESTE TOOTAL ATENÇÃO NO DOCTYPE, ISSO É VALIDADO POR UM DTD, 
-    VERIFIQUE SE O MESMO AINDA EXISTE E ESTA ONLINE SE POSSIVEL.
-    ALEM DISSO NÃO OMITA A TAG XML ABAIXO TAMBÉM, POIS É ASSIM QUE
-    É IDENTIFICADO.
--->
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-configuration PUBLIC
 	"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
 	"http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
 <!-- O hibernate-configuration, seria o root do XML. -->
 <hibernate-configuration>
-<!-- 
-    O factory lida com a parte de conexão com o banco de dados,
-    preste a atenção no padrão de nomenclatura, que seria:
-    hibernate.connection.<o atributo> esse seria o name de 
-    cada property.
-    Os valores de cada property vão como valores dentro das tags, 
-    seguindo a risca a estrutura dos XML.
--->
     <session-factory>
         <!-- Aqui carrega o driver do hibernate -->
         <property name="hibernate.connection.driver_class">
@@ -43,7 +29,7 @@
             org.hibernate.dialect.postgreSQLDialect
         </property>
         <!-- Exibir as queries do sql no console? -->
-        <property name="show_sql">true</property>
+        <property name="hibernate.show_sql">true</property>
         <!-- Mapeamento de classes -->
         <mapping resource="aluno.hbm.xml" />
     </session-factory>
