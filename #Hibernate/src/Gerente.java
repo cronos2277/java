@@ -1,3 +1,33 @@
+/*
+ * ATRIBUTOS
+ * String consulta => é a query que será executado no hibernate, se o nome da tabela no Banco de dados não bater, mude aqui.
+ * SessionFactory factory => A factory para toda a instancia.
+ * Session session; => A sessão para toda as instancias.
+ * List<Aluno> alunos; => Aqui aonde fica armazenado todos os registros pego do banco de dados.
+ * 
+ * MÉTODOS
+ * Construtor => ele abre a primeira fabrica de sessão e depois inicializa o Array de alunos vazio, ambos para evitar Java.Lang.NullPointerExeption.
+ * sessionFactory() => Abre a sessão fabrica.
+ * getSession() => Abre uma sessão, reabrindo a sessão fabrica se estiver fechado.
+ * closeSession() => fecha a sessão e a sessão fabrica.
+ * getAlunos(boolean) ou getAlunos() => se tiver um booleano verdadeiro ou a lista de alunos vazia acessa o banco de dados
+ e pega todos os registros atualizados. Padrão sem parametro, é falso.
+ 
+ * getAluno(int id) => pega o aluno da lista com base no id forçando a atualização se vazia, caso o segundo parametro seja true, força a atualização da lista. Padrão falso.
+ * toString() => retorna a quantidade de registros se o Objeto for tratado como uma String.
+ * formatError(Exception exception) => metodo que lida com os erros, exibindo-os no console e no JOptionPane também.
+ * fillAlunos() => Função usada pelo getAlunos() para preencher um array de Alunos.
+ * 
+ * */
+
+
+/*
+ * Criar um metodo para abrir transação, usuando o metodo getSession().
+ * Criar um metodo para comitar transação usando a sessão do getSession().
+ * criar um metodo para fechar a transação.
+ * Criar CRUD.
+ * */
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,8 +40,8 @@ public class Gerente {
 	private SessionFactory factory;
 	private Session session;
 	private List<Aluno> alunos;
-	public Gerente() {
-		sessionFactory();
+	public Gerente() {		
+		this.sessionFactory();
 		this.alunos = new ArrayList<Aluno>();
 	}
 	
@@ -44,13 +74,8 @@ public class Gerente {
 			System.err.println("Lançado na função closeSession");
 			formatError(e);
 		}
-	}
+	}	
 	
-	/* 	
-	  Aqui retorna a lista de alunos, se a lista de alunos estiver vazia, ou se o booleano
-		isUpdate estiver verdadeiro, ele acessa o banco e pega os dados atualizados, do contrario
-		é pego da lista salva, isso evita um excesso de requisição ao banco de dados. 
-	*/
 	public List<Aluno> getAlunos(boolean isUpdate){
 		try {
 			if(this.alunos.isEmpty() || isUpdate) {
@@ -100,7 +125,7 @@ public class Gerente {
 		JOptionPane.showMessageDialog(null, exception);
 	}
 	
-	public void fillAlunos() {
+	private void fillAlunos() {
 		this.getSession();
 		this.alunos = session.createQuery(consulta).list();
 		this.closeSession();
