@@ -15,6 +15,7 @@
  e pega todos os registros atualizados. Padrão sem parametro, é falso.
  
  * getAluno(int id) => pega o aluno da lista com base no id forçando a atualização se vazia, caso o segundo parametro seja true, força a atualização da lista. Padrão falso.
+ * alunoForId(id) => Faz uma busca e retorna o registro que tem esse ID.
  * toString() => retorna a quantidade de registros se o Objeto for tratado como uma String.
  * formatError(Exception exception) => metodo que lida com os erros, exibindo-os no console e no JOptionPane também.
  * fillAlunos() => Função usada pelo getAlunos() para preencher um array de Alunos.
@@ -41,7 +42,7 @@ import org.hibernate.*;
 import org.hibernate.cfg.Configuration;
 public class Gerente {
 	//Essa constante contem a String que o session.createQuery vai executar
-	private final String consulta = "from Aluno";
+	private final String consulta = "from Aluno order by alu_codigo";
 	private SessionFactory factory;
 	private Session session;
 	private Transaction transaction;
@@ -122,6 +123,29 @@ public class Gerente {
 		}
 	}
 	
+	public void updateTransaction(Aluno aluno) {
+		try {
+			this.transactionManager(true);
+			this.session.update(aluno);
+			this.transactionManager(false);	
+			this.getAlunos(true);
+		}catch(Exception e) {			
+			System.err.println("Lançado na função saveTransaction");
+			formatError(e);
+		}
+	}
+	
+	public void deleteTransaction(Aluno aluno) {
+		try {
+			this.transactionManager(true);
+			this.session.delete(aluno);
+			this.transactionManager(false);	
+			this.getAlunos(true);
+		}catch(Exception e) {			
+			System.err.println("Lançado na função saveTransaction");
+			formatError(e);
+		}
+	}
 	
 	public List<Aluno> getAlunos(boolean isUpdate){
 		try {
@@ -149,18 +173,31 @@ public class Gerente {
 	}
 	
 	
-	public Aluno getAluno(int id) {
-		return this.alunos.get(id);
+	public Aluno getAluno(int id) {		
+		return alunoForId(id);
 	}
 	
 	public Aluno getAluno(int id, boolean forceUpdate) {		
 		if(forceUpdate) {
-			this.getAlunos(forceUpdate);
-			return this.alunos.get(id);
-		}else {
-			return this.alunos.get(id);
-		}
+			this.getAlunos(forceUpdate);			
+		}		
+		return alunoForId(id);
 	}
+	
+	private Aluno alunoForId(int id) {
+		try {
+			for(Aluno aluno: this.alunos) {
+				if(aluno.getAlu_codigo() == id) {				
+					return aluno;
+				}
+			}
+				return null;	
+		}catch(Exception e) {
+			System.err.println("Lançado na função alunoFor");
+			formatError(e);
+			return null;
+		}
+	}	
 	
 	@Override
 	public String toString() {
@@ -172,6 +209,7 @@ public class Gerente {
 		JOptionPane.showMessageDialog(null, exception);
 	}
 	
+	@SuppressWarnings("unchecked")
 	private void fillAlunos() {
 		this.getSession();
 		this.alunos = session.createQuery(consulta).list();

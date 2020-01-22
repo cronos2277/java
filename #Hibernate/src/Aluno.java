@@ -46,7 +46,7 @@ public class Aluno {
     @Override
     public String toString() {
     	
-    	return "Codigo: "+this.alu_codigo+", Nome: "+this.alu_nome;
+    	return "[Codigo: "+this.alu_codigo+", Nome: "+this.alu_nome+"]";
     }
 
     public void setAlu_fone(String alu_fone) {
