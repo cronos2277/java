@@ -9,7 +9,7 @@ public class ListarAlunos2 {
     public static void main(String args[]){
         Gerente gerente = new Gerente();
         System.out.println(gerente);
-        gerente.getAlunos(true);
+        gerente.getAlunos();
         System.out.println(gerente);
     }
 }

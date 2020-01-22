@@ -54,19 +54,28 @@ public class Gerente {
 	public List<Aluno> getAlunos(boolean isUpdate){
 		try {
 			if(this.alunos.isEmpty() || isUpdate) {
-				this.getSession();
-				this.alunos = session.createQuery(consulta).list();
-				this.closeSession();
-				return this.alunos;
-			}else {
-				return this.alunos;
+				this.fillAlunos();				
 			}
+			return this.alunos;			
 		}catch(Exception e) {
 			System.err.println("Lançado na função getAlunos");
 			formatError(e);
 			return null;
 		}
 	}
+	public List<Aluno> getAlunos(){
+		try {
+			if(this.alunos.isEmpty()) {
+				this.fillAlunos();
+			}			
+			return this.alunos;			
+		}catch(Exception e) {
+			System.err.println("Lançado na função getAlunos");
+			formatError(e);
+			return null;
+		}
+	}
+	
 	
 	public Aluno getAluno(int id) {
 		return this.alunos.get(id);
@@ -89,6 +98,12 @@ public class Gerente {
 	private void formatError(Exception exception) {
 		System.out.println(exception);
 		JOptionPane.showMessageDialog(null, exception);
+	}
+	
+	public void fillAlunos() {
+		this.getSession();
+		this.alunos = session.createQuery(consulta).list();
+		this.closeSession();
 	}
 	
 }
