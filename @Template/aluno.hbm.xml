@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Aqui é mapping diferente do hibernate.cfg.xml, que configuration -->
+<hibernate-mapping>
+    <!-- 
+        aqui configura classe, o name é o nome da classe ".java" 
+    e o table é o nome da tabela no banco de dados. Java é case sensetive.
+    -->
+    <class name="Aluno" table="alunos">   
+        <!-- A tag do id é diferente mesmo, mas aqui no exemplo tem o campo igual aos outros. -->      
+        <id name="alu_codigo" column="alu_codigo">
+        <!-- Aqui é a estratégia para criação de ID, no caso aqui funciona por incremento. -->
+        <!-- Consulte o seu banco de dados e informe no campo class de generator a estratégia que quer. -->
+            <generator class="increment"/>
+        </id>
+        <!-- Aqui é a propriedade de cada coluna da tabela, sendo name o nome do atributo do arquivo .java informado no class="name" -->                    
+        <!-- Colunm é o campo referente ao banco de dados, no caso nesse campo você informa a qual coluna ele referencia no banco de dados. -->
+        <property name="alu_nome" column="alu_nome" />
+        <property name="alu_cidade" column="alu_cidade"/>
+        <property name="alu_fone" column="alu_fone"/>
+    </class>
+</hibernate-mapping>

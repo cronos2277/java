@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+	"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+	"http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<!-- O hibernate-configuration, seria o root do XML. -->
+<hibernate-configuration>
+    <session-factory>
+        <!-- Aqui carrega o driver do hibernate -->
+        <property name="hibernate.connection.driver_class">
+            org.postgresql.Driver
+        </property>
+        <!-- 
+            Aqui é informado o nome do banco usando o driver JDBC, ou seja
+            jdbc:seuBancoDeDados://SEUHOST/SEUBANCODEDADOS
+        -->
+        <property name="hibernate.connection.url">
+            jdbc:postgresql://localhost/Hibernate
+        </property>
+        <!-- Username no banco de dados. -->
+        <property name="hibernate.connection.username">
+            postgres
+        </property>
+        <!-- Password no banco de dados. -->
+        <property name="hibernate.connection.password">
+            123456
+        </property>
+        <!-- É o dialeto do Banco de dados, cada banco de dados tem um. -->
+        <property name="hibernate.connection.dialect">
+            org.hibernate.dialect.postgreSQLDialect
+        </property>
+        <!-- Exibir as queries do sql no console? -->
+        <property name="hibernate.show_sql">true</property>
+        <!-- Qual é o numero máximo de conexões?-->
+        <property name="hibernate.pool_size">10</property>
+        <!-- Mapeamento de classes -->
+        <mapping resource="aluno.hbm.xml" />
+    </session-factory>
+</hibernate-configuration>
