@@ -19,8 +19,7 @@
  * toString() => retorna a quantidade de registros se o Objeto for tratado como uma String.
  * formatError(Exception exception) => metodo que lida com os erros, exibindo-os no console e no JOptionPane também.
  * fillAlunos() => Função usada pelo getAlunos() para preencher um array de Alunos.
- * transactionManager(boolean openOrClose) => Se verdadeiro abre uma transação, se falso fecha a transação. Todas as transações devem ter esse metodo
- começando em verdadeiro e depois ao final da execução encerrada executando-a como falso, isso deve servir para editar, salver e excluir.
+ * transactionManager(operacao,objeto aluno) => Executa a exclusão, edição ou adição de cadastro.
  * saveTransaction(Aluno aluno) => Salvará um novo registro no banco de dados. 
  * */
 
@@ -90,19 +89,21 @@ public class Gerente {
 	//transactionManager(false);
 	//this.getAlunos(true); para forçar carregamento.
 	//Exclua a classe EditarAluno e ExcluirAluno depois de pronto.
-	private void transactionManager(boolean openOrClose) {
-		try {
-			if(openOrClose) {
-				if(!this.session.isOpen()) {
-					this.getSession();			
-				}
-				this.transaction = this.session.beginTransaction();
-			}else {
-				this.transaction.commit();
-				if(this.session.isOpen()) {				
-					this.closeSession();			
-				}			
+	private void transactionManager(int operation, Aluno aluno) {
+		try {			
+			if(!this.session.isOpen()) {
+				this.getSession();			
 			}
+			this.transaction = this.session.beginTransaction();
+			switch(operation) {
+				case 1: {this.session.save(aluno);break;}
+				case 2: {this.session.update(aluno);break;}
+				case 3: {this.session.delete(aluno);break;}
+			}
+			this.transaction.commit();								
+			this.closeSession();			
+							
+			
 		}catch(Exception e) {
 			this.transaction.rollback();
 			this.closeSession();
@@ -112,39 +113,15 @@ public class Gerente {
 	}
 	
 	public void saveTransaction(Aluno aluno) {
-		try {
-			this.transactionManager(true);
-			this.session.save(aluno);
-			this.transactionManager(false);	
-			this.getAlunos(true);
-		}catch(Exception e) {			
-			System.err.println("Lançado na função saveTransaction");
-			formatError(e);
-		}
+		this.transactionManager(1, aluno);
 	}
 	
 	public void updateTransaction(Aluno aluno) {
-		try {
-			this.transactionManager(true);
-			this.session.update(aluno);
-			this.transactionManager(false);	
-			this.getAlunos(true);
-		}catch(Exception e) {			
-			System.err.println("Lançado na função saveTransaction");
-			formatError(e);
-		}
+		this.transactionManager(2, aluno);
 	}
 	
 	public void deleteTransaction(Aluno aluno) {
-		try {
-			this.transactionManager(true);
-			this.session.delete(aluno);
-			this.transactionManager(false);	
-			this.getAlunos(true);
-		}catch(Exception e) {			
-			System.err.println("Lançado na função saveTransaction");
-			formatError(e);
-		}
+		this.transactionManager(3, aluno);
 	}
 	
 	public List<Aluno> getAlunos(boolean isUpdate){

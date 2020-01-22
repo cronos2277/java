@@ -9,21 +9,26 @@ public class TesteGerente {
     public static void main(String args[]){
         Gerente gerente = new Gerente();        
        List<Aluno> alunos = gerente.getAlunos();
-        //System.out.println(gerente);
+        System.out.println(alunos);
         
         //Habilite se quiser testar salvamento.
         /* Aluno aluno = new Aluno("Luana","Pato Branco", "44545454545454545");
         gerente.saveTransaction(aluno);  
         System.out.println(gerente); */
+     
+        //Habilite para editar
+        /* 	Aluno aluno = gerente.getAluno(1);
+        	aluno.setAlu_nome("Neiri Natzke");
+        	gerente.updateTransaction(aluno);
+       		System.out.println(aluno);
+        * */
+       
+        /*
+        	Aluno aluno = gerente.getAluno(2);
+        	gerente.deleteTransaction(aluno);
+        	System.out.println(aluno);
+        */
         
-        for(Aluno l: alunos) {
-        	//System.out.println(l);
-        }
-        
-        Aluno aluno = gerente.getAluno(11,false);
-       //System.out.println(aluno);
-        //gerente.deleteTransaction(aluno);
-        //System.out.println(aluno);
-        System.out.println(aluno);
+        System.out.println(alunos);
     }
 }
