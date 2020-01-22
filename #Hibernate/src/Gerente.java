@@ -4,6 +4,7 @@
  * SessionFactory factory => A factory para toda a instancia.
  * Session session; => A sessão para toda as instancias.
  * List<Aluno> alunos; => Aqui aonde fica armazenado todos os registros pego do banco de dados.
+ * Transaction transaction => aqui é aonde fica salvo toda a Transação.
  * 
  * MÉTODOS
  * Construtor => ele abre a primeira fabrica de sessão e depois inicializa o Array de alunos vazio, ambos para evitar Java.Lang.NullPointerExeption.
@@ -17,14 +18,18 @@
  * toString() => retorna a quantidade de registros se o Objeto for tratado como uma String.
  * formatError(Exception exception) => metodo que lida com os erros, exibindo-os no console e no JOptionPane também.
  * fillAlunos() => Função usada pelo getAlunos() para preencher um array de Alunos.
- * 
+ * transactionManager(boolean openOrClose) => Se verdadeiro abre uma transação, se falso fecha a transação. Todas as transações devem ter esse metodo
+ começando em verdadeiro e depois ao final da execução encerrada executando-a como falso, isso deve servir para editar, salver e excluir.
+ * saveTransaction(Aluno aluno) => Salvará um novo registro no banco de dados. 
  * */
 
 
-/*
- * Criar um metodo para abrir transação, usuando o metodo getSession().
- * Criar um metodo para comitar transação usando a sessão do getSession().
- * criar um metodo para fechar a transação.
+/* Tarefas.
+ * setar saveTransaction para privado e criar um metodo para tratar dados.
+ * setar removeTransaction para privado e criar um metodo para tratar dados.
+ * setar editTransaction para privado e criar um metodo para tratar dados.
+ * criar removeTransaction aos mesmos moldes do save.
+ * criar editTransaction aos mesmos moldes do save.
  * Criar CRUD.
  * */
 
@@ -39,6 +44,7 @@ public class Gerente {
 	private final String consulta = "from Aluno";
 	private SessionFactory factory;
 	private Session session;
+	private Transaction transaction;
 	private List<Aluno> alunos;
 	public Gerente() {		
 		this.sessionFactory();
@@ -74,7 +80,48 @@ public class Gerente {
 			System.err.println("Lançado na função closeSession");
 			formatError(e);
 		}
-	}	
+	}
+	
+	//Open Abre a conexão, false comita e fecha.
+	//Nos metodos de exclusão e edição, coloque
+	//transactionManager(true);
+	//this.session.<metodo para editar ou remover>()
+	//transactionManager(false);
+	//this.getAlunos(true); para forçar carregamento.
+	//Exclua a classe EditarAluno e ExcluirAluno depois de pronto.
+	private void transactionManager(boolean openOrClose) {
+		try {
+			if(openOrClose) {
+				if(!this.session.isOpen()) {
+					this.getSession();			
+				}
+				this.transaction = this.session.beginTransaction();
+			}else {
+				this.transaction.commit();
+				if(this.session.isOpen()) {				
+					this.closeSession();			
+				}			
+			}
+		}catch(Exception e) {
+			this.transaction.rollback();
+			this.closeSession();
+			System.err.println("Lançado na função transactionManager");
+			formatError(e);
+		}
+	}
+	
+	public void saveTransaction(Aluno aluno) {
+		try {
+			this.transactionManager(true);
+			this.session.save(aluno);
+			this.transactionManager(false);	
+			this.getAlunos(true);
+		}catch(Exception e) {			
+			System.err.println("Lançado na função saveTransaction");
+			formatError(e);
+		}
+	}
+	
 	
 	public List<Aluno> getAlunos(boolean isUpdate){
 		try {
