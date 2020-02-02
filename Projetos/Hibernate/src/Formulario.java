@@ -23,7 +23,7 @@ public abstract class Formulario extends javax.swing.JFrame{
 	    
 	protected void initComponents() {
 		this.gerente = new Gerente();
-        this.acao = new Acao(this.gerente);      
+        this.acao = new Acao(this.gerente,this);      
     	this.jLabel1 = new javax.swing.JLabel();
     	this.jLabel2 = new javax.swing.JLabel();
     	this.jLabel3 = new javax.swing.JLabel();
@@ -42,9 +42,10 @@ public abstract class Formulario extends javax.swing.JFrame{
         
     	}  
 	
+	//Classe que configura a tabela.
 		protected void setjTable() {
 			this.jTable2 = new javax.swing.JTable();
-			this.jTable2.addMouseListener(this.acao.getMouseListener());
+			this.jTable2.addMouseListener(this.acao.getMouseListener());			
 		}
 	
 	
@@ -65,6 +66,7 @@ public abstract class Formulario extends javax.swing.JFrame{
 		  if(jlabels.length == nomes.length) {
 			  for(int i=0;i<nomes.length;i++) {
 				  jlabels[i].setText(nomes[i]);
+				  jlabels[i].addActionListener(this.acao.getEventListener());
 			  }
 		  }else {
 			  System.out.println("Parametros incorretos para a funcao setButtons");
