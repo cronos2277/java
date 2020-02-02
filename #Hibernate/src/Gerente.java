@@ -21,6 +21,7 @@
  * fillAlunos() => Função usada pelo getAlunos() para preencher um array de Alunos.
  * transactionManager(operacao,objeto aluno) => Executa a exclusão, edição ou adição de cadastro.
  * saveTransaction(Aluno aluno) => Salvará um novo registro no banco de dados. 
+ *
  * */
 
 
@@ -80,15 +81,8 @@ public class Gerente {
 			System.err.println("Lançado na função closeSession");
 			formatError(e);
 		}
-	}
+	}	
 	
-	//Open Abre a conexão, false comita e fecha.
-	//Nos metodos de exclusão e edição, coloque
-	//transactionManager(true);
-	//this.session.<metodo para editar ou remover>()
-	//transactionManager(false);
-	//this.getAlunos(true); para forçar carregamento.
-	//Exclua a classe EditarAluno e ExcluirAluno depois de pronto.
 	private void transactionManager(int operation, Aluno aluno) {
 		try {			
 			if(!this.session.isOpen()) {

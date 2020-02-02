@@ -1,4 +1,3 @@
-
 public class Formulario extends javax.swing.JFrame {
     public Formulario() {
         initComponents();
@@ -64,11 +63,7 @@ public class Formulario extends javax.swing.JFrame {
         jButton4.setText("Excluir");
          
         javax.swing.table.DefaultTableModel defaultTable = new javax.swing.table.DefaultTableModel( new Object [][] {
-        	{null, null, null, null},
-            {null, null, null, null},
-            {null, null, null, null},               
-            {null, null, null, null}
-           	
+        	
         },
         new String [] {
             "Codigo", "Nome", "Cidade", "Telefone"
@@ -96,8 +91,12 @@ public class Formulario extends javax.swing.JFrame {
         }
     };
        
+    for(Aluno aluno: this.gerente.getAlunos()) {    	
+    	Object[] obj = {Integer.toString(aluno.getAlu_codigo()),aluno.getAlu_nome(),aluno.getAlu_cidade(),aluno.getAlu_fone()};		
+    	defaultTable.addRow(obj);
+    }
+   
     jTable2.setModel(defaultTable);
-        
         jScrollPane2.setViewportView(jTable2);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
