@@ -1,12 +1,14 @@
-
-
+import javax.swing.JOptionPane;
 public class Aluno {   
     private int alu_codigo;
     private String alu_nome;
     private String alu_cidade;
     private String alu_fone;    
     public Aluno(){
-        
+        this.alu_codigo = 1;
+        this.alu_nome = "";
+        this.alu_cidade = "";
+        this.alu_fone = "";
     } 
     
     
@@ -53,5 +55,30 @@ public class Aluno {
         this.alu_fone = alu_fone;
     }  
     
+    public Object[] getAllValues() {
+    	 Object [] obj = {Integer.toString(this.alu_codigo),this.alu_nome,this.alu_cidade,this.alu_fone};
+    	 return obj;
+    }
+    
+    public boolean isRight() {
+    	if(this.alu_codigo < 0) {
+    		System.out.println("Codigo vazio.");
+    		return false;
+    	}
+    	if(this.alu_nome.isEmpty()) {
+    		System.out.println("Nome não pode ficar em branco");
+    		JOptionPane.showMessageDialog(null,"Nome não pode ficar em branco");
+    		return false;
+    	}
+    	if(this.alu_cidade.isEmpty()) {
+    		System.out.println("Cidade não pode ficar em branco");
+    		JOptionPane.showMessageDialog(null,"Cidade não pode ficar em branco");
+    		return false;
+    	}
+    	
+    	return true;
+    }
+    
+   
     
 }

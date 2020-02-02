@@ -40,7 +40,7 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import org.hibernate.*;
 import org.hibernate.cfg.Configuration;
-public class Gerente {
+public class Gerente {	
 	//Essa constante contem a String que o session.createQuery vai executar
 	private final String consulta = "from Aluno order by alu_codigo";
 	private SessionFactory factory;

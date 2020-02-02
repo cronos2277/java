@@ -2,7 +2,7 @@ public class Formulario extends javax.swing.JFrame {
     public Formulario() {
         initComponents();
     }  
-    @SuppressWarnings("unchecked")                      
+    @SuppressWarnings({ "unchecked", "deprecation" })                      
     private void initComponents() {
     	setTitle("Formulario");   
         jLabel1 = new javax.swing.JLabel();
@@ -31,23 +31,24 @@ public class Formulario extends javax.swing.JFrame {
 
         jLabel4.setText("Telefone");
 
-        jTextField1.setText("cod");
+        jTextField1.setText("");
+        jTextField1.disable();
         jTextField1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextField1ActionPerformed(evt);
             }
         });
 
-        jTextField2.setText("jTextField2");
+        jTextField2.setText("");
         jTextField2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextField2ActionPerformed(evt);
             }
         });
 
-        jTextField3.setText("jTextField3");
+        jTextField3.setText("");
 
-        jTextField4.setText("jTextField4");
+        jTextField4.setText("");
 
         jButton1.setText("Novo");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -91,9 +92,8 @@ public class Formulario extends javax.swing.JFrame {
         }
     };
        
-    for(Aluno aluno: this.gerente.getAlunos()) {    	
-    	Object[] obj = {Integer.toString(aluno.getAlu_codigo()),aluno.getAlu_nome(),aluno.getAlu_cidade(),aluno.getAlu_fone()};		
-    	defaultTable.addRow(obj);
+    for(Aluno aluno: this.gerente.getAlunos()) { 	
+    	defaultTable.addRow(aluno.getAllValues());
     }
    
     jTable2.setModel(defaultTable);
