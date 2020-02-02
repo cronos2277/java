@@ -20,7 +20,7 @@ public class Formulario extends javax.swing.JFrame {
         jButton4 = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable2 = new javax.swing.JTable();      
-        
+        this.gerente = new Gerente();
        
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -62,33 +62,42 @@ public class Formulario extends javax.swing.JFrame {
         jButton3.setText("Salvar");
 
         jButton4.setText("Excluir");
+         
+        javax.swing.table.DefaultTableModel defaultTable = new javax.swing.table.DefaultTableModel( new Object [][] {
+        	{null, null, null, null},
+            {null, null, null, null},
+            {null, null, null, null},               
+            {null, null, null, null}
+           	
+        },
+        new String [] {
+            "Codigo", "Nome", "Cidade", "Telefone"
+        }
+    ) {
+        /**
+		 * 
+		 */
+    	
+    	
+		private static final long serialVersionUID = 1L;
+		Class[] types = new Class [] {
+            java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+        };
+        boolean[] canEdit = new boolean [] {
+            false, true, true, true
+        };
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Codigo", "Nome", "Cidade", "Telefone"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
-            };
-            boolean[] canEdit = new boolean [] {
-                false, true, true, true
-            };
+        public Class getColumnClass(int columnIndex) {
+            return types [columnIndex];
+        }
 
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
+        public boolean isCellEditable(int rowIndex, int columnIndex) {
+            return canEdit [columnIndex];
+        }
+    };
+       
+    jTable2.setModel(defaultTable);
+        
         jScrollPane2.setViewportView(jTable2);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -210,5 +219,5 @@ public class Formulario extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField4;
-                       
+    private Gerente gerente;                   
 }
