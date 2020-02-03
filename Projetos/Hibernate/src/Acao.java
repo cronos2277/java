@@ -1,5 +1,6 @@
 import java.awt.event.ActionEvent;
 
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 public class Acao {
@@ -8,6 +9,13 @@ public class Acao {
 	public Acao(Gerente gerente, Formulario formulario) {
 		this.gerente = gerente;
 		this.formulario = formulario;		
+	}
+	
+	//Atualiza a tela quando ocorre uma opeacao de crud.
+	protected void atualizarTela() {
+		this.formulario.gerente.getAlunos(true);
+		this.formulario.show(false);
+		Inicio.main(new String[]{});
 	}
 	
 	//preenche uma tabela com as informacoes do banco de dados.
@@ -26,6 +34,34 @@ public class Acao {
 		  return new Events();
 	  }
 	  
+	  //pega todos os campos do input e transforma em aluno
+	  protected Aluno toAlunoUpdatingOrCreating(boolean isUpdating) {
+		  Aluno aluno = new Aluno();
+		  aluno.setAlu_nome(this.formulario.jTextField2.getText());
+		  aluno.setAlu_cidade(this.formulario.jTextField3.getText());
+		  aluno.setAlu_fone(this.formulario.jTextField4.getText());
+		  if(isUpdating) {
+			  int id = Integer.parseInt(this.formulario.jTextField1.getText());
+			  aluno.setAlu_codigo(id);
+		  }else {
+			  if(!this.isAlunoReady(aluno)) {
+				  output("Esse nome ja esta cadastrado");
+				  return null;
+			  };
+		  }
+
+		  return aluno;
+	  }
+	  
+	  //Verificando se nome existe
+	  private boolean isAlunoReady(Aluno aluno) {
+		  for(Aluno cada: this.gerente.getAlunos(true)) {
+			  if(cada.getAlu_nome().toUpperCase().trim() == aluno.getAlu_nome().toUpperCase().trim()) {				  
+				  return false;
+			  }
+		  }
+		  return true;
+	  }
 	  
 	  //Esse metodo coloca os dados do aluno selecionado nos inputs do formulario.
 	  protected void putIntoFields(Aluno aluno) {
@@ -45,25 +81,48 @@ public class Acao {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			if(e.getSource() instanceof javax.swing.JButton) {
-				String cmd = String.valueOf(e.getActionCommand());
-				if(cmd == formulario.buttons_names[0]){ //Adicionado novo
-					System.out.println("criar novo");
-				}else if(cmd == formulario.buttons_names[1]) { //alterar
-					
-				}else if(cmd == formulario.buttons_names[2]) {//salvar
-					
-				}else if(cmd == formulario.buttons_names[3]) {//excluir
-					
-				}else {
-					formatError("Opcao Invalida");
+			try {
+				if(e.getSource() instanceof javax.swing.JButton) {
+					String cmd = String.valueOf(e.getActionCommand());
+					if(cmd == formulario.buttons_names[0]){ //Adicionado novo
+						Aluno aluno = toAlunoUpdatingOrCreating(false);
+						if(aluno.isRight()) {
+							gerente.saveTransaction(aluno);
+							output(aluno.getAlu_nome() + " Cadastrado com Sucesso!");
+						}else {
+							output("Erro ao inserir, Cidade e nome nao podem estar vazio");
+						}
+					}else if(cmd == formulario.buttons_names[1]) { //alterar
+						Aluno aluno = toAlunoUpdatingOrCreating(true);
+						if(aluno.isRight()) {
+							gerente.updateTransaction(aluno);
+							output(aluno.getAlu_nome() + " Atualizado com Sucesso!");
+						}else {
+							output("Erro ao editar, Cidade e nome nao podem estar vazio");
+						}
+					}else if(cmd == formulario.buttons_names[2]) {//pesquisar
+						//Pesquisar
+					}else if(cmd == formulario.buttons_names[3]) {//excluir
+						int id = Integer.parseInt(formulario.jTextField1.getText());
+						 Aluno aluno = gerente.getAluno(id);
+						 if(aluno.isRight()) {
+							 gerente.deleteTransaction(aluno);
+							 output(aluno.getAlu_nome() + " Excluido com Sucesso!");
+						 }else {
+							 output("Erro ao excluir, Cidade e nome nao podem estar vazio");
+						 }
+					}
 				}
+				atualizarTela();
+			}catch(Exception erro) {
+				System.out.println("Erro lancado na classe Events");
+				formatError(erro);
 			}
-			
 		}
 		 
 	 }
-		 
+		
+	
 	//Classe que controla o evento do mouse  
 	  private class Mouse implements java.awt.event.MouseListener{		
 		  
@@ -108,7 +167,7 @@ public class Acao {
 			JOptionPane.showMessageDialog(null, exception);
 		}
 	  
-	  protected void formatError(String exception) {
+	  protected void output(String exception) {
 			System.out.println(exception);
 			JOptionPane.showMessageDialog(null, exception);
 		}

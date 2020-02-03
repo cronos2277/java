@@ -5,7 +5,7 @@ public class Aluno {
     private String alu_cidade;
     private String alu_fone;    
     public Aluno(){
-        this.alu_codigo = 1;
+        this.alu_codigo = -1;
         this.alu_nome = "";
         this.alu_cidade = "";
         this.alu_fone = "";
@@ -60,11 +60,7 @@ public class Aluno {
     	 return obj;
     }
     
-    public boolean isRight() {
-    	if(this.alu_codigo < 0) {
-    		System.out.println("Codigo vazio.");
-    		return false;
-    	}
+    public boolean isRight() {    	
     	if(this.alu_nome.isEmpty()) {
     		System.out.println("Nome não pode ficar em branco");
     		JOptionPane.showMessageDialog(null,"Nome não pode ficar em branco");

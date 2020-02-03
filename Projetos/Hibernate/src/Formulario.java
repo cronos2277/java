@@ -2,7 +2,7 @@ public abstract class Formulario extends javax.swing.JFrame{
 		private static final long serialVersionUID = 1L;
 		private static final String titulo = "CRUD Alunos";
 		protected String[] jlabels_names = {"Codigo","Nome","Cidade","Telefone"};
-		protected String[] buttons_names = {"Novo","Alterar","Salvar","Excluir"};
+		protected String[] buttons_names = {"Novo","Alterar","Pesquisar","Excluir"};
 	 	protected javax.swing.JButton jButton1;
 	    protected javax.swing.JButton jButton2;
 	    protected javax.swing.JButton jButton3;
@@ -41,6 +41,7 @@ public abstract class Formulario extends javax.swing.JFrame{
         this.setPattern();
         
     	}  
+	
 	
 	//Classe que configura a tabela.
 		protected void setjTable() {
