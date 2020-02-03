@@ -1,4 +1,5 @@
 import java.awt.event.ActionEvent;
+import java.util.regex.Pattern;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -56,7 +57,7 @@ public class Acao {
 	  //Verificando se nome existe
 	  private boolean isAlunoReady(Aluno aluno) {
 		  for(Aluno cada: this.gerente.getAlunos(true)) {
-			  if(cada.getAlu_nome().toUpperCase().trim() == aluno.getAlu_nome().toUpperCase().trim()) {				  
+			  if(cada.getAlu_nome().toUpperCase().trim().replaceAll(" ", "") == aluno.getAlu_nome().toUpperCase().trim().replaceAll(" ", "")) {				  
 				  return false;
 			  }
 		  }
@@ -89,6 +90,7 @@ public class Acao {
 						if(aluno.isRight()) {
 							gerente.saveTransaction(aluno);
 							output(aluno.getAlu_nome() + " Cadastrado com Sucesso!");
+							atualizarTela();
 						}else {
 							output("Erro ao inserir, Cidade e nome nao podem estar vazio");
 						}
@@ -97,23 +99,33 @@ public class Acao {
 						if(aluno.isRight()) {
 							gerente.updateTransaction(aluno);
 							output(aluno.getAlu_nome() + " Atualizado com Sucesso!");
+							atualizarTela();
 						}else {
 							output("Erro ao editar, Cidade e nome nao podem estar vazio");
 						}
-					}else if(cmd == formulario.buttons_names[2]) {//pesquisar
-						//Pesquisar
+					}else if(cmd == formulario.buttons_names[2]) {//pesquisar						
+						//Pesquisar						
+						String nome = JOptionPane.showInputDialog(null, "Informe o nome a ser procurado");						
+						for(Aluno aluno: gerente.getAlunos()) {
+							if(Pattern.matches(aluno.getAlu_nome().toUpperCase().trim().replaceAll(" ", ""), nome.toUpperCase().trim().replaceAll(" ", ""))){
+								putIntoFields(aluno);
+								output("Nome encontrado: "+aluno.getAlu_nome());								
+							}
+						}
+						
 					}else if(cmd == formulario.buttons_names[3]) {//excluir
 						int id = Integer.parseInt(formulario.jTextField1.getText());
 						 Aluno aluno = gerente.getAluno(id);
 						 if(aluno.isRight()) {
 							 gerente.deleteTransaction(aluno);
 							 output(aluno.getAlu_nome() + " Excluido com Sucesso!");
+							 atualizarTela();
 						 }else {
 							 output("Erro ao excluir, Cidade e nome nao podem estar vazio");
 						 }
 					}
 				}
-				atualizarTela();
+				
 			}catch(Exception erro) {
 				System.out.println("Erro lancado na classe Events");
 				formatError(erro);
@@ -171,4 +183,6 @@ public class Acao {
 			System.out.println(exception);
 			JOptionPane.showMessageDialog(null, exception);
 		}
+	  
+	  
 }
