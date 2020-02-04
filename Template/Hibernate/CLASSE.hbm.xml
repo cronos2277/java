@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- PARA CADA ENTIDADE, SERA NECESSARIO UM "CLASSE".hbm.xml, CASO O MESMO SEJA FEITO POR NOTACAO XML. -->
+<hibernate-mapping>
+    <!-- 
+        aqui configura classe, o name é o nome da classe ".java" 
+    e o table é o nome da tabela no banco de dados. Java é case sensetive.
+    -->
+    <class name="SUACLASSE" table="SUA_TABELA_NO_BD">   
+        <!-- A tag do id é diferente mesmo, mas aqui no exemplo tem o campo igual aos outros. -->      
+        <id name="ATRIBUTO_CLASSE" column="ATRIBUTO_TABELA">        
+        <!-- Estrategia para criacao de ID, o incremente faz com que a geracao de ID seja criado pela aplicacao, nao indicado caso necessite de concorrencia. -->
+            <generator class="increment"/>
+        </id>
+        <!-- Aqui eh a propriedade de cada coluna da tabela, sendo name o nome do atributo do arquivo .java informado no class="name" -->                    
+        <!-- Colunm eh o campo referente ao banco de dados, no caso nesse campo você informa a qual coluna ele referencia no banco de dados. -->
+        <property name="ATRIBUTO_CLASSE" column="ATRIBUTO_TABELA" />
+        <property name="ATRIBUTO_CLASSE" column="ATRIBUTO_TABELA"/>
+        <property name="ATRIBUTO_CLASSE" column="ATRIBUTO_TABELA"/>
+    </class>
+</hibernate-mapping>
+<!-- APAGUE OS COMENTARIOS QUANDO USAR O TEMPLATE, PARA EVITAR ERROS DE COMPLILACAO. -->
