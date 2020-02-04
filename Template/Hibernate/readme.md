@@ -2,6 +2,7 @@
 <h2>Guia de como usar esse template de hibernate</h2>
 <p>Aqui as instruções para uso, aqui contém uma lista de dialetos e drivers para serem usados no hibernate.cfg.xml</p>
 
+<hr>
 <h2>Arquivo "CLASSE".hbm.xml</h2>
 <h3>Observações</h3>
 
