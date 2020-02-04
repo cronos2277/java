@@ -1,4 +1,10 @@
 <h1>Sobre o Hibernate</h1>
+<h2>Guia de como usar esse template de hibernate</h2>
+<p>Aqui as instruções para uso, aqui contém uma lista de dialetos e drivers para serem usados no hibernate.cfg.xml</p>
+
+<h2>Arquivo "CLASSE".hbm.xml</h2>
+<h3>Observações</h3>
+
 <hr>
 <h2>Arquivo hibernate.cfg.xml</h2>
 <h3>Observações</h3>
@@ -11,7 +17,7 @@ nos templates e substitua os valores no XML pelo equivalente ao banco de dados q
 <h3>Lista de Dialetos</h3>
 <p>repare que todos os dialetos começam com <b>"org.hibernate.dialect."</b>, esse valor é igual para todos, porem o valor que varia é após esse ultimo ponto. </p>
 <div>
-<p>Mais provaveis de serem usado:</p>
+<p style="color:red">Mais provaveis de serem usado:</p>
 <p>"<b>org.hibernate.dialect.MySQLDialect</b>" => MySQL</p>
 <p>"<b>org.hibernate.dialect.PostgreSQLDialect</b>" => PostgreSQL</p>
 <p>"<b>org.hibernate.dialect.SQLServerDialect</b>" => Microsoft SQL Server</p>
@@ -20,7 +26,7 @@ nos templates e substitua os valores no XML pelo equivalente ao banco de dados q
 <p>"<b>org.hibernate.dialect.SQLiteDialect</b>" =>  SQL Lite</p>
 </div>
 <div>
-<p>Os demais Dialetos</p>
+<p style="color:red">Os demais Dialetos</p>
 <p>"<b>org.hibernate.dialect.DB2Dialect</b>" => DB2</p>
 <p>"<b>org.hibernate.dialect.DB2400Dialect</b>" => DB2 AS/400</p>
 <p>"<b>org.hibernate.dialect.DB2390Dialect</b>" =>  DB2 OS390</p>
