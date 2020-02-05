@@ -58,6 +58,7 @@ opcoes:<br>
 <hr>
 <h3>Lista de Drivers</h3>
 <h4>hibernate.connection.driver_class</h4>
+<p>Esses sao os drivers que devem ser usados de acordo com o SGBD escolhido.</p>
 <div>
 
 <p>"<b>oracle.jdbc.driver.OracleDriver</b>" => Oracle</p>
