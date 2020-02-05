@@ -22,14 +22,16 @@
     apesar de algumas properties seguir o formato de booleano ou inteiro, os mesmos devem ser passados como string aqui.
 </p>
 <hr>
-<h4>Explicando as Property basicas e uteis.</h4>
-<h3> username (hibernate.connection.username) </h3>
+<h3> Username</h3>
+<h4>hibernate.connection.username</h4>
 <p>proprieade correspondente ao seu user id no banco de dados, recebe um valor do tipo string.</p>
 <hr>
-<h3>Password (hibernate.connection.password)</h3>
+<h3>Password</h3>
+<h4>hibernate.connection.password</h4>
 <p>Campo responsavel pelo password da sua conta no banco de dados</p>
 <hr>
-<h3>Estatisticas do Hibernate (hibernate.generate_statistics)</h3>
+<h3>Estatisticas do Hibernate</h3>
+<h4>hibernate.generate_statistics</h4>
 <p>Permite fazer estatisticas da aplicacao, mais informacao: <a href="https://docs.jboss.org/hibernate/core/3.6/javadocs/org/hibernate/stat/Statistics.html">Artigo a respeito</a></p>
 <hr>
 <h3>Exibir SQL (hibernate.show_sql)</h3>
@@ -52,7 +54,7 @@ opcoes:<br>
 <hr>
 <h3>Lista de Drivers (hibernate.connection.driver_class)</h3>
 <div>
-<p style="color:red">Mais provaveis de serem usado:</p>
+<h4>Mais provaveis de serem usado:</h4>
 <p>"<b>oracle.jdbc.driver.OracleDriver</b>" => Oracle</p>
 <p>"<b>com.mysql.jdbc.Driver"</b> => MySQL</p>
 <p>"<b>com.microsoft.sqlserver.jdbc.SQLServerDriver</b>" => MS SQL Server</p>
@@ -63,7 +65,7 @@ opcoes:<br>
 <p>"<b>org.apache.derby.jdbc.EmbeddedDriver</b>" => Derby </p>
 </div>
 <div>
-<p style="color:red">Os demais Drivers</p>
+<h4>Os demais Drivers</h4>
 <p>"<b>org.hsqldb.jdbcDriver</b>" => HypersonicSQL</p>
 <p>"<b>org.h2.Driver</b>" => H2</p>
 <p>"<b>com.timesten.jdbc.TimesTenDriver</b>" => TimesTen</p>
