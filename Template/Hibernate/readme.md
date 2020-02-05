@@ -59,7 +59,7 @@ opcoes:<br>
 <h3>Lista de Drivers</h3>
 <h4>hibernate.connection.driver_class</h4>
 <div>
-<h4>Mais provaveis de serem usado:</h4>
+
 <p>"<b>oracle.jdbc.driver.OracleDriver</b>" => Oracle</p>
 <p>"<b>com.mysql.jdbc.Driver"</b> => MySQL</p>
 <p>"<b>com.microsoft.sqlserver.jdbc.SQLServerDriver</b>" => MS SQL Server</p>
@@ -70,7 +70,7 @@ opcoes:<br>
 <p>"<b>org.apache.derby.jdbc.EmbeddedDriver</b>" => Derby </p>
 </div>
 <div>
-<h4>Os demais Drivers</h4>
+
 <p>"<b>org.hsqldb.jdbcDriver</b>" => HypersonicSQL</p>
 <p>"<b>org.h2.Driver</b>" => H2</p>
 <p>"<b>com.timesten.jdbc.TimesTenDriver</b>" => TimesTen</p>
@@ -113,7 +113,6 @@ opcoes:<br>
 <h4>hibernate.connection.dialect</h4>
 <p>repare que todos os dialetos começam com <b>"org.hibernate.dialect."</b>, esse valor é igual para todos, porem o valor que varia é após esse ultimo ponto. </p>
 <div>
-<h4>Mais provaveis de serem usado:</h4>
 <p>"<b>org.hibernate.dialect.MySQLDialect</b>" => MySQL</p>
 <p>"<b>org.hibernate.dialect.MySQLInnoDBDialect</b>" => MySQL with InnoDB</p>
 <p>"<b>org.hibernate.dialect.MySQLMyISAMDialect</b>" => MySQL with MyISAM</p>
@@ -129,7 +128,6 @@ opcoes:<br>
 <p>"<b>org.hibernate.dialect.DerbyDialect</b>" => Derby</p>
 </div>
 <div>
-<h4>Os demais Dialetos</h4>
 <p>"<b>org.hibernate.dialect.DB2400Dialect</b>" => DB2 AS/400</p>
 <p>"<b>org.hibernate.dialect.DB2390Dialect</b>" =>  DB2 OS390</p>
 <p>"<b>org.hibernate.dialect.SybaseDialect</b>" => Sybase</p>
