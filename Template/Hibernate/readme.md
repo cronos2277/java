@@ -34,16 +34,20 @@
 <h4>hibernate.generate_statistics</h4>
 <p>Permite fazer estatisticas da aplicacao, mais informacao: <a href="https://docs.jboss.org/hibernate/core/3.6/javadocs/org/hibernate/stat/Statistics.html">Artigo a respeito</a></p>
 <hr>
-<h3>Exibir SQL (hibernate.show_sql)</h3>
+<h3>Exibir SQL</h3>
+<h4>hibernate.show_sql</h4>
 <p>Se definido como True, exbibe o SQL.</p>
 <hr>
-<h3>Exibir SQL formatado no console? (hibernate.format_sql)</h3>
+<h3>Exibir SQL formatado no console?</h3>
+<h4>hibernate.format_sql</h4>
 <p>Recebe um valor booleano, precisa ter a propriedade hibernate.show_sql = true para funcionar</p>
 <hr>
-<h3>Define o numero maximo de conexoes (hibernate.pool_size)</h3>
+<h3>Define o numero maximo de conexoes.</h3>
+<h4>hibernate.pool_size</h4>
 <p>Recebe um valor inteiro correspondente ao numero de conexoes maximas permitidas.</p>
 <hr>
-<h3>Comandos DDL no Hibernate(hibernate.hbm2ddl.auto)</h3>
+<h3>Comandos DDL no Hibernate</h3>
+<h4>hibernate.hbm2ddl.auto</h4>
 <p>Essa property permite com que o Hibernate modele por completo as tabelas do banco de dados, com essa property ativada o Hibernate pode fazer o que for definido aqui na tabela:<br>
 opcoes:<br>
 "<b>validate</b>": validar o schema, nao faz mudancas no banco de dados, apenas analiza se os relacionamentos estao certos e se a tabela esta ok.<br>
@@ -52,7 +56,8 @@ opcoes:<br>
 "<b>create-drop</b>": drop o schema quando ao terminar a sessão, ou seja assim que a sessao termina, a tabela eh apagada. (Pode ser interessante para testes de conexao)<br>
 </p>
 <hr>
-<h3>Lista de Drivers (hibernate.connection.driver_class)</h3>
+<h3>Lista de Drivers</h3>
+<h4>hibernate.connection.driver_class</h4>
 <div>
 <h4>Mais provaveis de serem usado:</h4>
 <p>"<b>oracle.jdbc.driver.OracleDriver</b>" => Oracle</p>
@@ -82,7 +87,8 @@ opcoes:<br>
 <p>"<b>com.intersys.jdbc.CacheDriver</b>" => InterSystems Cache</p>
 </div>
 <hr>
-<h3>Lista de URLs (hibernate.connection.url)</h3>
+<h3>Lista de URLs</h3>
+<h4>hibernate.connection.url</h4>
 <p>Lista de padrões de URLS a serem usadas. O "||", significa ou, e && e, caso você encontre "||" ou "&&", favor apenas selecionar um outro, uma vez que isso é usado como separador aqui.  </p>
 <p>"<b>jdbc:mysql:///test</b>" => MySQL</p>
 <p>"<b>jdbc:mariadb://localhost/hibernate_orm_test</b>" => Maria DB</p>
@@ -103,10 +109,11 @@ opcoes:<br>
 <p>"<b>jdbc:Cache://127.0.0.1:1972/HIBERNATE</b>" => InterSystems Cache</p>
 
 <hr>
-<h3>Lista de Dialetos (hibernate.connection.dialect)</h3>
+<h3>Lista de Dialetos</h3>
+<h4>hibernate.connection.dialect</h4>
 <p>repare que todos os dialetos começam com <b>"org.hibernate.dialect."</b>, esse valor é igual para todos, porem o valor que varia é após esse ultimo ponto. </p>
 <div>
-<p style="color:red">Mais provaveis de serem usado:</p>
+<h4>Mais provaveis de serem usado:</h4>
 <p>"<b>org.hibernate.dialect.MySQLDialect</b>" => MySQL</p>
 <p>"<b>org.hibernate.dialect.MySQLInnoDBDialect</b>" => MySQL with InnoDB</p>
 <p>"<b>org.hibernate.dialect.MySQLMyISAMDialect</b>" => MySQL with MyISAM</p>
@@ -122,7 +129,7 @@ opcoes:<br>
 <p>"<b>org.hibernate.dialect.DerbyDialect</b>" => Derby</p>
 </div>
 <div>
-<p style="color:red">Os demais Dialetos</p>
+<h4>Os demais Dialetos</h4>
 <p>"<b>org.hibernate.dialect.DB2400Dialect</b>" => DB2 AS/400</p>
 <p>"<b>org.hibernate.dialect.DB2390Dialect</b>" =>  DB2 OS390</p>
 <p>"<b>org.hibernate.dialect.SybaseDialect</b>" => Sybase</p>
