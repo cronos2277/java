@@ -44,10 +44,10 @@
 <h3>Comandos DDL no Hibernate(hibernate.hbm2ddl.auto)</h3>
 <p>Essa property permite com que o Hibernate modele por completo as tabelas do banco de dados, com essa property ativada o Hibernate pode fazer o que for definido aqui na tabela:<br>
 opcoes:<br>
-"<b>validate</b>": validar o schema, nao faz mudancas no banco de dados, apenas analiza se os relacionamentos estao certos e se a tabela esta ok.
-"<b>update</b>": Faz update no schema, permite com que o hibernate atualize a tabela de acordo com o mapeamento das suas configuracoes. (Pode ser interessante para pequenos ambientes de producao e ambientes sem concorrencia)
-"<b>create</b>": cria o schema, destruindo dados anteriores, recria a tabela a cada inicializacao da aplicacao, apagando dados antigos. (Pode ser interessante para testes)
-"<b>create-drop</b>": drop o schema quando ao terminar a sessão, ou seja assim que a sessao termina, a tabela eh apagada. (Pode ser interessante para testes de conexao)
+"<b>validate</b>": validar o schema, nao faz mudancas no banco de dados, apenas analiza se os relacionamentos estao certos e se a tabela esta ok.<br>
+"<b>update</b>": Faz update no schema, permite com que o hibernate atualize a tabela de acordo com o mapeamento das suas configuracoes. (Pode ser interessante para pequenos ambientes de producao e ambientes sem concorrencia)<br>
+"<b>create</b>": cria o schema, destruindo dados anteriores, recria a tabela a cada inicializacao da aplicacao, apagando dados antigos. (Pode ser interessante para testes)<br>
+"<b>create-drop</b>": drop o schema quando ao terminar a sessão, ou seja assim que a sessao termina, a tabela eh apagada. (Pode ser interessante para testes de conexao)<br>
 </p>
 <hr>
 <h3>Lista de Drivers (hibernate.connection.driver_class)</h3>
