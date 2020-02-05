@@ -37,7 +37,7 @@
 </div>
 <hr>
 <h2>Lista de URLs</h2>
-<p>Lista de padrões de URLS a serem usadas.</p>
+<p>Lista de padrões de URLS a serem usadas. O "||", significa ou, e && e, caso você encontre "||" ou "&&", favor apenas selecionar um outro, uma vez que isso é usado como separador aqui.  </p>
 <p>"<b>jdbc:mysql:///test</b>" => MySQL</p>
 <p>"<b>jdbc:sqlserver://localhost || jdbc:microsoft:sqlserver://1E1;DatabaseName=test;SelectMethod=cursor</b>" => SQL Server</p>
 <p>"<b>jdbc:oracle:thin:@localhost:1521:orcl || jdbc:oracle:thin:@localhost:1522:XE</b>" => Oracle</p>
@@ -50,7 +50,7 @@
 <p>"<b>jdbc:mckoi:/// || jdbc:mckoi:local://C:/mckoi1.0.3/db.conf</b>" =>Mckoi SQL </p>
 <p>"<b>jdbc:interbase://localhost:3060/C:/firebird/test.gdb</b>" => InterClient</p>
 <p>"<b>jdbc:pointbase:embedded:sample</b>" => Pointbase</p>
-<p>"<b>jdbc:edbc://localhost:II7/database || jdbc:ingres://localhost:II7/database;CURSOR=READONLY;auto=multi</b>" => Ingres Old && Ingres New</p>
+<p>"<b>jdbc:edbc://localhost:II7/database && jdbc:ingres://localhost:II7/database;CURSOR=READONLY;auto=multi</b>" => Ingres Old && Ingres New</p>
 <p>"<b>jdbc:mimer:multi1</b>" => Mimer SQL</p>
 <p>"<b>jdbc:Cache://127.0.0.1:1972/HIBERNATE</b>" => InterSystems Cache</p>
 
