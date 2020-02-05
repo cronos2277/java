@@ -22,7 +22,7 @@
     apesar de algumas properties seguir o formato de booleano ou inteiro, os mesmos devem ser passados como string aqui.
 </p>
 <hr>
-Explicando as Property basicas e uteis.
+<center><b>Explicando as Property basicas e uteis.</b></center>
 <hr>
 <h3> username (hibernate.connection.username) </h3>
 <p>proprieade correspondente ao seu user id no banco de dados, recebe um valor do tipo string.</p>
