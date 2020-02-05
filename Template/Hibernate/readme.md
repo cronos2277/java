@@ -10,7 +10,7 @@
 <div>
 <p style="color:red">Mais provaveis de serem usado:</p>
 <p>"<b>oracle.jdbc.driver.OracleDriver</b>" => Oracle</p>
-<p>"<b>com.mysql.jdbc.Driver" => MySQL</p>
+<p>"<b>com.mysql.jdbc.Driver"</b> => MySQL</p>
 <p>"<b>com.microsoft.sqlserver.jdbc.SQLServerDriver</b>" => MS SQL Server</p>
 <p>"<b>org.postgresql.Driver</b>" => PostgreSQL</p>
 <p>"<b>org.sqlite.JDBC</b>" => SQL Lite</p>
