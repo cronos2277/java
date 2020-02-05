@@ -39,8 +39,10 @@
 <h2>Lista de URLs</h2>
 <p>Lista de padrões de URLS a serem usadas. O "||", significa ou, e && e, caso você encontre "||" ou "&&", favor apenas selecionar um outro, uma vez que isso é usado como separador aqui.  </p>
 <p>"<b>jdbc:mysql:///test</b>" => MySQL</p>
+<p>"<b>jdbc:mariadb://localhost/hibernate_orm_test</b>" => Maria DB</p>
 <p>"<b>jdbc:sqlserver://localhost || jdbc:microsoft:sqlserver://1E1;DatabaseName=test;SelectMethod=cursor</b>" => SQL Server</p>
 <p>"<b>jdbc:oracle:thin:@localhost:1521:orcl || jdbc:oracle:thin:@localhost:1522:XE</b>" => Oracle</p>
+<p>"<b>jdbc:sqlite:mydb.db</b>" => SQL Lite</p>
 <p>"<b>jdbc:hsqldb:./build/db/hsqldb/hibernate</b>" => HypersonicSQL</p>
 <p>"<b>jdbc:h2:tcp://dbserv:8084/sample; || jdbc:h2:ssl://secureserv:8085/sample;  || jdbc:h2:ssl://secureserv/testdb;cipher=AES</b>" => HypersonicSQL</p>
 <p>"<b>jdbc:db2://localhost:50000/somename || jdbc:db2:somename</b>" => DB2</p>
@@ -67,6 +69,7 @@
 <p>"<b>org.hibernate.dialect.OracleDialect</b>" =>  Oracle 8</p>
 <p>"<b>org.hibernate.dialect.Oracle9Dialect</b>" => Oracle 9i/10g</p>
 <p>"<b>org.hibernate.dialect.MariaDBDialect</b>" =>  Maria DB</p>
+<p>"<b>org.hibernate.dialect.MariaDB53Dialect</b>" =>  Maria DB</p>
 <p>"<b>org.hibernate.dialect.SQLiteDialect</b>" =>  SQL Lite</p>
 <p>"<b>org.hibernate.dialect.FirebirdDialect</b>" => Firebird</p>
 <p>"<b>org.hibernate.dialect.DB2Dialect</b>" => DB2</p>
