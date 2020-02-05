@@ -23,7 +23,6 @@
 </p>
 <hr>
 <h4>Explicando as Property basicas e uteis.</h4>
-<hr>
 <h3> username (hibernate.connection.username) </h3>
 <p>proprieade correspondente ao seu user id no banco de dados, recebe um valor do tipo string.</p>
 <hr>
