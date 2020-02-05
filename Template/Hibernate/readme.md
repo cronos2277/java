@@ -68,3 +68,4 @@
 <p>"<b>org.hibernate.dialect.PointbaseDialect</b>" => Pointbase</p>
 <p>"<b>org.hibernate.dialect.FrontbaseDialect</b>" => FrontBase</p>
 </div>
+<a href="https://github.com/hibernate/hibernate-orm/blob/master/etc/hibernate.properties" target"_blank">Hibernate.properties caught</a>
