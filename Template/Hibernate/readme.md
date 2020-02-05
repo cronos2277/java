@@ -36,6 +36,25 @@
 <p>"<b>com.intersys.jdbc.CacheDriver</b>" => InterSystems Cache</p>
 </div>
 <hr>
+<h2>Lista de URLs</h2>
+<p>Lista de padrões de URLS a serem usadas.</p>
+<p>"<b>jdbc:mysql:///test</b>" => MySQL</p>
+<p>"<b>jdbc:sqlserver://localhost || jdbc:microsoft:sqlserver://1E1;DatabaseName=test;SelectMethod=cursor</b>" => SQL Server</p>
+<p>"<b>jdbc:oracle:thin:@localhost:1521:orcl || jdbc:oracle:thin:@localhost:1522:XE</b>" => Oracle</p>
+<p>"<b>jdbc:hsqldb:./build/db/hsqldb/hibernate</b>" => HypersonicSQL</p>
+<p>"<b>jdbc:h2:tcp://dbserv:8084/sample; || jdbc:h2:ssl://secureserv:8085/sample;  || jdbc:h2:ssl://secureserv/testdb;cipher=AES</b>" => HypersonicSQL</p>
+<p>"<b>jdbc:db2://localhost:50000/somename || jdbc:db2:somename</b>" => DB2</p>
+<p>"<b>jdbc:timesten:direct:test</b>" => TimesTen</p>
+<p>"<b>jdbc:derby:build/db/derby/hibernate;create=true</b>" => Derby</p>
+<p>"<b>jdbc:sybase:Tds:co3061835-a:5000/tempdb</b>" => Sybase</p>
+<p>"<b>jdbc:mckoi:/// || jdbc:mckoi:local://C:/mckoi1.0.3/db.conf</b>" =>Mckoi SQL </p>
+<p>"<b>jdbc:interbase://localhost:3060/C:/firebird/test.gdb</b>" => InterClient</p>
+<p>"<b>jdbc:pointbase:embedded:sample</b>" => Pointbase</p>
+<p>"<b>jdbc:edbc://localhost:II7/database || jdbc:ingres://localhost:II7/database;CURSOR=READONLY;auto=multi</b>" => Ingres Old && Ingres New</p>
+<p>"<b>jdbc:mimer:multi1</b>" => Mimer SQL</p>
+<p>"<b>jdbc:Cache://127.0.0.1:1972/HIBERNATE</b>" => InterSystems Cache</p>
+
+<hr>
 <h2>Lista de Dialetos</h2>
 <p>repare que todos os dialetos começam com <b>"org.hibernate.dialect."</b>, esse valor é igual para todos, porem o valor que varia é após esse ultimo ponto. </p>
 <div>
@@ -51,6 +70,7 @@
 <p>"<b>org.hibernate.dialect.SQLiteDialect</b>" =>  SQL Lite</p>
 <p>"<b>org.hibernate.dialect.FirebirdDialect</b>" => Firebird</p>
 <p>"<b>org.hibernate.dialect.DB2Dialect</b>" => DB2</p>
+<p>"<b>org.hibernate.dialect.DerbyDialect</b>" => Derby</p>
 </div>
 <div>
 <p style="color:red">Os demais Dialetos</p>
