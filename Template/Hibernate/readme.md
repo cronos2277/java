@@ -21,7 +21,7 @@
 <div>
 <p style="color:red">Os demais Drivers</p>
 <p>"<b>org.hsqldb.jdbcDriver</b>" => HypersonicSQL</p>
-<p>"<b>org.h2.Driver</b>" => H2 (www.h2database.com)</p>
+<p>"<b>org.h2.Driver</b>" => H2</p>
 <p>"<b>com.timesten.jdbc.TimesTenDriver</b>" => TimesTen</p>
 <p>"<b>com.sybase.jdbc2.jdbc.SybDriver</b>" => Sybase</p>
 <p>"<b>com.mckoi.JDBCDriver</b>" => Mckoi SQL</p>
