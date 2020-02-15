@@ -19,6 +19,13 @@
         <property name="ATRIBUTO_CLASSE" column="ATRIBUTO_TABELA" />
         <property name="ATRIBUTO_CLASSE" column="ATRIBUTO_TABELA"/>
         <property name="ATRIBUTO_CLASSE" column="ATRIBUTO_TABELA"/>
+        <!-- Caso tenha uma colection na sua entidade, voce pode usar essa estrutura abaixo: -->
+        <!-- Esse tipo de estrutura com o set, evita de que voce tenha que ficar criando um outro arquivo hbm.xml. -->
+        <set name="NOME_ENTIDADE" table="NOME_TABELA_NO_BD">
+            <key column="CHAVE_PRIMARIA_TABELA"/>
+            <!-- Um element desse para cada atributo da tabela, aqui abaixo voce usa o padrao do seu banco de dados como tipo. -->
+            <element column="NOME_DA_COLUNA_COM_REFERENTE_A_COLLECTION" type="string"/>
+        </set>
     </class>
 </hibernate-mapping>
-<!-- APAGUE OS COMENTARIOS QUANDO USAR O TEMPLATE, PARA EVITAR ERROS DE COMPLILACAO. -->
+<!-- APAGUE OS COMENTARIOS QUANDO USAR O TEMPLATE, PARA EVITAR ERROS DE COMPILACAO. -->
