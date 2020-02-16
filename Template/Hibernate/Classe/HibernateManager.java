@@ -12,7 +12,6 @@ public class HibernateManager<Entity> {
 	private List<Entity> entity;
 	private List<String> errors;
 	private Iterator<Entity> iterator;	
-	//No primeiro construtor voce precisa passar a query: "from Aluno order by alu_codigo"
 	public HibernateManager(String query) {				
 		this.query = query;		
 		this.configuration = new Configuration().configure("hibernate.cfg.xml");
@@ -20,7 +19,7 @@ public class HibernateManager<Entity> {
 	}
 	
 	@SuppressWarnings("rawtypes")
-	public HibernateManager(boolean isAnnotatedClass,String user, String password, String host, String driver, String dialect, String query,Class ...Entities) {		
+	public HibernateManager(boolean isAnnotatedClass, String Restriction,String user, String password, String host, String driver, String dialect, String query,Class ...Entities) {		
 			this.query = query;		
 			this.configuration = new Configuration();
 			this.configuration.setProperty("hibernate.connection.driver_class", driver);
@@ -28,6 +27,10 @@ public class HibernateManager<Entity> {
 			this.configuration.setProperty("hibernate.connection.username", user);
 			this.configuration.setProperty("hibernate.connection.password", password);
 			this.configuration.setProperty("hibernate.connection.dialect", dialect);
+			this.configuration.setProperty("hibernate.show_sql", "true");
+			this.configuration.setProperty("hibernate.format_sql", "true");
+			this.configuration.setProperty("hibernate.pool_size", "10");
+			this.configuration.setProperty("hibernate.hbm2ddl.auto", Restriction);
 			for(Class Ent: Entities) {
 				if(isAnnotatedClass) {
 					this.configuration.addAnnotatedClass(Ent);
@@ -37,8 +40,7 @@ public class HibernateManager<Entity> {
 			}	
 			this.init();
 		
-	}
-	
+	}	
 	
 	public HibernateManager<Entity> setQuery(String query){
 		this.query = query;
@@ -91,6 +93,7 @@ public class HibernateManager<Entity> {
 				case 1: {this.session.save(entity);break;}
 				case 2: {this.session.update(entity);break;}
 				case 3: {this.session.delete(entity);break;}
+				case 4: {this.session.saveOrUpdate(entity);}
 			}
 			this.transaction.commit();								
 			this.closeSession();			
@@ -115,6 +118,11 @@ public class HibernateManager<Entity> {
 	
 	public HibernateManager<Entity> delete(Entity entity) {
 		this.transactionManager(3, entity);
+		return this;
+	}
+	
+	public HibernateManager<Entity> insertOrUpdate(Entity entity) {
+		this.transactionManager(4, entity);
 		return this;
 	}
 	
@@ -157,8 +165,6 @@ public class HibernateManager<Entity> {
 	public String toString() {
 		return "This object contains "+this.entity.size()+" records from database and "+this.errors.size()+" errors.";
 	}
-	
-
 	
 	@SuppressWarnings("unchecked")
 	private void fillAlunos() {
