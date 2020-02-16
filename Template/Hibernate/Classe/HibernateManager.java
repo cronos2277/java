@@ -19,7 +19,10 @@ public class HibernateManager<Entity> {
 	}
 	
 	@SuppressWarnings("rawtypes")
-	public HibernateManager(boolean isAnnotatedClass, String Restriction,String user, String password, String host, String driver, String dialect, String query,Class ...Entities) {		
+	public HibernateManager(
+			boolean isAnnotatedClass, String Restriction,String user, String password, 
+			String host, String driver, String dialect, String query,Class ...Entities) 
+	{		
 			this.query = query;		
 			this.configuration = new Configuration();
 			this.configuration.setProperty("hibernate.connection.driver_class", driver);
