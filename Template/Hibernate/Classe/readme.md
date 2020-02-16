@@ -53,5 +53,11 @@ String host, String driver, String dialect, String query,ENTIDADE_MAIS_FORTE.cla
 <p>Se o hasNext() e o next() nao forem o suficiente para a sua varredura, voce pode pegar um iterator e usa-lo como desejar.</p>
 <h3>size()</h3>
 <p>Retorna a quantidade de registro pego no banco de dados.</p>
-<h3></h3>
-<p></p>
+<h3>getRecord(int queryPosition)</h3>
+<p>Retorna um registro do banco de dados, o registro na posicao passada como parametro.</p>
+<h3>firstRecord()</h3>
+<p>Retorna o primeiro registro carregado no banco de dados.</p>
+<h3>lastRecord()</h3>
+<p>Retorna o ultimo registro carregado no banco de dados.</p>
+<h3>toArray()</h3>
+<p>Retorna todos os registros pego do banco de dados como um Array do tipo da entidade passada no diamante. </p>
