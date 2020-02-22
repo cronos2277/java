@@ -17,8 +17,9 @@ nos templates e substitua os valores no XML pelo equivalente ao banco de dados q
 <h2>"component"</h2>
 <p>
 Através dessa propriedade você pode fazer com que uma tabela no banco de dados, seja representado por duas ou mais entidades, isso pode ser muito util,<br>
-caso você tenha uma tabela muito grande ou que não seja normalizada.
+caso você tenha uma tabela muito grande ou que não seja normalizada. Coloque dentro da tag class:
 </p>
+<p><img src="./.imgs/print3.png"/></p>
 <h2>Criação de ID</h2>
 <p>Para referenciar uma id temos 2 formas de fazer isso:</p>
 <h3>Caso voce queira que a aplicao gerencie a aplicacao:</h3>
