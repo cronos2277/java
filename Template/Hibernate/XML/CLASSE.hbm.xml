@@ -41,7 +41,7 @@
             no banco de dados esteja em uma unica entidade, esse component eh desnecessario.
 
         -->
-        <component name="O_NOME_DA_SEGUNDA_ENTIDADE_A_CLASSE_JAVA">
+        <component name="O_ATRIBUTO_DO_TIPO_ENTIDADE_DA_CLASSE_JAVA_REFERENCIADO_NA_ENTIDADE-PRINCIPAL">
             <!-- Repare que a mesma suporta um property assim como o no pai -->
             <property name="ATRIBUTO_DA_ENTIDADE">
             <!-- 
