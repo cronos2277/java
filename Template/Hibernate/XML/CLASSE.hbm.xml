@@ -9,11 +9,19 @@
     e o table é o nome da tabela no banco de dados. Java é case sensetive.
     -->
     <class name="SUACLASSE" table="SUA_TABELA_NO_BD">   
+        
         <!-- A tag do id é diferente mesmo, mas aqui no exemplo tem o campo igual aos outros. -->      
         <id name="ATRIBUTO_CLASSE" column="ATRIBUTO_TABELA">        
         <!-- Estrategia para criacao de ID, o incremente faz com que a geracao de ID seja criado pela aplicacao, nao indicado caso necessite de concorrencia. -->
             <generator class="increment"/>
         </id>
+            <!-- Ou se voce quiser que a sequencia seja definida pelo banco de dados -->
+        <!--
+            <id name="ATRIBUTO_CLASSE" column="ATRIBUTO_TABELA">
+                <param name="sequence ou identity">NOME_DA_SEQUENCIA</param>
+            </id>
+        -->
+
         <!-- Aqui eh a propriedade de cada coluna da tabela, sendo name o nome do atributo do arquivo .java informado no class="name" -->                    
         <!-- Colunm eh o campo referente ao banco de dados, no caso nesse campo você informa a qual coluna ele referencia no banco de dados. -->
         <property name="ATRIBUTO_CLASSE" column="ATRIBUTO_TABELA" />
@@ -45,7 +53,7 @@
             -->
                 <column name="ATRIBUTO_NO_BANCO_DE_DADOS" not-null="true"></column>
             </property>
-        </component>
+        </component>       
     </class>
 </hibernate-mapping>
 <!-- APAGUE OS COMENTARIOS QUANDO USAR O TEMPLATE, PARA EVITAR ERROS DE COMPILACAO. -->
