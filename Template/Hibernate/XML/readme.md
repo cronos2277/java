@@ -27,4 +27,5 @@ caso você tenha uma tabela muito grande ou que não seja normalizada. Coloque d
 <h3>Caso voce queira que o banco de dados gerencie a aplicacao:</h3>
 <p><img src="./.imgs/print2.png"/></p>
 <h3>Caso voce precise colocar uma colection:</h3>
+<p>Essa seria uma outra forma de voce adicionar um relacionamento mais fraco a entidade, nesse caso o lado N da relação.</p>
 <p><img src="./.imgs/print4.png"/></p>
