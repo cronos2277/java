@@ -26,3 +26,5 @@ caso você tenha uma tabela muito grande ou que não seja normalizada. Coloque d
 <p><img src="./.imgs/print1.png"/></p>
 <h3>Caso voce queira que o banco de dados gerencie a aplicacao:</h3>
 <p><img src="./.imgs/print2.png"/></p>
+<h3>Caso voce precise colocar uma colection:</h3>
+<p><img src="./.imgs/print4.png"/></p>
