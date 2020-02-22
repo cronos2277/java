@@ -14,3 +14,13 @@ Alem disso tomar cuidado com o Doctype, o mesmo precisa ser valido para a aplica
 o link no navegador e veja se esse doctype é válido, pois qualquer erro desse tipo pode condenar a renderização desse arquivo xml. Por fim apague os comentários
 nos templates e substitua os valores no XML pelo equivalente ao banco de dados que você possui.
 </p>
+<h2>"component"</h2>
+<p>
+Através dessa propriedade você pode fazer com que uma tabela no banco de dados, seja representado por duas ou mais entidades, isso pode ser muito util,<br>
+caso você tenha uma tabela muito grande ou que não seja normalizada.
+</p>
+<h2>Criação de ID</h2>
+<p>Para referenciar uma id temos 2 formas de fazer isso:</p>
+<h3></h3>
+<pre><id name="ATRIBUTO_CLASSE" column="ATRIBUTO_TABELA"></pre>
+
