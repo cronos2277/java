@@ -26,6 +26,26 @@
             <!-- Um element desse para cada atributo da tabela, aqui abaixo voce usa o padrao do seu banco de dados como tipo. -->
             <element column="NOME_DA_COLUNA_COM_REFERENTE_A_COLLECTION" type="string"/>
         </set>
+        <!--
+            O component eh uma forma de voce dividir uma tabela do banco de dados
+            em duas ou mais entidade, no caso voce poderia incluir a entidade que nao
+            tem a chave primaria como uma extensao. Caso todos os campos de uma tabela
+            no banco de dados esteja em uma unica entidade, esse component eh desnecessario.
+
+        -->
+        <component name="O_NOME_DA_SEGUNDA_ENTIDADE_A_CLASSE_JAVA">
+            <!-- Repare que a mesma suporta um property assim como o no pai -->
+            <property name="ATRIBUTO_DA_ENTIDADE">
+            <!-- 
+                Caso o nome do atributo nao seja igual ao atributo no banco de dados, 
+                voce precisa informar aqui, entre outros atributos. No caso de proprieades
+                compostas use o hifen para separar como o "not-null abaixo". As propriedades
+                exceto a name nao precisam refletir a realidade do banco de dados. No caso
+                o atributo sera tratado como not-null, mesmo que no banco de dados nao seja assim.
+            -->
+                <column name="ATRIBUTO_NO_BANCO_DE_DADOS" not-null="true"></column>
+            </property>
+        </component>
     </class>
 </hibernate-mapping>
 <!-- APAGUE OS COMENTARIOS QUANDO USAR O TEMPLATE, PARA EVITAR ERROS DE COMPILACAO. -->
