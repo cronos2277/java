@@ -22,6 +22,6 @@ caso você tenha uma tabela muito grande ou que não seja normalizada.
 <h2>Criação de ID</h2>
 <p>Para referenciar uma id temos 2 formas de fazer isso:</p>
 <h3>Caso voce queira que a aplicao gerencie a aplicacao:</h3>
-<p><img src="./imgs/print1.png"/></p>
+<p><img src="./.imgs/print1.png"/></p>
 <h3>Caso voce queira que o banco de dados gerencie a aplicacao:</h3>
-<p><img src="./imgs/print2.png"/></p>
+<p><img src="./.imgs/print2.png"/></p>
