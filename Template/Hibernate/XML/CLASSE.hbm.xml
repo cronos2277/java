@@ -89,6 +89,12 @@
         parametro(s) os mesmos deveram ser substituidos, antes de ocorrer a execucao da query,
         impossibilitando o uso caso tenha parametros. Caso opte por usar o metodo acima, isso
         te livra de criar um objeto Query.
+        Voce pode contar com o metodo do Objeto Query, que implementa a interface Query, 
+        eles contem o setMaxResults(InteiroResultadoMaximo), sendo InteiroResultadoMaximo o numero
+        maximo de resultados permitidos e setFirstResult(InteiroDaOndeInicia), que define o ponto
+        de partida, exemplo se colocar o valor 1 como InteiroDaOndeInicia, o resultado comecara
+        da segunda ocorrencia, de toda forma voce pode usar o objeto Query que implementa uma
+        interface de mesmo nome para trabalhar com essa query abaixo.
     -->
     <query name="NOME_DA_QUERY">
         <![CDATA[ from Entidade where id = :parametro]]>
