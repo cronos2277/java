@@ -73,7 +73,22 @@
         query.setString(name, val) -> name o nome do atributo na query, nesse exemplo abaixo 
         voce colocaria "parametro", entre String e sem os dois pontos, no val voce colocaria
         o valor a substituido no lugar do :parametro (nesse caso em especifico), em formato
-        de string.               
+        de string. Porem caso o valor nao seja string, o valor a ser informado, voce pode
+        por exemplo mudar de setString para setSEUTIPO, assim sendo: query.setInteger("nome","valor"),
+        por exemplo, em algumas queries em que se exige valores inteiros, pode se dar problemas
+        ao usar o setString, como o between o in, ou ate mesmo para alguma operacao aritimetica,
+        se esse erro o ocorrer, troque o setString para o valor apropriado. Lembrando, se houver
+        mais de um parametro essa funcao "set" deve ser executada mais de uma vez, se por exemplo,
+        houver um valor inteiro e um valor string, entao deve Executar um setInteger e depois um 
+        setString, siga sempre a sequencia da esquerda para a direita ao definir parametros para
+        manter a ordem e a organizacao.               
+        Voce poderia caso nao tenha nenhum parametro na query, ja executar a query e ja passar o 
+        resultado direto para um List, exemplo:
+        objetoSession.seuObjeto.getNamedQuery("NOME_DA_QUERY").list();
+        Mas lembre-se ao chamar o metodo list acima a query sera executada, e nisso, se houver
+        parametro(s) os mesmos deveram ser substituidos, antes de ocorrer a execucao da query,
+        impossibilitando o uso caso tenha parametros. Caso opte por usar o metodo acima, isso
+        te livra de criar um objeto Query.
     -->
     <query name="NOME_DA_QUERY">
         <![CDATA[ from Entidade where id = :parametro]]>
