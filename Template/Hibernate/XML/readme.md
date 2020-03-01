@@ -36,45 +36,45 @@ caso você tenha uma tabela muito grande ou que não seja normalizada. Coloque d
         a query deve ter pelo menos um nome, ao qual sera usado para acessar essa query
         salva aqui. Essa query ela requer um parametro, mas eh perfeitamente possivel
         criar uma query aqui que nao exija parametro. Para fazer uso, use o metodo 
-        getNameQuery de um objeto org.hibernate.Session. Dentro do metodo 
-        "getNamedQuery(queryName)", aonde esta queryName, voce passa em formato de 
-        String o nome da query, nesse caso ficaria: 
-        seuObjeto.getNamedQuery("NOME_DA_QUERY");         
-        Porem voce deve salvar esse resultado dentro de um Objeto org.hibernate.query.Query
-        Para isso voce deve seguir o padrao abaixo:
-        org.hibernate.query.Query query = objetoSession.seuObjeto.getNamedQuery("NOME_DA_QUERY");
-        CASO TENHA PARAMETRO, FACA O SEGUINTE, MAS APENAS SE TIVER PARAMETRO:
-        query.setString(name, val) -> name o nome do atributo na query, nesse exemplo abaixo 
+        "<b>getNameQuery</b>" de um objeto "<b>org.hibernate.Session</b>". Dentro do metodo 
+        "<b>getNamedQuery(queryName)</b>", aonde esta queryName, voce passa em formato de 
+        String o nome da query, nesse caso ficaria: <br>
+        "<b>seuObjeto.getNamedQuery("NOME_DA_QUERY");</b>"<br>
+        Porem voce deve salvar esse resultado dentro de um Objeto "<b>org.hibernate.query.Query</b>"
+        Para isso voce deve seguir o padrao abaixo:<br>
+        "<b>org.hibernate.query.Query query = objetoSession.seuObjeto.getNamedQuery("NOME_DA_QUERY");</b>"<br>
+        <b>CASO TENHA PARAMETRO, FACA O SEGUINTE, MAS APENAS SE TIVER PARAMETRO:</b><br>
+        <b>query.setString(name, val) -> name o nome do atributo na query, nesse exemplo abaixo </b>
         voce colocaria "parametro", entre String e sem os dois pontos, no val voce colocaria
-        o valor a substituido no lugar do :parametro (nesse caso em especifico), em formato
+        o valor a substituido no lugar do "<b>:parametro </b>"(nesse caso em especifico), em formato
         de string. Porem caso o valor nao seja string, o valor a ser informado, voce pode
-        por exemplo mudar de setString para setSEUTIPO, assim sendo: query.setInteger("nome","valor"),
+        por exemplo mudar de <b>setString</b> para <b>setSEUTIPO</b>, assim sendo:<br>
+        <b>query.setInteger("nome","valor")</b>",
         por exemplo, em algumas queries em que se exige valores inteiros, pode se dar problemas
         ao usar o setString, como o between o in, ou ate mesmo para alguma operacao aritimetica,
         se esse erro o ocorrer, troque o setString para o valor apropriado. Lembrando, se houver
         mais de um parametro essa funcao "set" deve ser executada mais de uma vez, se por exemplo,
         houver um valor inteiro e um valor string, entao deve Executar um setInteger e depois um 
         setString, siga sempre a sequencia da esquerda para a direita ao definir parametros para
-        manter a ordem e a organizacao.               
+        manter a ordem e a organizacao.<br>               
         Voce poderia caso nao tenha nenhum parametro na query, ja executar a query e ja passar o 
-        resultado direto para um List, exemplo:
-        objetoSession.seuObjeto.getNamedQuery("NOME_DA_QUERY").list();
+        resultado direto para um List, exemplo:<br>
+        "<b>objetoSession.seuObjeto.getNamedQuery("NOME_DA_QUERY").list();</b>"<br>
         Mas lembre-se ao chamar o metodo list acima a query sera executada, e nisso, se houver
         parametro(s) os mesmos deveram ser substituidos, antes de ocorrer a execucao da query,
         impossibilitando o uso caso tenha parametros. Caso opte por usar o metodo acima, isso
-        te livra de criar um objeto Query.
+        te livra de criar um objeto "<b>Query</b>".
         Voce pode contar com o metodo do Objeto Query, que implementa a interface Query, 
-        eles contem o setMaxResults(InteiroResultadoMaximo), sendo InteiroResultadoMaximo o numero
-        maximo de resultados permitidos e setFirstResult(InteiroDaOndeInicia), que define o ponto
+        eles contem o <b>setMaxResults(InteiroResultadoMaximo)</b>, sendo <b>InteiroResultadoMaximo</b> o numero
+        maximo de resultados permitidos e <b>setFirstResult(InteiroDaOndeInicia)</b>, que define o ponto
         de partida, exemplo se colocar o valor 1 como InteiroDaOndeInicia, o resultado comecara
-        da segunda ocorrencia, de toda forma voce pode usar o objeto Query que implementa uma
-        interface de mesmo nome para trabalhar com essa query abaixo.
-        Voce tambem pode usar a APi criteria no lugar da Query:
-        Criteria crit = session.createCriteria(SuaEntidade.class);
-        List results = crit.list()
-        Para mais informacoes: https://docs.jboss.org/hibernate/orm/3.2/api/org/hibernate/Criteria.html
-        Query: https://docs.jboss.org/hibernate/orm/3.2/api/org/hibernate/Query.html
-        Session: https://docs.jboss.org/hibernate/orm/3.5/javadocs/org/hibernate/Session.html
+        da segunda ocorrencia.<br>
+        Voce tambem pode usar a APi criteria no lugar da Query:<br>
+        <pre>Criteria crit = session.createCriteria(SuaEntidade.class);<br>
+        List results = crit.list()</pre><br>
+        Para mais informacoes: https://docs.jboss.org/hibernate/orm/3.2/api/org/hibernate/Criteria.html<br>
+        Query: https://docs.jboss.org/hibernate/orm/3.2/api/org/hibernate/Query.html<br>
+        Session: https://docs.jboss.org/hibernate/orm/3.5/javadocs/org/hibernate/Session.html<br>
         Para isso voce tem no Hibernate, o Query, o Criteria API e o proprio sql puro, o que muda eh 
         apenas a forma de trabalhar.</p>
 <p><img src="./.imgs/print5.png"/></p>
