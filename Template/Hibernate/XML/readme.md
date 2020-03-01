@@ -22,14 +22,14 @@ caso você tenha uma tabela muito grande ou que não seja normalizada. Coloque d
 <p><img src="./.imgs/print3.png"/></p>
 <h2>Criação de ID</h2>
 <p>Para referenciar uma id temos 2 formas de fazer isso:</p>
-<h3>Caso voce queira que a aplicao gerencie a aplicacao:</h3>
+<h2>Caso voce queira que a aplicao gerencie a aplicacao:</h2>
 <p><img src="./.imgs/print1.png"/></p>
-<h3>Caso voce queira que o banco de dados gerencie a aplicacao:</h3>
+<h2>Caso voce queira que o banco de dados gerencie a aplicacao:</h2>
 <p><img src="./.imgs/print2.png"/></p>
-<h3>Caso voce precise colocar uma colection:</h3>
+<h2>Caso voce precise colocar uma colection:</h2>
 <p>Essa seria uma outra forma de voce adicionar um relacionamento mais fraco a entidade, nesse caso o lado N da relação.</p>
 <p><img src="./.imgs/print4.png"/></p>
-<h3>Colocando a Query dentro do arquivo XML</h3>
+<h2>Colocando a Query dentro do arquivo XML</h2>
 <p>Caso voce queira incluir a query no arquivo xml, coloqueo dentro da tag query.
         O mesmo deve estar dentro de um CDATA para que nao seja interpolado, na hora 
         de compilar o XML, ou seja isso pode dar erro se nao estiver dentro de CDATA.
@@ -39,11 +39,11 @@ caso você tenha uma tabela muito grande ou que não seja normalizada. Coloque d
         "<b>getNameQuery</b>" de um objeto "<b>org.hibernate.Session</b>". Dentro do metodo 
         "<b>getNamedQuery(queryName)</b>", aonde esta queryName, voce passa em formato de 
         String o nome da query, nesse caso ficaria: <br>
-        "<b>seuObjeto.getNamedQuery("NOME_DA_QUERY");</b>"<br>
+        <pre>seuObjeto.getNamedQuery("NOME_DA_QUERY");</pre><br>
         Porem voce deve salvar esse resultado dentro de um Objeto "<b>org.hibernate.query.Query</b>"
         Para isso voce deve seguir o padrao abaixo:<br>
-        "<b>org.hibernate.query.Query query = objetoSession.seuObjeto.getNamedQuery("NOME_DA_QUERY");</b>"<br>
-        <b>CASO TENHA PARAMETRO, FACA O SEGUINTE, MAS APENAS SE TIVER PARAMETRO:</b><br>
+        <pre>org.hibernate.query.Query query = objetoSession.seuObjeto.getNamedQuery("NOME_DA_QUERY");</pre><br>
+        <h3>Necessário apenas se tiver parametro na Query:</h3><br>
         <b>query.setString(name, val) -> name o nome do atributo na query, nesse exemplo abaixo </b>
         voce colocaria "parametro", entre String e sem os dois pontos, no val voce colocaria
         o valor a substituido no lugar do "<b>:parametro </b>"(nesse caso em especifico), em formato
@@ -56,10 +56,11 @@ caso você tenha uma tabela muito grande ou que não seja normalizada. Coloque d
         mais de um parametro essa funcao "set" deve ser executada mais de uma vez, se por exemplo,
         houver um valor inteiro e um valor string, entao deve Executar um setInteger e depois um 
         setString, siga sempre a sequencia da esquerda para a direita ao definir parametros para
-        manter a ordem e a organizacao.<br>               
+        manter a ordem e a organizacao.<br>             
+        <h3>Opcional caso não exista parametros:</h3>
         Voce poderia caso nao tenha nenhum parametro na query, ja executar a query e ja passar o 
         resultado direto para um List, exemplo:<br>
-        "<b>objetoSession.seuObjeto.getNamedQuery("NOME_DA_QUERY").list();</b>"<br>
+        <pre>objetoSession.seuObjeto.getNamedQuery("NOME_DA_QUERY").list();</pre><br>
         Mas lembre-se ao chamar o metodo list acima a query sera executada, e nisso, se houver
         parametro(s) os mesmos deveram ser substituidos, antes de ocorrer a execucao da query,
         impossibilitando o uso caso tenha parametros. Caso opte por usar o metodo acima, isso
@@ -69,6 +70,7 @@ caso você tenha uma tabela muito grande ou que não seja normalizada. Coloque d
         maximo de resultados permitidos e <b>setFirstResult(InteiroDaOndeInicia)</b>, que define o ponto
         de partida, exemplo se colocar o valor 1 como InteiroDaOndeInicia, o resultado comecara
         da segunda ocorrencia.<br>
+        <h3>Para mais informações sobre queries:</h3>
         Voce tambem pode usar a APi criteria no lugar da Query:<br>
         <pre>Criteria crit = session.createCriteria(SuaEntidade.class);<br>
         List results = crit.list()</pre><br>
