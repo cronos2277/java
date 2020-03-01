@@ -99,6 +99,8 @@
         Criteria crit = session.createCriteria(SuaEntidade.class);
         List results = crit.list()
         Para mais informacoes: https://docs.jboss.org/hibernate/orm/3.2/api/org/hibernate/Criteria.html
+        Query: https://docs.jboss.org/hibernate/orm/3.2/api/org/hibernate/Query.html
+        Session: https://docs.jboss.org/hibernate/orm/3.5/javadocs/org/hibernate/Session.html
     -->
     <query name="NOME_DA_QUERY">
         <![CDATA[ from Entidade where id = :parametro]]>
