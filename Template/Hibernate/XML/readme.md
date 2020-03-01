@@ -2,11 +2,11 @@
 <p>Aqui as instruções para uso, aqui contém uma lista de dialetos e drivers para serem usados no hibernate.cfg.xml</p>
 
 <hr>
-<h2>Arquivo "CLASSE".hbm.xml</h2>
+<h2>Arquivo hibernate.cfg.xml</h2>
 <h3>Observações</h3>
 
 <hr>
-<h2>Arquivo hibernate.cfg.xml</h2>
+<h2>Arquivo "CLASSE".hbm.xml</h2>
 <h3>Observações</h3>
 <p>
 Esse arquivo deve estar na pasta src da aplicação dentro da raiz, pode acontecer de dar erros de compilação caso esse arquivo não esteja no diretório correto.<br>
