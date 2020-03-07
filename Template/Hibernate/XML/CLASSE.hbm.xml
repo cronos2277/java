@@ -53,16 +53,18 @@
             -->
                 <column name="ATRIBUTO_NO_BANCO_DE_DADOS" not-null="true"></column>
             </property>
-        </component>       
-        <one-to-one class="PACKAGE.ENTIDADE" name="INSTANCIA_DA_ENTIDADE">
+        </component>               
             <!-- 
                 Dessa forma voce faz que voce usa a notacao one para one no hibernate, 
                 Voce especifica no class a entidade a ser relacionada aqui, e no name
                 voce especifica o nome da instancia da entidade. Lembrando que a sua
                 entidade, a que foi estipulada no name la em cima, deve ter uma instancia
-                dessa Entidade que esta sendo referenciada aqui.
+                dessa Entidade que esta sendo referenciada aqui. Por debaixo dos panos
+                o hibernate faz um join entre as tabelas no banco de dados de maneira
+                automatica, voce tambem pode colocar esse one-to-one na outra entidade,
+                fazendo assim um one-to-one bidirecional.
             -->
-        </one-to-one>
+        <one-to-one class="PACKAGE.ENTIDADE" name="INSTANCIA_DA_ENTIDADE" />
     </class>
     <!-- 
         Caso voce queira incluir a query no arquivo xml, coloqueo dentro da tag query.
