@@ -54,6 +54,16 @@
                 <column name="ATRIBUTO_NO_BANCO_DE_DADOS" not-null="true"></column>
             </property>
         </component>       
+        <one-to-one class="PACKAGE.CLASSE" name="ATRIBUTO_QUE_FAZ_REFERENCIA_A_ENTIDADE_FRACA">
+            <!-- 
+                Dessa forma voce faz que voce usa a notacao one para one no hibernate, 
+                no atributo class voce especifica a entidade forte desse relacionamento
+                e no atributo name voce informa o nome da instancia do tipo entidade fraca,
+                por exemplo se voce tem um atributo do tipo entidade fraca, voce especifica
+                no nome o nome do atributo, esse atributo deve existir dentro da sua entidade
+                e deve ser do tipo de uma Entidade que tenha anotacao ou tenha um respectivo XML.
+            -->
+        </one-to-one>
     </class>
     <!-- 
         Caso voce queira incluir a query no arquivo xml, coloqueo dentro da tag query.
