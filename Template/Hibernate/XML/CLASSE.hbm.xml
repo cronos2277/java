@@ -85,6 +85,12 @@
                 atualizacao e insercao por exemplo. Quando com o valor all, logo eh tudo,
                 ou seja o que for feito na instancia se refletira na tupla, independente
                 do que acontecao com o valor, podendo ser perigoso na exclusao por exemplo.
+                Para relacionamento 1 para 1, pode-se deixar o all, uma vez que uma tupla
+                depende da outra, agora se fosse um relacionamento 1 para N ou N para N
+                ai o all poderia dar um problema, ou seja se outros valores usassem dessa
+                instancia, provavelmente seriam afetados, mas como eh um para um o relacionamento,
+                entao recomenda-se o uso do all, para que se tenha um crud completo atraves
+                da entidade referenciada no no pai na propriedade name.
             -->
         <one-to-one class="PACKAGE.ENTIDADE" name="INSTANCIA_DA_ENTIDADE" cascade="all"/>
     </class>
