@@ -80,3 +80,45 @@ caso você tenha uma tabela muito grande ou que não seja normalizada. Coloque d
         Para isso voce tem no Hibernate, o Query, o Criteria API e o proprio sql puro, o que muda eh 
         apenas a forma de trabalhar.</p>
 <p><img src="./.imgs/print5.png"/></p>
+<h2>Relacionamentos Com outras Entidades</h2>
+<h3>Propriedade Cascade</h3>
+<p>O Cascade informa como sera feito esse relacionamento, entre as entidades
+                existe varias formas de estabelecer esse relacionamento, nesse caso qualquer 
+                alteracao feito na instancia, se reflitira na tabela ao qual a instancia
+                pertence. Por exemplo se o cascade for save ou update, qualquer valor
+                atualizado na instancia sera refletido na tupla no Banco de dados ao fim da 
+                transacao. Caso voce nao informe o cascade, caso voce insira ou atualiza
+                algum valor na instancia, o mesmo nao ira ser registrado na tupla, exceto
+                que voce faca outra transacao, ao qual voce fara usando a outra entidade
+                ao qual eh referenciada abaixo. De toda forma para que o relacionamento
+                funcione em operacoes como insercao, remocao ou atualizacao, o mesmo
+                deve ser definido com o cascade, do contrario essa relacao apenas 
+                acontecera quando a aplicacao ler dados.
+                oneOrMany-to-oneOrMany -> cria um join, assim sendo a relacao ocorre apenas em relacoes
+                do tipo select. Ou seja quando eh feito a conexao e o acesso aos dados.
+                cascade -> define o relacionamento das entidades, nesse caso como que 
+                as alteracoes feitas nas instancias se refletirao na tupla da tabela
+                ao qual a entidade referenciada representa, podendo estabelecer algum
+                tipo de restricao, ou seja apenas inserir, crud completo, ou apenas
+                atualizacao e insercao por exemplo. Quando com o valor all, logo eh completo,
+                ou seja o que for feito na instancia se refletira na tupla, independente
+                do que acontecao com o valor, podendo ser perigoso na exclusao por exemplo.
+                </p>
+<h3>OneToOne</h3>
+<p>
+ Dessa forma voce faz que voce usa a notacao one para one no hibernate, 
+                Voce especifica no class a entidade a ser relacionada aqui, e no name
+                voce especifica o nome da instancia da entidade. Lembrando que a sua
+                entidade, a que foi estipulada no name la em cima, deve ter uma instancia
+                dessa Entidade que esta sendo referenciada aqui. Por debaixo dos panos
+                o hibernate faz um join entre as tabelas no banco de dados de maneira
+                automatica, isso quando resgata valores do banco, ao modificar precisa
+                do cascade para definir como isso sera feito. Voce tambem pode colocar 
+                esse one-to-one na outra entidade, fazendo assim um one-to-one bidirecional.<br>
+                Sobre o cascade, Para relacionamento 1 para 1, pode-se deixar o all, uma vez que uma tupla
+                depende da outra, agora se fosse um relacionamento 1 para N ou N para N
+                ai o all poderia dar um problema, ou seja se outros valores usassem dessa
+                instancia, provavelmente seriam afetados, mas como eh um para um o relacionamento,
+                entao recomenda-se o uso do all, para que se tenha um crud completo atraves
+                da entidade referenciada no no pai na propriedade name.                
+</p>
