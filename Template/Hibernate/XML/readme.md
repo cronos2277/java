@@ -104,7 +104,7 @@ caso você tenha uma tabela muito grande ou que não seja normalizada. Coloque d
                 ou seja o que for feito na instancia se refletira na tupla, independente
                 do que acontecao com o valor, podendo ser perigoso na exclusao por exemplo.
                 </p>
-<h3>OneToOne</h3>
+<h3>One To One</h3>
 <p>
  Dessa forma voce faz que voce usa a notacao one para one no hibernate, 
                 Voce especifica no class a entidade a ser relacionada aqui, e no name
@@ -123,3 +123,10 @@ caso você tenha uma tabela muito grande ou que não seja normalizada. Coloque d
                 da entidade referenciada no no pai na propriedade name.                
 </p>
 <p><img src="./.imgs/print6.png"/></p>
+<h3>Many To One</h3>
+<p>Dessa forma se faz o relacionamento many to one, os atributos permitidos sao semelhantes ao do one-to-one,
+            o column serve tabem para a anotacao acima, a mesma deve ser usada caso voce queira que especificar o
+            nome da coluna de chava estrangeira que essa entidade ao qual contem o relacionamento tem. O atributo
+            foreign-key caso voce queira renomear o relacionamento entre essa chave estrangeira e o id da tabela
+            relacionada no banco de dados.</p>
+<p><img src="./.imgs/print7.png"/></p>

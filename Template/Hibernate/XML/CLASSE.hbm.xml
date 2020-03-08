@@ -60,6 +60,13 @@
                 relacionamento 1 para 1 bidirecional, do contrario eh apenas unidirecional. 
         -->
         <one-to-one class="PACKAGE.ENTIDADE" name="INSTANCIA_DA_ENTIDADE" cascade="all"/>
+        <!-- 
+            Dessa forma que voce faz o relacionamento 1 para muitos, use colunm caso o nome do atributo da chave 
+            estrangeira seja diferente no banco de dados, e o campo foreign-key caso voce queira definir um 
+            nome ao relacionamento, se apenas aqui o relacionamento eh unidirecional, se essa entidade referenciada
+            contem isso tambem, ai eh bidirecional.
+        -->
+        <many-to-one class="PACKAGE.ENTIDADE" name="INSTANCIA_DA_ENTIDADE" cascade="all" column="idEntity" foreign-key="sua_fk_nome"/>
     </class>
     <!-- 
         Caso voce queira incluir a query no arquivo xml, coloqueo dentro da tag query.
