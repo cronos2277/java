@@ -122,3 +122,4 @@ caso você tenha uma tabela muito grande ou que não seja normalizada. Coloque d
                 entao recomenda-se o uso do all, para que se tenha um crud completo atraves
                 da entidade referenciada no no pai na propriedade name.                
 </p>
+<p><img src="./.imgs/print6.png"/></p>
