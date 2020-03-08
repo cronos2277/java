@@ -21,6 +21,14 @@
                 <param name="sequence ou identity">NOME_DA_SEQUENCIA</param>
             </id>
         -->
+        <id column="ID_DA_TABELA" name="ID_DA_CLASSE" type="int">
+            <generator class="foreign">
+                <param name="property">
+                    NOME_ATRIBUTO_NA_CLASSE_REFERENCIADA
+                </param>                
+            </generator>
+        </id>
+
 
         <!-- Aqui eh a propriedade de cada coluna da tabela, sendo name o nome do atributo do arquivo .java informado no class="name" -->                    
         <!-- Colunm eh o campo referente ao banco de dados, no caso nesse campo você informa a qual coluna ele referencia no banco de dados. -->
