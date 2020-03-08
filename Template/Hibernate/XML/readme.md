@@ -27,6 +27,7 @@ caso você tenha uma tabela muito grande ou que não seja normalizada. Coloque d
 <h3>Caso voce queira que o banco de dados gerencie a aplicacao:</h3>
 <p><img src="./.imgs/print2.png"/></p>
 <h3>Criacao de PK com base na chave estrangeira:</h3>
+<p>Essa estrategia transforma a chave primaria dessa tabela em chave primaria e estrangeira da tabela referenciada abaixo.</p>
 <p><img src="./.imgs/print8.png"/></p>
 <h2>Caso voce precise colocar uma colection:</h2>
 <p>Essa seria uma outra forma de voce adicionar um relacionamento mais fraco a entidade, nesse caso o lado N da relação.</p>
