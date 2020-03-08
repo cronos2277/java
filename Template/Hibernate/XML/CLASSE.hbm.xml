@@ -27,7 +27,7 @@
             <id column="ID_DA_TABELA" name="ID_DA_CLASSE" type="int">
                 <generator class="foreign">
                     <param name="property">
-                        NOME_ATRIBUTO_NA_CLASSE_REFERENCIADA
+                        NOME_ATRIBUTO_DESSA_CLASSE_AQUI_QUE_REFERENCIA_A_OUTRA
                     </param>                
                 </generator>
             </id>
