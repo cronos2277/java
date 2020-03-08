@@ -109,7 +109,12 @@ caso você tenha uma tabela muito grande ou que não seja normalizada. Coloque d
 <h3>Propriedade: foreign-key</h3>
 <p>O atributo foreign-key caso voce queira renomear o relacionamento entre essa chave estrangeira e o id da tabela relacionada no banco de dados.</p>
 <h3>Propriedade: unique</h3>
-<p>Se true o relacionamento Many to one se comporta como um relacionamento one-to-one.</p>
+<p>Se true o relacionamento Many to one se comporta como um relacionamento one-to-one. No caso o relacionamento one-to-one passa a ter uma chave
+estrangeira no banco de dados, o hibernate quando voce faz o relacionamento 1 para 1, ele nao cria necessariamente esse relacionamento no banco
+de dados, no caso de um one-to-one simples, ele simplesmente faz duas operacoes dependendo do valor do cascade. Para que voce construa esse relacionameto
+entre as chaves primarias, uma das estrategias eh colocar o many-to-one ou o one-to-many e ai definir como unique, assim ele adiciona o unique no
+relacionamento da chave estrangeira, fazendo com que na pratica essa cardinalidade seja um para um, uma vez que o unique evita com que haja repeticoes.
+</p>
 <h3>Propriedade: column</h3>
 <p>Esse atributo deve estar nos relacionamento many to one, aqui eh definido o nome do atributo da chave estrangeira no Banco de Dados.
 Por exemplo se voce tiver uma chave estrangeira, esse campo define o nome que o atributo integer contendo o valor do ID da outra tabela
