@@ -34,7 +34,7 @@
         
         <!-- voce precisa da propriedade constrained="true" na tabela referenciada para funcionar direito. -->
         
-            <one-to-one name="AQUI_VOCE_DEFINE_ENTIDADE_CITADA_ACIMA" constrained="true"/>
+            <one-to-one name="AQUI_VOCE_DEFINE_ENTIDADE_DO_ID_ACIMA" constrained="true"/>
         
         <!-- Aqui eh a propriedade de cada coluna da tabela, sendo name o nome do atributo do arquivo .java informado no class="name" -->                    
         <!-- Colunm eh o campo referente ao banco de dados, no caso nesse campo você informa a qual coluna ele referencia no banco de dados. -->
