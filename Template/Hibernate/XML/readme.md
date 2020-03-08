@@ -81,7 +81,7 @@ caso você tenha uma tabela muito grande ou que não seja normalizada. Coloque d
         apenas a forma de trabalhar.</p>
 <p><img src="./.imgs/print5.png"/></p>
 <h2>Relacionamentos Com outras Entidades</h2>
-<h3>Propriedade Cascade</h3>
+<h3>Propriedade: Cascade</h3>
 <p>O Cascade informa como sera feito esse relacionamento, entre as entidades
                 existe varias formas de estabelecer esse relacionamento, nesse caso qualquer 
                 alteracao feito na instancia, se reflitira na tabela ao qual a instancia
@@ -104,6 +104,18 @@ caso você tenha uma tabela muito grande ou que não seja normalizada. Coloque d
                 ou seja o que for feito na instancia se refletira na tupla, independente
                 do que acontecao com o valor, podendo ser perigoso na exclusao por exemplo.
                 </p>
+<h3>Propriedade: not-null</h3>
+<p>Se true, eh permitido que o valor na chave estrangeira seja nulo. Atributo valido apenas para relacionamento 1 para N</p>
+<h3>Propriedade: foreign-key</h3>
+<p>O atributo foreign-key caso voce queira renomear o relacionamento entre essa chave estrangeira e o id da tabela relacionada no banco de dados.</p>
+<h3>Propriedade: unique</h3>
+<p>Se true o relacionamento Many to one se comporta como um relacionamento one-to-one.</p>
+<h3>Propriedade: column</h3>
+<p>Esse atributo deve estar nos relacionamento many to one, aqui eh definido o nome do atributo da chave estrangeira no Banco de Dados.
+Por exemplo se voce tiver uma chave estrangeira, esse campo define o nome que o atributo integer contendo o valor do ID da outra tabela
+deve ter. No caso se tiver um colunm, isso permite com que a relacao ocorra sem que voce precise criar um atributo na entidade para
+receber o valor de id da tabela correspondente. 
+</p>
 <h3>One To One</h3>
 <p>
  Dessa forma voce faz que voce usa a notacao one para one no hibernate, 
@@ -126,7 +138,6 @@ caso você tenha uma tabela muito grande ou que não seja normalizada. Coloque d
 <h3>Many To One</h3>
 <p>Dessa forma se faz o relacionamento many to one, os atributos permitidos sao semelhantes ao do one-to-one,
             o column serve tabem para a anotacao acima, a mesma deve ser usada caso voce queira que especificar o
-            nome da coluna de chava estrangeira que essa entidade ao qual contem o relacionamento tem. O atributo
-            foreign-key caso voce queira renomear o relacionamento entre essa chave estrangeira e o id da tabela
-            relacionada no banco de dados.</p>
+            nome da coluna de chava estrangeira que essa entidade ao qual contem o relacionamento tem. 
+            </p>
 <p><img src="./.imgs/print7.png"/></p>
