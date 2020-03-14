@@ -136,6 +136,8 @@ simultaneamentes usando algum join ao inves de dois select, veja:<br>
 Com o fetch voce pode escolher se o hibernate vai usar mais select ou se ele vai fazer algum join, quando for resgatar dados do banco e montar o relacionamento com as entidades.
 
 </p>
+<h3>SET</h3>
+<p><img src="./.imgs/print8.png"/></p>
 <h3>One To One</h3>
 <p>
  Dessa forma voce faz que voce usa a notacao one para one no hibernate, 
