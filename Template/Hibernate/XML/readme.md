@@ -131,8 +131,8 @@ Quando o valor do fetch eh "select", o hibernate ira preencher uma entidade e de
 no caso ela preenche a entidade dona do relacionamento com os dados do banco de dados e depois com um segundo select, sera preenchido a entidade
 com os dados correspondente no banco de dados da entidade ao qual esta sendo alvo do relacionamento. Porem com "join", as duas tabelas soa preenchidas
 simultaneamentes usando algum join ao inves de dois select, veja:<br>
-<b>fetch="select"<b>, Exemplo:<br><pre>select id,campo from EntidadeForte;<br>select id, campo from EntidadeRelacionada</pre><br>
-<b>fetch="join"<b>, Exemplo: <br><pre>select f.id,f.campo, r.id,r.campo from EntidadeForte as f, EntidadeRelacionada as r where f.id = r.id</pre><br>
+<b>fetch="select"</b>, Exemplo:<br><pre>select id,campo from EntidadeForte;<br>select id, campo from EntidadeRelacionada</pre><br>
+<b>fetch="join"</b>, Exemplo: <br><pre>select f.id,f.campo, r.id,r.campo from EntidadeForte as f, EntidadeRelacionada as r where f.id = r.id</pre><br>
 Com o fetch voce pode escolher se o hibernate vai usar mais select ou se ele vai fazer algum join, quando for resgatar dados do banco e montar o relacionamento com as entidades.
 </p>
 <h3>One To One</h3>
