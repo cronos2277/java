@@ -134,6 +134,7 @@ simultaneamentes usando algum join ao inves de dois select, veja:<br>
 <b>fetch="select"</b>, Exemplo:<br><pre>select id,campo from EntidadeForte;<br>select id, campo from EntidadeRelacionada;</pre><br>
 <b>fetch="join"</b>, Exemplo: <br><pre>select f.id,f.campo, r.id,r.campo from EntidadeForte as f, EntidadeRelacionada as r where f.id = r.id;</pre><br>
 Com o fetch voce pode escolher se o hibernate vai usar mais select ou se ele vai fazer algum join, quando for resgatar dados do banco e montar o relacionamento com as entidades.
+
 </p>
 <h3>One To One</h3>
 <p>
