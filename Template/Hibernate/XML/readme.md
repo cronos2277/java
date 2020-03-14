@@ -129,7 +129,7 @@ receber o valor de id da tabela correspondente, ou seja esse valor apenas existe
 varia de acordo com o relacionamento, podendo ser estabelecido um tipo quando voce impoe um valor ao fetch.<br>
 Quando o valor do fetch eh "select", o hibernate ira preencher uma entidade e depois a outra, preenchendo assim o relacionamento usando 2 selects,
 no caso ela preenche a entidade dona do relacionamento com os dados do banco de dados e depois com um segundo select, sera preenchido a entidade
-com os dados correspondente no banco de dados da entidade ao qual esta sendo alvo do relacionamento. Porem com "join", as duas tabelas soa preenchidas
+com os dados correspondente no banco de dados da entidade ao qual esta sendo alvo do relacionamento. Porem com "join", as duas entidades sao preenchidas
 simultaneamentes usando algum join ao inves de dois select, veja:<br>
 <b>fetch="select"</b>, Exemplo:<br><pre>select id,campo from EntidadeForte;<br>select id, campo from EntidadeRelacionada;</pre><br>
 <b>fetch="join"</b>, Exemplo: <br><pre>select f.id,f.campo, r.id,r.campo from EntidadeForte as f, EntidadeRelacionada as r where f.id = r.id;</pre><br>
