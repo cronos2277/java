@@ -91,7 +91,7 @@
             1 para N, ou seja a entidade fraca. No set, "name" eh o nome da entidade e o "table" eh o nome da 
             tabela ao qual a entidade faz referencia.             
         -->
-        <set name="PACKAGE.NOME_DA_ENTIDADE" table="NOME_DA_TABELA_NO_BD" cascade="all">
+        <set name="PACKAGE.NOME_DA_ENTIDADE" table="NOME_DA_TABELA_NO_BD" cascade="all" inverse="true">
             <!-- Key -> nessa sera criado uma chave estrangeira na tabela descrita acima, usando o valor de column,
             como nome da chave estrangeira. Voce pode tambem determinar o nome da Constraint -->
             <key column="NOME_DO_CAMPO_CHAVE_ESTRANGEIRA" foreign-key="NOME_DA_CONSTRAINT"/>
