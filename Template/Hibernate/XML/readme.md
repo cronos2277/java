@@ -170,4 +170,7 @@ Com o fetch voce pode escolher se o hibernate vai usar mais select ou se ele vai
 <h3>SET</h3>
 <p>Abaixo temos um exemplo de como funciona o SET, o SET ele cria um container de relacionamento, o atributo key eh obrigatorio. </p>
 <p>O Atributo Inverse joga a responsabilidade da geracao da foreign key a tabela relacionada se estiver setado como true, ou ela pode ser gerado apartir do campo key se estiver setado como falso.</p>
+<h4>ONE to ONE no SET</h4>
 <p><img src="./.imgs/print9.png"/></p>
+<h4>MANY to MANY no SET</h4>
+<p><img src="./.imgs/print10.png"/></p>
