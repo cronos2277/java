@@ -23,7 +23,7 @@
         -->
 
         <!-- Faz com que o ID dessa classe seja o mesmo da classe que a esta referenciando. -->
-        
+        <!--
             <id column="ID_DA_TABELA" name="ID_DA_CLASSE" type="int">
                 <generator class="foreign">
                     <param name="property">
@@ -31,7 +31,7 @@
                     </param>                
                 </generator>
             </id>
-        
+        -->
         <!-- voce precisa da propriedade constrained="true" na tabela referenciada para funcionar direito. -->
         
             <one-to-one name="AQUI_VOCE_DEFINE_ENTIDADE_DO_ID_ACIMA" constrained="true"/>
@@ -97,6 +97,15 @@
             <key column="NOME_DO_CAMPO_CHAVE_ESTRANGEIRA" foreign-key="NOME_DA_CONSTRAINT"/>
             <!-- Repare que aqui eh one-to-many e nao many-to-one, ou seja a parte forte do relacionamento esta do outro lado. -->
             <one-to-many class="PACKAGE.ENTIDADE_FORTE" />
+        </set>
+
+        <!-- 
+            Aqui temos um exemplo da cardinalidade N para N. Nesse caso o SET se comporta de maneira um pouco diferente da tabela acima
+            Nesse caso a tabela intermediaria criara duas chaves estrangeiras com uma chave sorrogada de ID.
+        -->
+        <set name="PACKAGE.ENTIDADE1" table="TABELA_INTERMEDIARIA_ENTRE_1e2">
+            <key column="NOME_DO_CAMPO_CHAVE_ESTRANGEIRA" foreign-key="NOME_DA_CONSTRAINT"/>
+            <many-to-many class="PACKAGE.ENTIDADE2" column="TABELA_DA_ENTIDADE2_ID"/>
         </set>
 
 
