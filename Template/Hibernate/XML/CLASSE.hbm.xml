@@ -103,7 +103,7 @@
             Aqui temos um exemplo da cardinalidade N para N. Nesse caso o SET se comporta de maneira um pouco diferente da tabela acima
             Nesse caso a tabela intermediaria criara duas chaves estrangeiras com uma chave sorrogada de ID.
         -->
-        <set name="PACKAGE.ENTIDADE1" table="TABELA_INTERMEDIARIA_ENTRE_1e2">
+        <set name="PACKAGE.ENTIDADE1" table="TABELA_INTERMEDIARIA_ENTRE_1e2" cascade="all">
             <key column="NOME_DO_CAMPO_CHAVE_ESTRANGEIRA" foreign-key="NOME_DA_CONSTRAINT"/>
             <many-to-many class="PACKAGE.ENTIDADE2" column="TABELA_DA_ENTIDADE2_ID"/>
         </set>
