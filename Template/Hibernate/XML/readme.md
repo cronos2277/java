@@ -122,7 +122,18 @@ relacionamento da chave estrangeira, fazendo com que na pratica essa cardinalida
 <p>Esse atributo deve estar nos relacionamento many to one, aqui eh definido o nome do atributo da chave estrangeira no Banco de Dados.
 Por exemplo se voce tiver uma chave estrangeira, esse campo define o nome que o atributo integer contendo o valor do ID da outra tabela
 deve ter. No caso se tiver um colunm, isso permite com que a relacao ocorra sem que voce precise criar um atributo na entidade para
-receber o valor de id da tabela correspondente. 
+receber o valor de id da tabela correspondente, ou seja esse valor apenas existe no banco de dados e nao na aplicacao. 
+</p>
+<h3>Propriedade: fetch</h3>
+<p> Aqui voce define como que o hibernate ira trabalhar o relacionamento, voce pode escolher entre select e fetch, o padrao
+varia de acordo com o relacionamento, podendo ser estabelecido um tipo quando voce impoe um valor ao fetch.<br>
+Quando o valor do fetch eh "select", o hibernate ira preencher uma entidade e depois a outra, preenchendo assim o relacionamento usando 2 selects,
+no caso ela preenche a entidade dona do relacionamento com os dados do banco de dados e depois com um segundo select, sera preenchido a entidade
+com os dados correspondente no banco de dados da entidade ao qual esta sendo alvo do relacionamento. Porem com "join", as duas tabelas soa preenchidas
+simultaneamentes usando algum join ao inves de dois select, veja:<br>
+<b>fetch="select"<b>, Exemplo:<br><pre>select id,campo from EntidadeForte;<br>select id, campo from EntidadeRelacionada</pre><br>
+<b>fetch="join"<b>, Exemplo: <br><pre>select f.id,f.campo, r.id,r.campo from EntidadeForte as f, EntidadeRelacionada as r where f.id = r.id</pre><br>
+Com o fetch voce pode escolher se o hibernate vai usar mais select ou se ele vai fazer algum join, quando for resgatar dados do banco e montar o relacionamento com as entidades.
 </p>
 <h3>One To One</h3>
 <p>

@@ -72,8 +72,9 @@
                 Dessa forma voce faz o relacionamento 1 para 1, para esse tipo relacionamento o all eh o melhor, 
                 Caso seja colocado, essa one-to-one na outra entidade que referencia essa, logo temos um
                 relacionamento 1 para 1 bidirecional, do contrario eh apenas unidirecional. 
+                O fetch eh a forma com que o hibernate fara o relacionamento.
         -->
-        <one-to-one class="PACKAGE.ENTIDADE" name="INSTANCIA_DA_ENTIDADE" cascade="all" />
+        <one-to-one class="PACKAGE.ENTIDADE" name="INSTANCIA_DA_ENTIDADE" cascade="all" fetch="select"/>
         <!-- 
             Dessa forma que voce faz o relacionamento 1 para muitos, use colunm caso o nome do atributo da chave 
             estrangeira seja diferente no banco de dados, e o campo foreign-key caso voce queira definir um 
