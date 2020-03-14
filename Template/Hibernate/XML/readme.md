@@ -137,7 +137,7 @@ Com o fetch voce pode escolher se o hibernate vai usar mais select ou se ele vai
 
 </p>
 <h3>SET</h3>
-<p><img src="./.imgs/print8.png"/></p>
+<p><img src="./.imgs/print9.png"/></p>
 <h3>One To One</h3>
 <p>
  Dessa forma voce faz que voce usa a notacao one para one no hibernate, 
