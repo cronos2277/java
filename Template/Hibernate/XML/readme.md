@@ -122,7 +122,12 @@ relacionamento da chave estrangeira, fazendo com que na pratica essa cardinalida
 <p>Esse atributo deve estar nos relacionamento many to one, aqui eh definido o nome do atributo da chave estrangeira no Banco de Dados.
 Por exemplo se voce tiver uma chave estrangeira, esse campo define o nome que o atributo integer contendo o valor do ID da outra tabela
 deve ter. No caso se tiver um colunm, isso permite com que a relacao ocorra sem que voce precise criar um atributo na entidade para
-receber o valor de id da tabela correspondente, ou seja esse valor apenas existe no banco de dados e nao na aplicacao. 
+receber o valor de id da tabela correspondente, ou seja esse valor apenas existe no banco de dados e nao na aplicacao, porem isso apenas
+funciona como atributos de relacionamentos, como "one-to-one", "one-to-one", "many-to-one", "many-to-many", agora quando atributo
+de um property por exemplo, ela ja se comporta como o nome do atributo da tabela no banco de dados, por exemplo, se voce tem um atributo
+em uma entidade e esse mesmo atributo tem um nome diferente no banco de dados, voce referencia o nome dele na entidade como propriedade "name",
+e referencia o nome que o atributo name no banco de dados, isso deve ser feito caso o nome do atributo da entidade nao tenha o mesmo nome que
+o atributo la no banco de dados, sob o risco de dar erro no hibernate. 
 </p>
 <h3>Propriedade: fetch</h3>
 <p> Aqui voce define como que o hibernate ira trabalhar o relacionamento, voce pode escolher entre select e fetch, o padrao
