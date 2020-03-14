@@ -136,8 +136,6 @@ simultaneamentes usando algum join ao inves de dois select, veja:<br>
 Com o fetch voce pode escolher se o hibernate vai usar mais select ou se ele vai fazer algum join, quando for resgatar dados do banco e montar o relacionamento com as entidades.
 
 </p>
-<h3>SET</h3>
-<p><img src="./.imgs/print9.png"/></p>
 <h3>One To One</h3>
 <p>
  Dessa forma voce faz que voce usa a notacao one para one no hibernate, 
@@ -163,3 +161,7 @@ Com o fetch voce pode escolher se o hibernate vai usar mais select ou se ele vai
             nome da coluna de chava estrangeira que essa entidade ao qual contem o relacionamento tem. 
             </p>
 <p><img src="./.imgs/print7.png"/></p>
+
+<h3>SET</h3>
+<p>Abaixo temos um exemplo de como funciona o SET, o SET ele cria um container de relacionamento, o atributo key eh obrigatorio. </p>
+<p><img src="./.imgs/print9.png"/></p>
