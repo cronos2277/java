@@ -19,19 +19,19 @@ nos templates e substitua os valores no XML pelo equivalente ao banco de dados q
 Através dessa propriedade você pode fazer com que uma tabela no banco de dados, seja representado por duas ou mais entidades, isso pode ser muito util,<br>
 caso você tenha uma tabela muito grande ou que não seja normalizada. Coloque dentro da tag class:
 </p>
-<p><img src="./.imgs/print3.png"/></p>
+<p><img src="./.imgs/component.png"/></p>
 <h2>Criação de ID</h2>
 <p>Para referenciar uma id temos 2 formas de fazer isso:</p>
 <h3>Caso voce queira que a aplicao gerencie a aplicacao:</h3>
-<p><img src="./.imgs/print1.png"/></p>
+<p><img src="./.imgs/criacaoID.png"/></p>
 <h3>Caso voce queira que o banco de dados gerencie a aplicacao:</h3>
-<p><img src="./.imgs/print2.png"/></p>
+<p><img src="./.imgs/sequenceOrIdentity.png"/></p>
 <h3>Criacao de Chave Estrangeira com base na chave estrangeira:</h3>
 <p>Essa estrategia transforma a chave primaria dessa tabela em chave primaria e estrangeira da tabela referenciada abaixo.</p>
-<p><img src="./.imgs/print8.png"/></p>
-<h2>Caso voce precise colocar uma colection:</h2>
+<p><img src="./.imgs/generator.png"/></p>
+<h2>Caso voce precise colocar uma collection:</h2>
 <p>Essa seria uma outra forma de voce adicionar um relacionamento mais fraco a entidade, nesse caso o lado N da relação.</p>
-<p><img src="./.imgs/print4.png"/></p>
+<p><img src="./.imgs/collection.png"/></p>
 <h2>Colocando a Query dentro do arquivo XML</h2>
 <p>Caso voce queira incluir a query no arquivo xml, coloqueo dentro da tag query.
         O mesmo deve estar dentro de um CDATA para que nao seja interpolado, na hora 
@@ -82,7 +82,7 @@ caso você tenha uma tabela muito grande ou que não seja normalizada. Coloque d
         Session: https://docs.jboss.org/hibernate/orm/3.5/javadocs/org/hibernate/Session.html<br>
         Para isso voce tem no Hibernate, o Query, o Criteria API e o proprio sql puro, o que muda eh 
         apenas a forma de trabalhar.</p>
-<p><img src="./.imgs/print5.png"/></p>
+<p><img src="./.imgs/query.png"/></p>
 <h2>Relacionamentos Com outras Entidades</h2>
 <h3>Propriedade: Cascade</h3>
 <p>O Cascade informa como sera feito esse relacionamento, entre as entidades
@@ -159,24 +159,24 @@ Com o fetch voce pode escolher se o hibernate vai usar mais select ou se ele vai
                 entao recomenda-se o uso do all, para que se tenha um crud completo atraves
                 da entidade referenciada no no pai na propriedade name.                
 </p>
-<p><img src="./.imgs/print6.png"/></p>
+<p><img src="./.imgs/onetoone.png"/></p>
 <h3>Many To One</h3>
 <p>Dessa forma se faz o relacionamento many to one, os atributos permitidos sao semelhantes ao do one-to-one,
             o column serve tabem para a anotacao acima, a mesma deve ser usada caso voce queira que especificar o
             nome da coluna de chava estrangeira que essa entidade ao qual contem o relacionamento tem. 
             </p>
-<p><img src="./.imgs/print7.png"/></p>
+<p><img src="./.imgs/manytoone.png"/></p>
 <h3>Usando um composite-id</h3>
 <p>Essa estrategia abaixo pode ser interessante caso voce queira que a tabela associativa tenha mais atributos alem das duas ou mais chaves estrangeiras.</p>
-<p><img src="./.imgs/print11.png"/></p>
+<p><img src="./.imgs/composite-id.png"/></p>
 <h3>Join</h3>
 <p>O Join cria o relacionamento apenas no banco de dados, ou seja nao se faz necessario ter entidade para ela. Pode ser interessante caso voce nao queira 
 ter tabelas associativas sendo representadas como entidades por exemplo.</p>
-<p><img src="./.imgs/print12.png"/></p>
+<p><img src="./.imgs/join.png"/></p>
 <h3>SET</h3>
 <p>Abaixo temos um exemplo de como funciona o SET, o SET ele cria um container de relacionamento, o atributo key eh obrigatorio. Ele eh sempre util quando nas classes many do relacionamento,one_ou_manyToMany</p>
 <p>O Atributo Inverse joga a responsabilidade da geracao da foreign key a tabela relacionada se estiver setado como true, ou ela pode ser gerado apartir do campo key se estiver setado como falso.</p>
 <h4>ONE to ONE no SET</h4>
-<p><img src="./.imgs/print9.png"/></p>
+<p><img src="./.imgs/onetooneset.png"/></p>
 <h4>MANY to MANY no SET</h4>
-<p><img src="./.imgs/print10.png"/></p>
+<p><img src="./.imgs/manytomanyset.png"/></p>
