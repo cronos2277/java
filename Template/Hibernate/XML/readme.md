@@ -3,7 +3,7 @@
 
 <hr>
 <h2>Arquivo hibernate.cfg.xml</h2>
-<h3>Observações</h3>
+<p><img src="./.imgs/hibernate.png"/></p>
 
 <hr>
 <h2>Arquivo "CLASSE".hbm.xml</h2>
