@@ -166,6 +166,9 @@ Com o fetch voce pode escolher se o hibernate vai usar mais select ou se ele vai
             nome da coluna de chava estrangeira que essa entidade ao qual contem o relacionamento tem. 
             </p>
 <p><img src="./.imgs/print7.png"/></p>
+<h3>Usando um composite-id</h3>
+<p>Essa estrategia abaixo pode ser interessante caso voce queira que a tabela associativa tenha mais atributos alem das duas ou mais chaves estrangeiras.</p>
+<p><img src="./.imgs/print11.png"/></p>
 
 <h3>SET</h3>
 <p>Abaixo temos um exemplo de como funciona o SET, o SET ele cria um container de relacionamento, o atributo key eh obrigatorio. </p>

@@ -120,6 +120,16 @@
     <query name="NOME_DA_QUERY">
         <![CDATA[ from Entidade where id = :parametro]]>
     </query>
+
+    <class name="PACKAGE.ENTIDADE_ASSOCIATIVA" table="TABELA_CORRESPONDENTE_A_ENTIDADE_ASSOCIATIVA_NO_BD">
+        <!-- Nessa estrategia eh criada uma chave composto com base nas duas chaves compostas. Porem isso pode mudar. -->
+        <composite-id name="Atributo_Entidade_associativa" class="PACKAGE.ENTIDADE_ASSOCIATIVA" >
+            <key-many-to-one name="NOME_TABELA_DA_ENTIDADE1_NO_BD" foreign-key="NOME_DO_RELACIONAMENTO_COM_A_FK" column="O_ID_TABELA_DA_ENTIDADE1_NO_BD" class="PACKAGE.ENTIDADE1"/>
+            <key-many-to-one name="NOME_TABELA_DA_ENTIDADE2_NO_BD" foreign-key="NOME_DO_RELACIONAMENTO_COM_A_FK" column="O_ID_TABELA_DA_ENTIDADE2_NO_BD" class="PACKAGE.ENTIDADE2"/>
+        </composite-id>
+        <!-- Caso voce queira colocar atributos na tabela associativa, use os properties-->
+        <property name="UM_EXEMPLO_SE_VOCE_QUISER"/>
+    </class>
     
 </hibernate-mapping>
 
