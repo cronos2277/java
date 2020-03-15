@@ -129,6 +129,14 @@
         </composite-id>
         <!-- Caso voce queira colocar atributos na tabela associativa, use os properties-->
         <property name="UM_EXEMPLO_SE_VOCE_QUISER"/>
+
+        <!-- Essa eh uma forma de voce criar uma tabela associativa, a diferenca eh que essa nao tem Entidade representando-a. -->
+        <join table="NOME_DA_TABELA_NO_BD" optional="true">
+            <key column="NOME_COLUNA_DO_PK" unique="true"/>
+            <!-- Se unique estiver em true o relacionamento passa a ser 1 para 1, uma vez que o unique proibe repeticoes. -->
+            <many-to-one name="NOME_DA_TABELA_NO_BD" column="NOME_DO_ID_DO_PK" not-null="true" unique="true"/>
+            
+        </join>
     </class>
     
 </hibernate-mapping>
