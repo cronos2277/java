@@ -169,9 +169,12 @@ Com o fetch voce pode escolher se o hibernate vai usar mais select ou se ele vai
 <h3>Usando um composite-id</h3>
 <p>Essa estrategia abaixo pode ser interessante caso voce queira que a tabela associativa tenha mais atributos alem das duas ou mais chaves estrangeiras.</p>
 <p><img src="./.imgs/print11.png"/></p>
-
+<h3>Join</h3>
+<p>O Join cria o relacionamento apenas no banco de dados, ou seja nao se faz necessario ter entidade para ela. Pode ser interessante caso voce nao queira 
+ter tabelas associativas sendo representadas como entidades por exemplo.</p>
+<p><img src="./.imgs/print12.png"/></p>
 <h3>SET</h3>
-<p>Abaixo temos um exemplo de como funciona o SET, o SET ele cria um container de relacionamento, o atributo key eh obrigatorio. </p>
+<p>Abaixo temos um exemplo de como funciona o SET, o SET ele cria um container de relacionamento, o atributo key eh obrigatorio. Ele eh sempre util quando nas classes many do relacionamento,one_ou_manyToMany</p>
 <p>O Atributo Inverse joga a responsabilidade da geracao da foreign key a tabela relacionada se estiver setado como true, ou ela pode ser gerado apartir do campo key se estiver setado como falso.</p>
 <h4>ONE to ONE no SET</h4>
 <p><img src="./.imgs/print9.png"/></p>

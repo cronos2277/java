@@ -32,9 +32,8 @@
                 </generator>
             </id>
         -->
-        <!-- voce precisa da propriedade constrained="true" na tabela referenciada para funcionar direito. -->
-        
-            <one-to-one name="AQUI_VOCE_DEFINE_ENTIDADE_DO_ID_ACIMA" constrained="true"/>
+        <!-- voce precisa da propriedade constrained="true" na tabela referenciada para funcionar direito. -->        
+            <one-to-one name="AQUI_VOCE_DEFINE_ENTIDADE_DO_ID_ACIMA" constrained="true" />
         
         <!-- Aqui eh a propriedade de cada coluna da tabela, sendo name o nome do atributo do arquivo .java informado no class="name" -->                    
         <!-- Colunm eh o campo referente ao banco de dados, no caso nesse campo você informa a qual coluna ele referencia no banco de dados. -->
@@ -133,12 +132,13 @@
         <!-- Essa eh uma forma de voce criar uma tabela associativa, a diferenca eh que essa nao tem Entidade representando-a. -->
         <join table="NOME_DA_TABELA_NO_BD" optional="true">
             <key column="NOME_COLUNA_DO_PK" unique="true"/>
-            <!-- Se unique estiver em true o relacionamento passa a ser 1 para 1, uma vez que o unique proibe repeticoes. -->
-            <many-to-one name="NOME_DA_TABELA_NO_BD" column="NOME_DO_ID_DO_PK" not-null="true" unique="true"/>
+            <!-- Se unique estiver em true o relacionamento passa a ser 1 para 1, uma vez que o unique proibe repeticoes. -->        
+            <!-- property-ref eh uma boa colocar se o relacionamento eh o elo fraco da relacao, com esse atributo o column e o name daqui sao ignorados.-->    
+            <many-to-one name="NOME_DA_TABELA_NO_BD" column="NOME_DO_ID_DO_PK" not-null="true" unique="true" property-ref="O_NAME_DO_MANY_TO_QUALQUER_COISA_AO_QUAL_VOCE_QUER_REMETER"/>
             
         </join>
-    </class>
-    
+    </class>   
+
 </hibernate-mapping>
 
 <!-- APAGUE OS COMENTARIOS QUANDO USAR O TEMPLATE, PARA EVITAR ERROS DE COMPILACAO. -->
