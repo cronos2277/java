@@ -184,8 +184,24 @@ ter tabelas associativas sendo representadas como entidades por exemplo.</p>
 <p><img src="./.imgs/onetooneset.png"/></p>
 <h4>MANY to MANY no SET</h4>
 <p><img src="./.imgs/manytomanyset.png"/></p>
+<h2>Heranca no Hibernate</h2>
 <h3>JOINED SUBCLASS</h3>
 <p>Essa eh a forma com que o Hibernate trabalha com heranca, inicialmente voce configura mais externamente, no class as propriedades da entidade pai e depois voce usa a <b>Joined-subclass</b> 
 dentro para cada classe filha, uma joined para cada classe filha. O key ira pegar o PK do Pai e usa-lo como FK.</p>
+<p>Caso voce nao queira colocar dentro de um class existente, por algum motivo, voce precisa informar atraves da propriedade extends, a entidade pai, nesse caso:<br>
+<pre>
+< joined-subclass extends="PACKAGE.ENTIDADE_PAI"><br>
+< key column="ID_PAI" foreign-key="NOME_DA_CONTRAINT" /><br>
+< property name="NOME_DO_ATRIBUTO_NA_ENTIDADE" /><br>
+</ joined-subclass ><br>
+</pre>
+<br>
+Nessa estrutura de heranca a tabela filha estara separada da tabela pai, associando-se usando uma chave estrangeira.
+</p>
 <p><img src="./.imgs/joined-subclass.png"/></p>
+<h3>SUBCLASS</h3>
+<p>Nessa estrutura, diferente da <b>JOINED SUBCLASS</b> voce nao precisa informar um key para chave estrangeira, uma vez que as colunas das filhas seram unidas as do Pai.<br>
+Nessa estrutura de heranca tanto a tabela filha estara junto com a tabela pai.
+</p>
+<p><img src="./.imgs/subclass.png"/></p>
 

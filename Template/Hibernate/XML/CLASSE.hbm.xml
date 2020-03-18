@@ -139,16 +139,25 @@
         </join>
     </class>   
     <!-- O hibernate trabalha com heranca da forma abaixo -->
-<class>
+<class name="ENTIDADE_PAI">
     <id name="ID_PAI" column="ID_PAI" type="int">
         <generator class="increment"/>
     </id>
-    <property name="ATRIBUTO_PAI"/>
+    <property name="ATRIBUTO_PAI"/>    
     <joined-subclass>
         <!-- Key pega o ID do pai e monta uma--> 
         <key column="ID_PAI" foreign-key="NOME_DA_CONTRAINT"/>
         <property name="NOME_DO_ATRIBUTO_NA_ENTIDADE"/>
     </joined-subclass>
+</class>
+
+<class name="PACKAGE.ENTIDADE_PAI">
+    <id name="ID_PAI" column="ID_PAI" type="int">
+        <generator class="increment"/>
+    </id>
+    <subclass>
+        <property name="ATRIBUTO_FILHO1"/>
+    </subclass>
 </class>
 </hibernate-mapping>
 
