@@ -143,7 +143,7 @@ Com o fetch voce pode escolher se o hibernate vai usar mais select ou se ele vai
 </p>
 <h3>KEY</h3>
 <p>Diferente do id que cria a chave primaria, o key cria a chave estrangeira com base na chave primaria.
-<pre><key column="NOME_DO_CAMPO_CHAVE_ESTRANGEIRA" foreign-key="NOME_DA_CONSTRAINT"/></pre>
+<pre>< key column="NOME_DO_CAMPO_CHAVE_ESTRANGEIRA" foreign-key="NOME_DA_CONSTRAINT" / ></pre>
 </p>
 <h3>One To One</h3>
 <p>

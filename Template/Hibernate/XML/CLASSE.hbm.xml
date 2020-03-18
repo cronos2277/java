@@ -145,7 +145,7 @@
     </id>
     <property name="ATRIBUTO_PAI"/>
     <joined-subclass>
-        <!-- Key pega o ID do pai e monta uma FK--> 
+        <!-- Key pega o ID do pai e monta uma--> 
         <key column="ID_PAI" foreign-key="NOME_DA_CONTRAINT"/>
         <property name="NOME_DO_ATRIBUTO_NA_ENTIDADE"/>
     </joined-subclass>
