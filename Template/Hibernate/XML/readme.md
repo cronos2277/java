@@ -141,6 +141,10 @@ simultaneamentes usando algum join ao inves de dois select, veja:<br>
 Com o fetch voce pode escolher se o hibernate vai usar mais select ou se ele vai fazer algum join, quando for resgatar dados do banco e montar o relacionamento com as entidades.
 
 </p>
+<h3>KEY</h3>
+<p>Diferente do id que cria a chave primaria, o key cria a chave estrangeira com base na chave primaria.
+<pre><key column="NOME_DO_CAMPO_CHAVE_ESTRANGEIRA" foreign-key="NOME_DA_CONSTRAINT"/></pre>
+</p>
 <h3>One To One</h3>
 <p>
  Dessa forma voce faz que voce usa a notacao one para one no hibernate, 
@@ -180,3 +184,8 @@ ter tabelas associativas sendo representadas como entidades por exemplo.</p>
 <p><img src="./.imgs/onetooneset.png"/></p>
 <h4>MANY to MANY no SET</h4>
 <p><img src="./.imgs/manytomanyset.png"/></p>
+<h3>JOINED SUBCLASS</h3>
+<p>Essa eh a forma com que o Hibernate trabalha com heranca, inicialmente voce configura mais externamente, no class as propriedades da entidade pai e depois voce usa a <b>Joined-subclass</b> 
+dentro para cada classe filha, uma joined para cada classe filha. O key ira pegar o PK do Pai e usa-lo como FK.</p>
+<p><img src="./.imgs/joined-subclass.png"/></p>
+
