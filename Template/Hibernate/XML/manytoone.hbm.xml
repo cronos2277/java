@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>	 
+	<!-- APESAR DO Relacionamento "MANY-TO-ONE", sendo que apenas a tabela Many dessa relacao tendo constraint  -->
+    <class name="pkg.Entidade1" table="Tabela1">
+        <id name="id" column="id">
+            <generator class="increment"/>
+        </id>
+        <property name="atribute" column="atribute"/>               
+        <!-- Voce habilitar o campo abaixo se quiser bi-direcionalidade.  -->
+       <!-- <many-to-one class="pkg.Entidade2" name="entidade2" cascade="all" column="id_entidade2" foreign-key="fk_entidade1" not-null="false" unique="false"/> -->       
+    </class>    
+    
+    <class name="pkg.Entidade2" table="Tabela2">
+        <id name="id" column="id">
+            <generator class="increment"/>
+        </id>
+        <property name="atribute" column="atribute"/>  
+        <many-to-one class="pkg.Entidade1" name="entidade1" cascade="all" column="id_entidade1" foreign-key="fk_entidade2" not-null="false" unique="false"/> 
+    </class>
+</hibernate-mapping>
