@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- Esse mapeamento eh 1 para 1 sem uma FK no BD, no caso o mapeamento eh feito pela aplicacao. -->   
+    <class name="pkg.Entidade1" table="Tabela1">
+        <id name="id" column="id">
+            <generator class="increment"/>
+        </id>
+        <property name="atribute" column="atribute"/>  
+        <one-to-one class="pkg.Entidade2" name="entidade2" cascade="all" fetch="select"/>
+    </class>    
+    
+    <class name="pkg.Entidade2" table="Tabela2">
+        <id name="id" column="id">
+            <generator class="increment"/>
+        </id>
+        <property name="atribute" column="atribute"/>
+        <one-to-one class="pkg.Entidade1" name="entidade1" cascade="all" fetch="select"/>          
+    </class>
+</hibernate-mapping>

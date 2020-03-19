@@ -33,6 +33,6 @@
         <!-- Qual é o numero máximo de conexões?-->
         <property name="hibernate.pool_size">10</property>
         <!-- Mapeamento de classes -->
-        <mapping resource="mapping.hbm.xml" />
+        <mapping resource="aluno.hbm.xml" />
     </session-factory>
 </hibernate-configuration>
