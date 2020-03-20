@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping> 
+	
+    <class name="pkg.Entidade1" table="tabela1">
+    <id name="id" column="id">
+        <generator class="increment"/>
+    </id>
+    
+    <!-- Aqui eh feito o mapeamento com base na Entidade 2, name eh o nome do atributo List na Entidade1 -->
+    <set name="entidades" table="associativa">
+    <!-- o nome do id da tabela forte nesse key -->
+        <key column="id"/>
+        <!-- Aqui sao os dados da tabela fraca -->
+        <many-to-many column="id" unique="true" class="pkg.Entidade2"/>
+    </set>
+    <property name="atribute"/>
+</class>
+
+<class name="pkg.Entidade2" table="tabela2">
+    <id name="key" column="id">
+        <generator class="native"/>
+    </id>
+    <property name="atribute"/>
+</class
+>
+    
+    
+</hibernate-mapping>
