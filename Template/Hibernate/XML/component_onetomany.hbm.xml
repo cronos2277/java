@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping> 
+	<!-- Aqui voce une 2 Entidades em uma unica tabela no banco de dados -->
+    <class name="pkg.Entidade1" table="tabela">
+    <id name="id" column="id">
+        <generator class="increment"/>
+    </id>
+    
+    <!-- o component faz a uniao de tabelas, nesse caso a entidade2 esta se unindo a entidade1 -->
+     <component name="entidade2" class="pkg.Entidade2"> 
+     	<!-- Aqui todos os os atributos da entidade fraca que esta se unindo a entidade forte, o type eh opcional -->           
+     	<property name = "key" column = "key" type = "int"/> 
+     	<property name = "atribute" column = "atribute2" type = "string"/>     	      
+     </component>                   
+    
+    <property name="atribute" column="atribute1"/>
+</class>
+
+</hibernate-mapping>

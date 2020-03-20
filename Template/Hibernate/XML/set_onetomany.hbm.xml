@@ -13,8 +13,8 @@
     <set name="entidades" table="associativa">
     <!-- o nome do id da tabela forte nesse key -->
         <key column="id"/>
-        <!-- Aqui sao os dados da tabela fraca -->
-        <many-to-many column="id" unique="true" class="pkg.Entidade2"/>
+        <!-- Aqui sao os dados da tabela fraca, o key eh o id -->
+        <many-to-many column="key" unique="true" class="pkg.Entidade2"/>
     </set>
     <property name="atribute"/>
 </class>
