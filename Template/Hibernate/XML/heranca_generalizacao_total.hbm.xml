@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>	 
+<!-- Esse mapeamento eh para uma relacao de especializacao opcional, ou seja a tabela filha nao esta inclusa no pai -->
+    <class name="pkg.Pai" table="Tabela_unica" discriminator-value="tblp">
+    <id name="superId" column="id" type="int">
+        <generator class="increment"/>
+    </id>
+    <!-- Voce precisa criar um atributo na Entidade Pai para colocar esse desciminator. -->
+    <discriminator column="coluna_desciminator" type="string"/>
+    <property name="superAttr" column="superAttr"/>      
+  	<!-- Aqui voce define as configuracoes da classe filha --> 
+  	<!-- discriminator-value, esse valor sera colocado dentro do descrimanator acima para identificar essa entidade abaixo -->   
+    <subclass name="pkg.Entidade1" discriminator-value="valor_identificador_da_entidade">     	
+        	<property name="atribute" column="atributeEnt1"/>       	
+    </subclass>
+    
+   
+    
+</class>
+</hibernate-mapping>

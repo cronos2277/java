@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>	 
+<!-- Esse mapeamento eh para uma relacao de especializacao opcional, ou seja a tabela filha nao esta inclusa no pai -->
+    <class name="pkg.Pai" table="pai">
+    <id name="superId" column="id" type="int">
+        <generator class="increment"/>
+    </id>
+    <property name="superAttr" column="superAttr"/>  
+      
+  <!-- Aqui voce define as configuracoes da classe filha -->    
+    <joined-subclass name="pkg.Entidade1" table="filho">
+    	<!-- ID do filho -->         
+        <key column="id" foreign-key="NOME_DA_CONTRAINT"/>
+        <!-- Atributos do filho, o campo id do filho eh apenas um atributo aqui. -->
+        <property name="atribute"/>    
+        <property name="id" column="key"/>
+    </joined-subclass>
+</class>
+</hibernate-mapping>
