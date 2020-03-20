@@ -3,17 +3,17 @@
     "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
     "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	   
+	<!-- Esse relacionamento MANY TO MANY, cria a tabela associativa apenas no banco de dados e nao na aplicacao. -->   
     <class name="pkg.Entidade1" table="Tabela1">
         <id name="id" column="id">
             <generator class="increment"/>
         </id>
         <property name="atribute" column="atribute"/> 
-         
-       <!-- Aqui esta as informacoes da tabela associativa, o name eh o atributo Set dentro da entidade forte. -->  
-       <!-- o table eh o nome da tabela no banco de dados. -->
+        
+    <!-- Aqui esta as informacoes da tabela associativa, o name eh o atributo Set dentro da entidade forte. -->  
+    <!-- o table eh o nome da tabela no banco de dados. -->
         <set name="entidades" table="associativa" cascade="all">
-        	<!-- Key faz referencia ao ID da tabela1 -->
+        <!-- Key faz referencia ao ID da tabela1 -->
             <key column="id"/>
             <!-- Aqui a tabela externa a esse "<class>", no caso a tabela2 -->
             <many-to-many class="pkg.Entidade2" column="key"/>            
@@ -26,6 +26,6 @@
             <generator class="sequence"/>
         </id>
         <property name="atribute" column="atribute"/>  
-           
+        
     </class>
 </hibernate-mapping>

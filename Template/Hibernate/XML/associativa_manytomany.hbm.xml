@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- Esse relacionamento MANY TO MANY, cria a tabela associativa como entidade, use caso necessite da associativa na aplicacao -->	   
+    <class name="pkg.Entidade1" table="Tabela1">
+        <id name="id" column="id">
+            <generator class="increment"/>
+        </id>
+        <property name="atribute" column="atribute"/>        
+    </class>        
+    
+    <class name="pkg.Entidade2" table="Tabela2">
+        <id name="key" column="id">
+            <generator class="sequence"/>
+        </id>
+        <property name="atribute" column="atribute"/>          
+    </class>
+    
+    <!-- Tabela Associativa,  -->
+    <class name="pkg.Associativa" table="associativa">
+    <!-- o composite-id nao cria a chave sorrogada abaixo no banco, mas usa na aplicacao. -->
+    	<composite-id name="sorrogate" class="pkg.Associativa" >
+    	<!-- Cada key dessa abaixo representa o relacionamento com as Entidades mapeadas acima. id e key sao as PK das entidades -->
+            <key-many-to-one name="id" foreign-key="fk_tbl1" column="id" class="pkg.Entidade1"/>
+            <key-many-to-one name="key" foreign-key="fk_tbl2" column="key" class="pkg.Entidade2"/>
+        </composite-id>
+    </class>
+    
+</hibernate-mapping>
