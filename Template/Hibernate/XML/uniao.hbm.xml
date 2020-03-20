@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+	<!-- Essa estrutura une duas ou mais entidades em apenas um banco de dados. --> 
+    <class name="pkg.Entidade1" table="Tabela1" >
+        <id name="id" column="id">
+            <generator class="increment"/>
+        </id>
+        <property name="atribute" column="atribute"/>  
+       
+       <!-- Aqui a estrutura que faz essa uniao. --> 
+        <component name="entidade2">
+        <!-- Dados da Tabela que esta sendo unida. -->
+            <property name="key" column="key"/>
+            <property name="atribute" column="prop2"/>           
+        </component>               
+        
+    </class>  
+   
+</hibernate-mapping>
