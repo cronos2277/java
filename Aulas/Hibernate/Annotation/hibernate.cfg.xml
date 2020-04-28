@@ -34,6 +34,6 @@
         <property name="hibernate.pool_size">10</property>
         <property name="hibernate.hbm2ddl.auto">create</property>
         <!-- Mapeamento de classes nao precisa extensao, apenas o pacote e o nome do arquivo .java-->     
-         <mapping class="Pacote.Classe" />   
+        <mapping class="Pacote.Classe" />   
     </session-factory>
 </hibernate-configuration>
