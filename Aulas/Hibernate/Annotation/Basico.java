@@ -1,5 +1,3 @@
-package Runner;
-
 //Voce pode importar as bibliotecas do org.hibernate, mas ai a sua aplicacao fica preso a essa tecnologia.
 import java.util.Date;
 import javax.persistence.Column;
