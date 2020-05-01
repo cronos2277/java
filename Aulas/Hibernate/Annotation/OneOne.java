@@ -5,6 +5,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
@@ -27,7 +28,8 @@ public class OneOne {
 	 * no exemplo que temos abaixo, seria na classe Auxiliar.
 	 * */
 	
-	@OneToOne //Use apenas em entidades essa anotacao.
+	//"targetEntity": é a classe da entidade que é o destino da associação(Opcional). 
+	@OneToOne(targetEntity=Auxiliar.class) //Use apenas em entidades essa anotacao. 
 	@Cascade(value = { CascadeType.ALL }) //Explicado nos comentarios da classe Auxiliar
 	@JoinColumn(name="id_auxiliar")	//Aqui eh definido os parametros do FK da auxiliar.
 	public Auxiliar auxiliar;
