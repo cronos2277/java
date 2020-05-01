@@ -1,30 +1,49 @@
+import java.util.Collection;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 @Entity
 	@Table(name="AUXILIAR")
 	public class Auxiliar {
 		@Id
 		@GeneratedValue(strategy=GenerationType.AUTO)
-		@Column(name="id")
+		@Column(name="auxiliar_id")
 		public int codigo;
 		
 		@Column(name="valor")
 		public String valor;
 		
+		/*
+				
 		@OneToOne //Aqui eh feito a anotacao 1-1, Explica nos comentarios da classe OneOne
 		@Cascade(value = { CascadeType.ALL })
 		@JoinColumn(name="id_onetoone") //Aqui eh definido a FK da relacao 1x1
 		public OneOne oneone;
+		
+		*/
+		
+		@OneToMany(mappedBy="auxiliar",fetch=FetchType.EAGER) 
+		@Cascade(value = { CascadeType.ALL })	
+		public Collection<ManyOneMany> list_manyonemany;		
+		
+		@ManyToOne(fetch=FetchType.EAGER)
+		@JoinColumn(name="manyonemany_id",updatable=true, insertable=true)
+		@Fetch(FetchMode.JOIN)
+		@Cascade(CascadeType.SAVE_UPDATE)
+		public ManyOneMany manyonemany;
 		
 		@Override
 		public String toString() {
