@@ -5,6 +5,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+
 import javax.persistence.GenerationType;
 
 @Entity
@@ -25,6 +28,7 @@ public class OneOne {
 	 * */
 	
 	@OneToOne //Use apenas em entidades essa anotacao.
+	@Cascade(value = { CascadeType.ALL }) //Explicado nos comentarios da classe Auxiliar
 	@JoinColumn(name="id_auxiliar")	//Aqui eh definido os parametros do FK da auxiliar.
 	public Auxiliar auxiliar;
 
@@ -33,15 +37,7 @@ public class OneOne {
 		return "Unico [codigo=" + codigo + ", valor=" + valor + ", auxiliar=" + auxiliar + "]";
 	}	
 	
-	/*
-	 * Essa entidade deve ser instanciada, a Entidade Auxiliar tambem, apos preencher
-	 * todos os dados, a classe auxiliar dever ser passada ao atributo auxiliar,
-	 * uma vez que tudo esteja pronto, se faz necessario quando for rodar a transacao
-	 * executar o metodo "save" ou o "saveOrUpdate" em ambas as instancias antes de comitar.
-	 * 
-	 * A atribuicao da instancia do auxiliar com essa, eh a que faz a marcacao do campo id_auxiliar
-	 * com o 
-	 * */
+	
 	
 	
 }
