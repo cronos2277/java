@@ -34,8 +34,8 @@ import org.hibernate.annotations.FetchMode;
 		public OneOne oneone;
 		
 		*/
-		
-		@OneToMany(mappedBy="auxiliar",fetch=FetchType.EAGER) 
+		//mappedBy eh o nome dado a instancia dessa entidade, na entidade alvo.
+		@OneToMany(mappedBy="auxiliar",fetch=FetchType.LAZY) //Explicado abaixo.
 		@Cascade(value = { CascadeType.ALL })	
 		public Collection<ManyOneMany> list_manyonemany;		
 		
@@ -63,7 +63,37 @@ import org.hibernate.annotations.FetchMode;
 		 *  entidades, ou seja no caso de uma anotacao onetoone por exemplo, qualquer uma das
 		 *  duas que voce manda salvar, ja salva a outra, voce nao precisara fazer duas operacoes
 		 *  de insercoes, isso funciona tambem com exclusao e atualizacao dependendo do tipo
-		 *  de cascade que voce colocar em value.
+		 *  de cascade que voce colocar em value. Aqui tambem temos o cascade no update:
+		 *  @Cascade(CascadeType.SAVE_UPDATE) => Significa sincroniza na insercao e update e
+		 *  nao exclua, caso o outro campo seja excluido.
+		 *  
+		 *  Fetch
+		 *  fetch=FetchType.LAZY => (Padrao se omitido) Atualiza apenas os dados dessa entidade e das outras apenas 
+		 *  quando for solicitado algum acesso aos dados das entidades anexadas a ela.
+		 *  
+		 *  fetch=FetchType.EAGER => Atualiza todas as entidades, tanto a entidade que esta sendo acessada,
+		 *  assim como as que estao lincadas a elas, a cada atualizacao atualiza tudo.
+		 *  
+		 *  Por exemplo se existe duas Entidades a Entidades relacionadas A e B, no lazy se a A for atualizada,
+		 *  a B so sera atualizada quando for tentar pegar os dados relacionados a B, ja no Eager
+		 *  a atualizacao dos dados tanto de A e B ocorrem independente se o usuario so requisita a Entidade A.
+		 *  
+		 *  @Fetch: Aqui fiz como o hibernate deve trabalhar, quando for criar os relacionamentos entre as entidades{
+		 *  SÓ FARA DIFERENCA ISSO SE A ENTIDADE TIVER ALGUM RELACIONAMENTO!
+		 *  	Se Join = Isso significa que no banco de dados a consulta por dados deve ser feita utilizado Joins,
+		 *  	por exemplo, quando for pegar dados no banco de dados as entidades devem usar Joins quando for
+		 *  	pegar dados.
+		 *  
+		 *   	Se Select = Isso significa que o Hibernate deve usar o select, no caso, ao inves de usar Joins
+		 *   	o banco de dados fara 2 ou mais selects para preencher os dados das Entidades, primeiro da entidade
+		 *   	que esta requisitando dados e depois da(s) entidades relacionadas.
+		 *   
+		 *   	Se subselected = Ele usara de consultas aninhadas, ou seja ele usara o select, porem apenas 1 unico
+		 *   	select e nao varios como o select (Pouco usual)
+		 *   
+		 *   	Isso pode melhorar o desempenho da aplicacao, uma vez que o acesso ao banco de dados excessivo pode
+		 *   	representar um gargalo.
+		 *  }
 		 * */
 		
 	}
