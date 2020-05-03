@@ -1,4 +1,5 @@
 import java.util.Collection;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -9,6 +10,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -16,9 +18,12 @@ import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.hibernate.query.Query;
 
 @Entity
 	@Table(name="AUXILIAR")
+@NamedQuery(name="query_simples",query="from Auxiliar")
+@NamedQuery(name="query_parametro",query="from Auxiliar where valor = :param")
 	public class Auxiliar {
 		@Id
 		@GeneratedValue(strategy=GenerationType.AUTO)
@@ -51,6 +56,7 @@ import org.hibernate.annotations.FetchMode;
 		
 		*/
 		
+		/*
 		@ManyToMany(fetch=FetchType.EAGER) //Anotacao para ManyToMany, explicado melhor na classe ManyMany
 		@JoinTable(
 				name="manymany_auxiliar", //O Nome da Tabela intermediaria 
@@ -58,6 +64,7 @@ import org.hibernate.annotations.FetchMode;
 				inverseJoinColumns=@JoinColumn(name="id_manymany"))	 //ID da outra entidade.
 		@Cascade(CascadeType.ALL) 
 		public Collection<Auxiliar> manymany;
+		*/
 		
 		@Override
 		public String toString() {
@@ -107,6 +114,25 @@ import org.hibernate.annotations.FetchMode;
 		 *   
 		 *   	Isso pode melhorar o desempenho da aplicacao, uma vez que o acesso ao banco de dados excessivo pode
 		 *   	representar um gargalo.
+		 *  }
+		 *  @NamedQuery => Aqui voce pode criar querys costumizaveis envolvendo essa entidade {
+		 *  	Para usar uma query simples voce deve criar  uma instancia de Query, como nesse exemplo: 
+		 *  			Query query = session.getNamedQuery("query_simples");
+		 *  	Uma vez feito isso, voce pode resgatar o resultado, convertendo-o para uma lista, com o metodo list():
+		 *  			List<Auxiliar>auxs = query.list();
+		 *  	Ja nas query com parametros, voce precisaria, colocar o parametro, antes de converter para list e 
+		 *  	depois de criar o objeto Query, assim sendo, ficaria: 
+			 *  	Query query = session.getNamedQuery("query_parametro");
+					query = query.setParameter("param", "a");
+					List<Auxiliar>auxs = query.list();
+				Isso eh claro usando os dois exemplos de NamedQuery criado aqui nessa entidade. No campo name
+				voce deve colocar o nome da query, ao qual o metodo getNamedQuery vai usar, e no campo query
+				voce deve colocar a query a ser executada. Esse pode ser uma otima forma de criar uma query
+				customizada para essa entidade. Importante, as referencias deve ser da entidade e nao da tabela
+				no banco de dados, por exemplo: from <SuaEntidade> where valor = :<parametro>", voce usa a 
+				entidade no lugar da tabela e nos ":" voces informa(s) parametros que voce passara no metodo
+				getNamedQuery, lembrando que todos os parametros devem ser substituidos antes de voce transformar
+				a Query em List. 
 		 *  }
 		 * */
 		
