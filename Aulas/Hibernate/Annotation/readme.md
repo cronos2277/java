@@ -15,3 +15,5 @@ Aqui temos um exemplo de como Coleções funciona: [Exemplo de Coleções](Colec
 Aqui temos um exemplo de como OneToOne funciona: [Exemplo de OneToOne](OneOne.java)
 
 Aqui temos um exemplo de como ManyToOne e OneToMany funciona: [Exemplo de OneToOne e OneToMany](ManyOneMany.java)
+
+Aqui temos um exemplo de como ManyMany funciona: [Exemplo de ManyMany](ManyMany.java)

@@ -6,6 +6,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -34,6 +36,8 @@ import org.hibernate.annotations.FetchMode;
 		public OneOne oneone;
 		
 		*/
+		
+		/*
 		//mappedBy eh o nome dado a instancia dessa entidade, na entidade alvo.
 		@OneToMany(mappedBy="auxiliar",fetch=FetchType.LAZY) //Explicado abaixo.
 		@Cascade(value = { CascadeType.ALL })	
@@ -44,6 +48,16 @@ import org.hibernate.annotations.FetchMode;
 		@Fetch(FetchMode.JOIN)
 		@Cascade(CascadeType.SAVE_UPDATE)
 		public ManyOneMany manyonemany;
+		
+		*/
+		
+		@ManyToMany(fetch=FetchType.EAGER) //Anotacao para ManyToMany, explicado melhor na classe ManyMany
+		@JoinTable(
+				name="manymany_auxiliar", //O Nome da Tabela intermediaria 
+				joinColumns=@JoinColumn(name="id_auxiliar"), //ID dessa entidade
+				inverseJoinColumns=@JoinColumn(name="id_manymany"))	 //ID da outra entidade.
+		@Cascade(CascadeType.ALL) 
+		public Collection<Auxiliar> manymany;
 		
 		@Override
 		public String toString() {
