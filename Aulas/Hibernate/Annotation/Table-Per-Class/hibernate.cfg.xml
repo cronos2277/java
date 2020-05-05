@@ -36,8 +36,8 @@
         <!-- Mapeamento de classes nao precisa extensao, apenas o pacote e o nome do arquivo .java-->    
          
          
-         <mapping class="Heranca.ConcretaPorClasseDireita" />  
-         <mapping class="Heranca.ConcretaPorClasseEsquerda" />
+         <mapping class="ConcretaDireita" />  
+         <mapping class="ConcretaEsquerda" />
          
     </session-factory>
 </hibernate-configuration>
