@@ -1,9 +1,10 @@
 # Hibernate com '@Annotation'
+
 ## MAPEANDO
 Mapeamento de classes nao precisa extensao, apenas o pacote e o nome do arquivo .java
-
 `<mapping class="Pacote.Classe" />`
-## Exemplos
+
+## Exemplos de Mapeamento
 Aqui temos o arquivo de Mapemento: [hibernate.cfg.xml](hibernate.cfg.xml)
 
 Aqui temos um exemplo básico de como funciona: [Exemplo Básico](Basico.java)
@@ -17,3 +18,12 @@ Aqui temos um exemplo de como OneToOne funciona: [Exemplo de OneToOne](OneOne.ja
 Aqui temos um exemplo de como ManyToOne e OneToMany funciona: [Exemplo de OneToOne e OneToMany](ManyOneMany.java)
 
 Aqui temos um exemplo de como ManyMany funciona: [Exemplo de ManyMany](ManyMany.java)
+
+## Exemplos de mapeamento com Herança
+
+Aqui exemplos de como funciona a Herança: [Exemplos de Herança](./Heranca)
+
+## Observação
+As entidades tem os atributos publicos, mas isso é apenas para reduzir código, uma
+vez que os getters e setters iriam poluir muito a Entidade e deixar o código um 
+pouco mais complexo, use Bean se precisar de algo profissional, evite atributos publicos.
