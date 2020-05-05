@@ -25,6 +25,8 @@ Aqui exemplos de como funciona a Herança (Generalização): [Exemplos de Heran�
 
 Aqui exemplos de como funciona a Herança (Hierarquia): [Exemplos de Herança](./Single-Table)
 
+Aqui exemplos de como funciona a Herança (Normalizado): [Exemplos de Herança](./Joined)
+
 ## Observação
 As entidades tem os atributos publicos, mas isso é apenas para reduzir código, uma
 vez que os getters e setters iriam poluir muito a Entidade e deixar o código um 
