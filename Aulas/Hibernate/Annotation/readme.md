@@ -21,7 +21,7 @@ Aqui temos um exemplo de como ManyMany funciona: [Exemplo de ManyMany](ManyMany.
 
 ## Exemplos de mapeamento com Herança
 
-Aqui exemplos de como funciona a Herança: [Exemplos de Herança](./Heranca)
+Aqui exemplos de como funciona a Herança(Table-Per-Class): [Exemplos de Herança](./Table-Per-Class)
 
 ## Observação
 As entidades tem os atributos publicos, mas isso é apenas para reduzir código, uma
