@@ -1,4 +1,6 @@
 # Java Spring
+
+## XML
 ## Instalando
 Esse é o arquivo pom.xml que foi usado. Você pode encontra-lo aqui:[pom.xml](pom.xml)
 
@@ -103,3 +105,26 @@ Você o encontra aqui esse arquivo básico: [ApplicationContext](ApplicationCont
 `<bean name="bean1" class="Spring.home.Bean1" >` **property** `</bean>` => Aqui fica a definição da sua classe, ao qual o Spring deve fazer a injeção de dependência. O **name** é como ele será referenciado e o **class** é path mais o nome da classe. XML e Java são sensetive case.
 
 `<property name="valor" value="valor Padrao"/>` => Nesse contexto o name se refere ao atributo e o value, o valor inícial que esse atributo deve ter, você deve usar apenas se voce quiser que esse atributo inicie com algum valor.
+
+## Como acessar esses valores do XML?
+Nesse exemplo acima se quiser acessar esses valores você vai precisar fazer dois imports:
+
+    `import org.springframework.context.ApplicationContext;
+    import org.springframework.context.support.ClassPathXmlApplicationContext;`
+
+para conseguir fazer esses dois imports acima, você precisará dessa parte do código no seu arquivo pom.xml, Aqui estamos usando a versão 5.2.8
+
+    `<dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>5.2.8.RELEASE</version>
+        </dependency>
+    </dependencies>	`
+
+No código, para acessar o Bean instanciado em tempo de execução:
+
+`ApplicationContext app = new ClassPathXmlApplicationContext("/Spring/home/ApplicationContext.xml");` => No construtor você passa o Path mais o arquivo XML em questão.
+
+`Bean1 bean = (Bean1) app.getBean("bean1");` => Essa parte seria o equivalente ao `Bean bean = new Bean` e `bean.setValor("valor Padrao");` uma vez que existe uma property no arquivo xml acima definido um valor padrão para esse bean. No caso é exatamente isso que o Spring faz, instanciar classes automaticamente e controla-las dando assim mais desempenho e maior escalabilidade, uma vez que isso pode ser tudo resolvido por anotations ou por XML. Não esqueça de dar um cast, uma vez que o método getBean retorna um **Object**, penso que seria uma boa tratar isso com **try** e **catch** também. Esse bean1 passado como parametro no método, faz referência a esse campo aqui: `<bean name="bean1" class="Spring.home.Bean1" >` 
+
+`bean.getValor()` => Pronto agora você pode acessar normalmente o seu Bean, com a instanciação sendo gerenciada pelo Spring.
