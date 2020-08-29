@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN"
-        "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
 <beans>
 	<bean name="bean1" class="Spring.home.Bean1" >		
-		<property name="valor" value="valor Padrao"/>
+		<property name="valor" value="valor Padrao"/>		
+		<property name="bean" ref="beanId" />
 	</bean>	
+	<bean id="beanId" name="bean2" class="Spring.home.Bean2" ></bean>	
+	<bean name="bean3" class="Spring.home.Bean3">		
+		<constructor-arg value="Valor"/>
+		<constructor-arg value="1"/>
+		<constructor-arg value="true"/>
+	</bean>
 </beans>

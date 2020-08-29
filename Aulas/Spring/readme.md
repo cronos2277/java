@@ -103,7 +103,7 @@ Você o encontra aqui esse arquivo básico: [ApplicationContext](ApplicationCont
 
 `<bean name="bean1" class="Spring.home.Bean1" >` **property** `</bean>` => Aqui fica a definição da sua classe, ao qual o Spring deve fazer a injeção de dependência. O **name** é como ele será referenciado e o **class** é path mais o nome da classe. XML e Java são sensetive case.
 
-`<property name="valor" value="valor Padrao"/>` => Nesse contexto o name se refere ao atributo e o value, o valor inícial que esse atributo deve ter, você deve usar apenas se voce quiser que esse atributo inicie com algum valor. Lembrando que essa estratégia ela é apenas para valores do tipo primitivo, como String, Integer e etc... Se for um objeto a estratégia é outra.
+`<property name="valor" value="valor Padrao"/>` => Nesse contexto o name se refere ao atributo e o value, o valor inícial que esse atributo deve ter, você deve usar apenas se voce quiser que esse atributo inicie com algum valor. Lembrando que essa estratégia ela é apenas para valores do tipo primitivo, como String, Integer e etc... Se for um objeto a estratégia é outra, além disso o Spring vai procurar pelo Getter e o setter dele, ambos devem existir, no caso como o **name="valor"** deve existir na classe um setValor e um getValor. Com relação ao tipo voce pode especificar colocando um **type** no property, argumento que foi omitido nesse exemplo, ou apenas colocar o dado e no caso o Spring analisa o tipo pelo contexto.
 
 ## Como acessar esses valores do XML?
 Nesse exemplo acima se quiser acessar esses valores você vai precisar fazer dois imports:
@@ -188,3 +188,52 @@ No caso para fazer referência ao **Bean2** a estratégia é diferente, no caso 
 
 `<property name="bean" ref="beanId" />` => Esse property vai dentro do elemento que contem, repare que temos um **ref** ali, esse ref, faz referência a um ID, por isso que o bean2 precisou ter um ID,
  justamente para que o mesmo pudesse ser referenciado.
+
+ ### Injetando via construtor
+XML contendo o Bean3
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+    <beans>
+        <bean name="bean1" class="Spring.home.Bean1" >		
+            <property name="valor" value="valor Padrao"/>		
+            <property name="bean" ref="beanId" />
+        </bean>	
+        <bean id="beanId" name="bean2" class="Spring.home.Bean2" ></bean>	
+        <bean name="bean3" class="Spring.home.Bean3">
+
+            <!-- Aqui estamos injetando valores no construtor a forma eh essa, repare que o Spring descobre o tipo sozinho -->
+            <constructor-arg value="Valor"/>
+            <constructor-arg value="1"/>
+            <constructor-arg value="true"/>
+        </bean>
+    </beans>
+
+A Classe do Bean3.
+
+    public class Bean3 {
+        private String valor1;
+        private int valor2;
+        private boolean valor3;
+        
+        //Repare que temos um tipo String, um integer e um boolean e isso nao eh dito no XML acima
+        public Bean3(String valor1, int valor2, boolean valor3) {
+            this.valor1 = valor1;
+            this.valor2 = valor2;
+            this.valor3 = valor3;
+        }	
+        
+        @Override
+        public String toString() {
+            return "Valor 1: "+this.valor1+", Valor2: "+this.valor2+", Valor3: "+this.valor3;
+        }
+    }
+
+A forma básica é essa, dentro do seu bean: `<bean name="bean3" class="Spring.home.Bean3"></bean>` você coloca os **constructor-arg** `<constructor-arg value="Valor"/>`, um para cada parametro do seu bean, no caso a nossa classe Bean3 tem um construtor que recebe 3 argumentos, um de cada tipo, como visto nessa parte: `public Bean3(String valor1, int valor2, boolean valor3)`, logo no XML que é usado para configurar o Bean se faz necessário informar isso lá, como informado nesse trecho, repare que no XML não é informado os tipos, o Spring descobre isso sozinho:
+
+    <bean name="bean3" class="Spring.home.Bean3">		
+		<constructor-arg value="Valor"/>
+		<constructor-arg value="1"/>
+		<constructor-arg value="true"/>
+	</bean>
+
