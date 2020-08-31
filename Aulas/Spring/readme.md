@@ -255,3 +255,141 @@ Exemplo de uso do **BeanFactory**, usando os beans acima.
     System.out.println(app2.getBean("bean3"));
 
 repare que os dois instanciam de `new ClassPathXmlApplicationContext("/Spring/home/ApplicationContext.xml");`. A String informada ali corresponde ao nome do XML aonde tem essas configurações e o Path para esse arquivo, instanciando a classe `ApplicationContext app = new ClassPathXmlApplicationContext` você inicia os Beans mapeados e para acessar os beans `app.getBean("bean3")`, com esse método você acessa o bean, uma vez acessado o bean você ja pode usar os setters e getters desse bean sem se preocupar com erros do tipo **NullPointerException**, uma vez que os mesmos serão inicializados com um valor padrão.
+
+### Collections SET e LIST
+Aqui nós temos alguns exemplos de collections, no caso do **SET** e do **MAP**, você precisa informar um property que tenha o nome do atributo e dentro do property iniciar o **SET** ou o **LIST** com os valores que você deseja que seja inicializados.
+
+Exemplos com o **LIST**
+
+    <property name="lista">
+			<list>
+				<value>Item 1</value>
+				<value>Item 2</value>
+				<value>Item 3</value>
+			</list>						
+	</property>
+
+Exemplos com o **SET**
+
+    <property name="numeros">
+			<set>
+				<value>1</value>
+				<value>2</value>
+				<value>3</value>
+			</set>
+		</property>
+
+Repare que a estrutura para os dois é a mesma, você deve criar uma tag **SET** ou **List** que sirva de container para os seus valores, uma vez feito isso, basta coloca-los dentro de um property, cujo o name é o atributo em questão.
+
+### Collections com o MAP e Properties
+
+O **MAP** já é um pouco diferente, no caso ao invés do **value**, você deve criar uma **entry** que contém como atributo uma **key** e um atributo **value** ou o **value** deve ser uma tag filho de **entry**, o **property** deve conter o nome do atributo da classe em questão.
+
+		<property name="eventos">
+			<map>
+				<entry key="evento1" value="true"/>
+				<entry key="evento2" value="false"/>
+			</map>			
+		</property>
+
+**Properties** a estrutura é semelhante, porém ao invés de um **MAP**, você tem o **props** no *plural* e dentro do **props** no *plural* você tem os **prop** no *singular* que tem a chave com o valor dentro das tags a ser inicializado.
+
+    <property name="propriedades">
+			<props>
+				<prop key="atributo1">valor1</prop>
+				<prop key="atributo2">valor2</prop>				
+			</props>
+	</property>
+
+### A classe Bean 4 que contém os atributos collections
+Aqui nós temos uma classe que tem coleções, no caso a classe usada nas coleções acima, reparem que eles tem getters e setters como os atributos normais, no caso a estratégia de inicialização foi por setter, mas poderia ser por construtor também.
+
+    public class Bean4 {
+        private List<String> lista;
+        private Map<String,Boolean> eventos;
+        private Set<Integer> numeros;
+        private Properties propriedades;
+        
+        public Properties getPropriedades() {
+            return propriedades;
+        }
+        public void setPropriedades(Properties propriedades) {
+            this.propriedades = propriedades;
+        }
+        public List<String> getLista() {
+            return lista;
+        }
+        public void setLista(List<String> lista) {
+            this.lista = lista;
+        }
+        public Map<String, Boolean> getEventos() {
+            return eventos;
+        }
+        public void setEventos(Map<String, Boolean> eventos) {
+            this.eventos = eventos;
+        }
+        public Set<Integer> getNumeros() {
+            return numeros;
+        }
+        public void setNumeros(Set<Integer> numeros) {
+            this.numeros = numeros;
+        }
+            
+        @Override
+        public String toString() {
+            return "Lista: "+this.lista
+                    +"\nEventos: "+this.eventos
+                    +"\nNumeros: "+this.numeros
+                    +"\nPropriedades: "+this.propriedades;
+        }
+    }   
+
+### O XML contendo o Bean4
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+    <beans>
+        <bean name="bean1" class="Spring.home.Bean1" >		
+            <property name="valor" value="valor Padrao"/>		
+            <property name="bean" ref="beanId" />
+        </bean>	
+        <bean id="beanId" name="bean2" class="Spring.home.Bean2" ></bean>	
+        <bean name="bean3" class="Spring.home.Bean3">		
+            <constructor-arg value="Valor"/>
+            <constructor-arg value="1"/>
+            <constructor-arg value="true"/>
+        </bean>
+        <bean name="bean4" class="Spring.home.Bean4">
+            <property name="lista">
+                <list>
+                <!-- Uma lista -->
+                    <value>Item 1</value>
+                    <value>Item 2</value>
+                    <value>Item 3</value>
+                </list>						
+            </property>
+            <property name="eventos">
+                <map>
+                    <entry key="evento1" value="true"/>
+                    <entry key="evento2" value="false"/>
+                    <!-- Essa eh uma outra forma -->
+                    <entry key="evento3"><value>true</value></entry>
+                </map>			
+            </property>
+            <property name="numeros">
+                <set>
+                <!-- uma lista que nao se repete -->
+                    <value>1</value>
+                    <value>2</value>
+                    <value>3</value>
+                </set>
+            </property>
+            <property name="propriedades">		
+                <props>
+                <!-- Properties -->
+                    <prop key="atributo1">valor1</prop>
+                    <prop key="atributo2">valor2</prop>				
+                </props>
+            </property>
+        </bean>
+    </beans>
