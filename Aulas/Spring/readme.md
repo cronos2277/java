@@ -237,3 +237,21 @@ A forma básica é essa, dentro do seu bean: `<bean name="bean3" class="Spring.h
 		<constructor-arg value="true"/>
 	</bean>
 
+### ApplicationContext ou BeanFactory
+No caso sempre que possível use o **ApplicationContext**, uma vez que este é mais completo.
+
+Exemplo de uso do **ApplicationContext**, usando os beans acima.
+
+    import org.springframework.context.ApplicationContext;
+    import org.springframework.context.support.ClassPathXmlApplicationContext;
+    ApplicationContext app1 = new ClassPathXmlApplicationContext("/Spring/home/ApplicationContext.xml");
+    System.out.println(app1.getBean("bean3"));
+
+Exemplo de uso do **BeanFactory**, usando os beans acima.
+
+    import org.springframework.context.ApplicationContext;
+    import org.springframework.beans.factory.BeanFactory;
+    BeanFactory app2 = new ClassPathXmlApplicationContext("/Spring/home/ApplicationContext.xml");
+    System.out.println(app2.getBean("bean3"));
+
+repare que os dois instanciam de `new ClassPathXmlApplicationContext("/Spring/home/ApplicationContext.xml");`. A String informada ali corresponde ao nome do XML aonde tem essas configurações e o Path para esse arquivo, instanciando a classe `ApplicationContext app = new ClassPathXmlApplicationContext` você inicia os Beans mapeados e para acessar os beans `app.getBean("bean3")`, com esse método você acessa o bean, uma vez acessado o bean você ja pode usar os setters e getters desse bean sem se preocupar com erros do tipo **NullPointerException**, uma vez que os mesmos serão inicializados com um valor padrão.
