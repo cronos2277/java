@@ -500,3 +500,35 @@ Com o Lazy init você pode fazer com que o Bean seja inicializado apenas quando 
 #### default-lazy-init
 Aqui definimos o padrão de carregamento para todos os beans dentro da nossa tag `<beans>`, como nesse exemplo a seguir: `<beans default-lazy-init="true">` o padrão é false, e o funcionamento é igual ao **lazy-init**, mas diferentente dele, esse vai na tag que engloba todos os beans e define o comportamento padrão de todos os beans, caso o **lazy-init** não seja especificado, ou caso o **lazy-init** do bean em questão esteja definido como *default*.
 
+### Instancias no Spring
+#### N beans para a mesma classe
+    <bean name="bean0" class="Spring.home.Bean1">		
+		<property name="valor" value="valor Padrao"/>		
+		<property name="bean" ref="beanId" />
+	</bean>	
+	
+	<bean name="bean1" class="Spring.home.Bean1">		
+		<property name="valor" value="valor Padrao"/>		
+		<property name="bean" ref="beanId" />
+	</bean>	
+
+Aqui nesse exemplo acima, temos que tanto o **Bean0** como o **Bean1** apontam para a mesma classe, você pode acessar os dados tanto por `.getBean("bean0")` como por `.getBean("bean1")`, ou seja você pode acessar. Essa estratégia seria interessante por exemplo caso você tivesse uma classe DAO e quisesse que houvesse a conexão com dois ou mais bancos de dados diferentes, por exemplo uma classe inicializada com valores para acessar no mysql e você pode mudar os parametros para que possa ser feito o acesso com essa mesma classe no postgres por exemplo, tudo mudando o valor de uma String por exemplo.
+
+#### Parametro scope
+    <bean name="bean0" class="Spring.home.Bean1" scope="prototype">		
+		<property name="valor" value="valor Padrao"/>		
+		<property name="bean" ref="beanId" />
+	</bean>	
+	
+	<bean name="bean1" class="Spring.home.Bean1" scope="singleton">		
+		<property name="valor" value="valor Padrao"/>		
+		<property name="bean" ref="beanId" />
+	</bean>	
+
+Aqui temos a mesma classe, porém com um atributo diferente, o atributo **scope**, aqui temos um exemplo de como funciona isso. Por padrão o spring trabalha com o Singleton, ou seja toda a chamada do método `.getBean("bean")` terá a instancia compartilhada, por exemplo: 
+
+        ApplicationContext app1 = new ClassPathXmlApplicationContext("/Spring/home/ApplicationContext.xml");    
+    	Bean1 bean1 = (Bean1) app1.getBean("bean0");
+    	Bean1 bean2 = (Bean1) app1.getBean("bean0");
+
+Se estiver configurado no modo padrão, ou se o **scope="singleton"**, nesse caso tanto o bean1 assim como o bean2 irão apontar para a mesma instancia, o objeto será inicializado na hora que for requisitado o acesso ao primeiro objeto, se o modo *lazy-init* estiver habilitado, seria executado ao inicialiazar a aplicação, caso o *lazy-init* fosse falso ou padrão, e o segundo objeto irá pegar uma cópia do primeiro. Agora se tivermos isso: `<bean name="bean0" class="Spring.home.Bean1" scope="prototype">`, ai muda, quando especificado como prototype, ai cada objeto terá acesso a uma instancia independente, nesse caso com o prototype o objeto bean1 e bean2 não apontariam ao mesmo objeto e sim a objetos diferentes. Em resumo, apenas use o prototype se você precisar de instancias independentes e não tem interesse de fazer isso dando um **new** em alguma classe, caso o contrário use o singleton, que é o padrão.
