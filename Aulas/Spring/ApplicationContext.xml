@@ -11,4 +11,57 @@
 		<constructor-arg value="1"/>
 		<constructor-arg value="true"/>
 	</bean>
+	<bean name="bean4" class="Spring.home.Bean4">
+		<property name="lista">
+			<list>
+			<!-- Uma lista -->
+				<value>Item 1</value>
+				<value>Item 2</value>
+				<value>Item 3</value>
+			</list>						
+		</property>
+		<property name="eventos">
+			<map>
+				<entry key="evento1" value="true"/>
+				<entry key="evento2" value="false"/>
+				<!-- Essa eh uma outra forma -->
+				<entry key="evento3"><value>true</value></entry>
+			</map>			
+		</property>
+		<property name="numeros">
+			<set>
+			<!-- uma lista que nao se repete -->
+				<value>1</value>
+				<value>2</value>
+				<value>3</value>
+			</set>
+		</property>
+		<property name="propriedades">		
+			<props>
+			<!-- Properties -->
+				<prop key="atributo1">valor1</prop>
+				<prop key="atributo2">valor2</prop>				
+			</props>
+		</property>
+	</bean>
+	<bean name="bean5" class="Spring.home.Bean5">
+		<!-- referenciando pelo id, injetando via construtor -->
+		<constructor-arg  ref="idInterno1"/>
+		<!-- referenciando pelo name, injetando via setter -->
+		<property name="basico2" ref="interno2"/>
+	</bean>
+	<bean id="idInterno1" name="interno1" class="Spring.home.interno.Basico1">
+		<property name="id" value="1"/>
+		<property name="valor" value="valor padrao"/>
+	</bean>
+	<bean name="interno2" class="Spring.home.interno.Basico2">
+		<property name="id" value="2"/>
+		<property name="valores">
+			<list>
+				<value>Valor 1</value>
+				<value>Valor 2</value>
+				<value>Valor 3</value>
+			</list>
+		</property>
+	</bean>
 </beans>

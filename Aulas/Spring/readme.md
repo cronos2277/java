@@ -129,7 +129,7 @@ No código, para acessar o Bean instanciado em tempo de execução:
 `bean.getValor()` => Pronto agora você pode acessar normalmente o seu Bean, com a instanciação sendo gerenciada pelo Spring.
 
 ### Mapeando dados não primitivos.
-Essa é a classe **Bean2**, ao qual está contido dentro de **Bean1**.
+#### Essa é a classe **Bean2**, ao qual está contido dentro de **Bean1**.
 
     import javax.swing.JOptionPane;
     public class Bean2 {
@@ -141,8 +141,7 @@ Essa é a classe **Bean2**, ao qual está contido dentro de **Bean1**.
 	    }
     }
 
-Aqui esta a classe **Bean1**.
-
+#### Aqui esta a classe **Bean1**.
     public class Bean1 {
 	private int id;
 	private String valor;
@@ -169,7 +168,7 @@ Aqui esta a classe **Bean1**.
 
 No caso para fazer referência ao **Bean2** a estratégia é diferente, no caso o seu property vai ter a seguinte estrutura:
 
- No caso o XML ficaria assim:
+#### No caso o XML ficaria assim:
     
     <?xml version="1.0" encoding="UTF-8"?>
     <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
@@ -189,9 +188,8 @@ No caso para fazer referência ao **Bean2** a estratégia é diferente, no caso 
 `<property name="bean" ref="beanId" />` => Esse property vai dentro do elemento que contem, repare que temos um **ref** ali, esse ref, faz referência a um ID, por isso que o bean2 precisou ter um ID,
  justamente para que o mesmo pudesse ser referenciado.
 
- ### Injetando via construtor
-XML contendo o Bean3
-
+### Injetando via construtor
+#### XML contendo o Bean3
     <?xml version="1.0" encoding="UTF-8"?>
     <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
     <beans>
@@ -209,7 +207,7 @@ XML contendo o Bean3
         </bean>
     </beans>
 
-A Classe do Bean3.
+#### A Classe do Bean3.
 
     public class Bean3 {
         private String valor1;
@@ -240,15 +238,13 @@ A forma básica é essa, dentro do seu bean: `<bean name="bean3" class="Spring.h
 ### ApplicationContext ou BeanFactory
 No caso sempre que possível use o **ApplicationContext**, uma vez que este é mais completo.
 
-Exemplo de uso do **ApplicationContext**, usando os beans acima.
-
+#### Exemplo de uso do **ApplicationContext**, usando os beans acima.
     import org.springframework.context.ApplicationContext;
     import org.springframework.context.support.ClassPathXmlApplicationContext;
     ApplicationContext app1 = new ClassPathXmlApplicationContext("/Spring/home/ApplicationContext.xml");
     System.out.println(app1.getBean("bean3"));
 
-Exemplo de uso do **BeanFactory**, usando os beans acima.
-
+#### Exemplo de uso do **BeanFactory**, usando os beans acima.
     import org.springframework.context.ApplicationContext;
     import org.springframework.beans.factory.BeanFactory;
     BeanFactory app2 = new ClassPathXmlApplicationContext("/Spring/home/ApplicationContext.xml");
@@ -259,8 +255,7 @@ repare que os dois instanciam de `new ClassPathXmlApplicationContext("/Spring/ho
 ### Collections SET e LIST
 Aqui nós temos alguns exemplos de collections, no caso do **SET** e do **MAP**, você precisa informar um property que tenha o nome do atributo e dentro do property iniciar o **SET** ou o **LIST** com os valores que você deseja que seja inicializados.
 
-Exemplos com o **LIST**
-
+#### Exemplos com o LIST
     <property name="lista">
 			<list>
 				<value>Item 1</value>
@@ -269,8 +264,7 @@ Exemplos com o **LIST**
 			</list>						
 	</property>
 
-Exemplos com o **SET**
-
+#### Exemplos com o SET
     <property name="numeros">
 			<set>
 				<value>1</value>
@@ -285,6 +279,7 @@ Repare que a estrutura para os dois é a mesma, você deve criar uma tag **SET**
 
 O **MAP** já é um pouco diferente, no caso ao invés do **value**, você deve criar uma **entry** que contém como atributo uma **key** e um atributo **value** ou o **value** deve ser uma tag filho de **entry**, o **property** deve conter o nome do atributo da classe em questão.
 
+#### MAP XML
 		<property name="eventos">
 			<map>
 				<entry key="evento1" value="true"/>
@@ -294,6 +289,7 @@ O **MAP** já é um pouco diferente, no caso ao invés do **value**, você deve 
 
 **Properties** a estrutura é semelhante, porém ao invés de um **MAP**, você tem o **props** no *plural* e dentro do **props** no *plural* você tem os **prop** no *singular* que tem a chave com o valor dentro das tags a ser inicializado.
 
+#### Properties XML
     <property name="propriedades">
 			<props>
 				<prop key="atributo1">valor1</prop>
@@ -304,6 +300,7 @@ O **MAP** já é um pouco diferente, no caso ao invés do **value**, você deve 
 ### A classe Bean 4 que contém os atributos collections
 Aqui nós temos uma classe que tem coleções, no caso a classe usada nas coleções acima, reparem que eles tem getters e setters como os atributos normais, no caso a estratégia de inicialização foi por setter, mas poderia ser por construtor também.
 
+#### Bean4.java
     public class Bean4 {
         private List<String> lista;
         private Map<String,Boolean> eventos;
@@ -344,7 +341,7 @@ Aqui nós temos uma classe que tem coleções, no caso a classe usada nas coleç
         }
     }   
 
-### O XML contendo o Bean4
+#### O XML contendo o Bean4
 
     <?xml version="1.0" encoding="UTF-8"?>
     <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
@@ -396,6 +393,7 @@ Aqui nós temos uma classe que tem coleções, no caso a classe usada nas coleç
 ### Bean aninhado
 É possível inicializar um beam dentro do outro, ou seja caso um bean tenha como atributo, um outro bean, voce pode inicializa-lo, aqui inicializamos tanto por setter como por construtor. Abaixo o trecho de XML exemplo:
 
+#### XML
     <bean name="bean5" class="Spring.home.Bean5">
 		<!-- referenciando pelo id, injetando via construtor -->
 		<constructor-arg  ref="idInterno1"/>
