@@ -393,3 +393,105 @@ Aqui nós temos uma classe que tem coleções, no caso a classe usada nas coleç
             </property>
         </bean>
     </beans>
+### Bean aninhado
+É possível inicializar um beam dentro do outro, ou seja caso um bean tenha como atributo, um outro bean, voce pode inicializa-lo, aqui inicializamos tanto por setter como por construtor. Abaixo o trecho de XML exemplo:
+
+    <bean name="bean5" class="Spring.home.Bean5">
+		<!-- referenciando pelo id, injetando via construtor -->
+		<constructor-arg  ref="idInterno1"/>
+		<!-- referenciando pelo name, injetando via setter -->
+		<property name="basico2" ref="interno2"/>
+	</bean>
+	<bean id="idInterno1" name="interno1" class="Spring.home.interno.Basico1">
+		<property name="id" value="1"/>
+		<property name="valor" value="valor padrao"/>
+	</bean>
+	<bean name="interno2" class="Spring.home.interno.Basico2">
+		<property name="id" value="2"/>
+		<property name="valores">
+			<list>
+				<value>Valor 1</value>
+				<value>Valor 2</value>
+				<value>Valor 3</value>
+			</list>
+		</property>
+	</bean>
+
+#### Bean 5    
+
+    public class Bean5 {
+	    private  Basico1 basico1;
+	    private  Basico2 basico2;
+	
+        public Bean5(Basico1 basico1) {
+            this.basico1 = basico1;
+        }	
+
+        public Basico2 getBasico2() {
+            return basico2;
+        }
+
+        public void setBasico2(Basico2 basico2) {
+            this.basico2 = basico2;
+        }
+
+        @Override
+        public String toString() {
+            // TODO Auto-generated method stub
+            return "Basico1: "+this.basico1
+                    +"\nBasico2: "+this.basico2;
+        }	
+    }
+
+#### Basico1.java
+    public class Basico1 {
+        private String valor;
+        public String getValor() {
+            return valor;
+        }
+        public void setValor(String valor) {
+            this.valor = valor;
+        }
+        public int getId() {
+            return id;
+        }
+        public void setId(int id) {
+            this.id = id;
+        }
+        private int id;
+        
+        @Override
+        public String toString() {
+            // TODO Auto-generated method stub
+            return "ID: "+this.id+", Valor: "+this.valor;
+        }
+    }
+
+#### Basico2.java
+    public class Basico2 {
+        private int id;
+        private List<String> valores;
+        public int getId() {
+            return id;
+        }
+        public void setId(int id) {
+            this.id = id;
+        }
+        public List<String> getValores() {
+            return valores;
+        }
+        public void setValores(List<String> valores) {
+            this.valores = valores;
+        }
+        
+        @Override
+        public String toString() {
+            // TODO Auto-generated method stub
+            return "ID: "+this.id+", Valores: "+this.valores;
+        }
+    }
+
+As 3 classes são informadas como qualquer bean, mas no Bean5 existe algo novo, no caso aqui `<constructor-arg  ref="idInterno1"/>` temos o construtor referenciando o **id**, esse id faz referência a anotação mais abaixo do primeiro bean interno como podemos ver aqui `<bean id="idInterno1" name="interno1" class="Spring.home.interno.Basico1">`. Além disso esse mesmo **ref** ele pode referenciar também um **name**, no segundo objeto interno fizemos a injeção por setter e o **ref** faz referência a um **name**, o Spring se vira tanto com **id** como com **name**.
+Aqui temos o Bean5 referenciando um name `<property name="basico2" ref="interno2"/>`, no caso o interno2 que é esse beam aqui `<bean name="interno2" class="Spring.home.interno.Basico2">`. 
+
+
