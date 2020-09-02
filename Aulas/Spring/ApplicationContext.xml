@@ -1,5 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+
 <beans default-lazy-init="false">
 	<!-- Essa aqui eh um bean clone e versao prototype do bean1 abaixo -->
 	<bean name="bean0" class="Spring.home.Bean1" scope="prototype">		
@@ -70,4 +71,15 @@
 			</list>
 		</property>
 	</bean>
+	<bean name="propertiesConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<value>
+				classpath:Spring/home/arquivo.extensao
+			</value>
+		</property>
+	</bean>
+	<bean name="arquivo" class="Spring.home.Bean1" scope="prototype">		
+		<property name="valor" value="${chave.prop1}"/>		
+		<property name="bean" ref="beanId" />
+	</bean>	
 </beans>

@@ -532,3 +532,164 @@ Aqui temos a mesma classe, porém com um atributo diferente, o atributo **scope*
     	Bean1 bean2 = (Bean1) app1.getBean("bean0");
 
 Se estiver configurado no modo padrão, ou se o **scope="singleton"**, nesse caso tanto o bean1 assim como o bean2 irão apontar para a mesma instancia, o objeto será inicializado na hora que for requisitado o acesso ao primeiro objeto, se o modo *lazy-init* estiver habilitado, seria executado ao inicialiazar a aplicação, caso o *lazy-init* fosse falso ou padrão, e o segundo objeto irá pegar uma cópia do primeiro. Agora se tivermos isso: `<bean name="bean0" class="Spring.home.Bean1" scope="prototype">`, ai muda, quando especificado como prototype, ai cada objeto terá acesso a uma instancia independente, nesse caso com o prototype o objeto bean1 e bean2 não apontariam ao mesmo objeto e sim a objetos diferentes. Em resumo, apenas use o prototype se você precisar de instancias independentes e não tem interesse de fazer isso dando um **new** em alguma classe, caso o contrário use o singleton, que é o padrão.
+
+## Lendo dados de arquivo externo
+#### Arquivo XML
+[ArquivosExternos.xml](ArquivosExternos.xml)
+
+    <?xml version="1.0" encoding="UTF-8" ?>
+    <!-- Repare que eh colocado um xmlns no beans e o doctype foi tirado -->
+    <beans xmlns="http://www.springframework.org/schema/beans"       
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:context="http://www.springframework.org/schema/context" 
+        xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context 
+        http://www.springframework.org/schema/context/spring-context.xsd"> 
+        
+        <!-- Aqui estamos importando o arquivo, ao qual contem os dados. -->   
+        <context:property-placeholder location="classpath:Spring/home/arquivo.extensao"/>
+        
+        <!-- no valor nos interpolamos o valor pego no arquivo, aqui estamos injetando por setter -->
+        <bean name="bean1" class="Spring.home.Bean1">
+            <property name="id" value="${chave.prop2}" />
+            <property name="valor" value="${chave.prop1}" />		
+        </bean>	
+        
+        <!-- injetando por constructor, use o ${chave.prop} la no arquivo externo -->
+        <bean name="bean3" class="Spring.home.Bean3">		
+            <constructor-arg value="${chave.prop1}"/>
+            <constructor-arg value="${chave.prop2}"/>
+            <constructor-arg value="${chave.prop3}"/>
+        </bean>
+    </beans>
+
+Repare que removemos do XML acima a linha `<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" "http://www.springframework.org/dtd/spring-beans-2.0.dtd">` e no lugar colocamos, dentro da própria tag beans:
+
+    <beans xmlns="http://www.springframework.org/schema/beans"       
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context" 
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context 
+       http://www.springframework.org/schema/context/spring-context.xsd"> 
+
+#### Como funciona essa estratégia?
+No caso nos tags `<bean>` mantivemos os mesmos beans que usamos nos outros XML, usamos o Bean3 e o Bean1, no caso do Bean1 foi omitido a referência ao Bean2. Aqui temos a seguinte propriedade `<context:property-placeholder location="classpath:Spring/home/arquivo.extensao"/>` essa parte carrega o arquivo, que no caso é usado pelos dois beans. Dessa forma `${chave.prop1}` nos acessamos uma propriedade de dentro do arquivo, no caso essa linha é preenchida pelo atributo **prop1** dentro do objeto **chave**, segue o arquivo [arquivo.extensao](arquivo.extensao) abaixo:
+
+    chave.prop1 = valor1
+    chave.prop2 = 1
+    chave.prop3 = true
+
+Lembre-se do seguinte, aqui é definido o namespace *context*: `xmlns:context="http://www.springframework.org/schema/context"`, ao qual tem o seu *xsi*:
+
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context 
+       http://www.springframework.org/schema/context/spring-context.xsd"
+
+E aqui temos o uso: `context:property-placeholder` dentro da tag `<context:property-placeholder location="classpath:Spring/home/arquivo.extensao"/>`, no *location* você define o path da seguinte forma **classpath:**path/arquivo.extensao. 
+
+#### Uma outra estratégia
+
+Isso no arquivo de XML acima: [ApplicationContext.xml](ApplicationContext.xml)
+
+    <bean name="propertiesConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<value>
+				classpath:Spring/home/arquivo.extensao
+			</value>
+		</property>
+	</bean>
+	<bean name="arquivo" class="Spring.home.Bean1" scope="prototype">		
+		<property name="valor" value="${chave.prop1}"/>		
+		<property name="bean" ref="beanId" />
+	</bean>	
+
+Nessa estratégia nós configuramos um Bean com esse parametro: `<bean name="propertiesConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">`, ali dentro colocamos uma uma propriedade `<property name="locations">` e ali dentro colocamos o path para o arquivo no seguinte padrão: `<value>` **classpath:path/arquivo.extensao** `</value>`, esse nós colocamos dentro do XML que tem o doctype `<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" "http://www.springframework.org/dtd/spring-beans-2.0.dtd">` dentro do arquivo em questão, abaixo o XML com o *propertiesConfigurer*
+
+    <?xml version="1.0" encoding="UTF-8" ?>
+    <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+    <beans default-lazy-init="false">
+        <!-- Essa aqui eh um bean clone e versao prototype do bean1 abaixo -->
+        <bean name="bean0" class="Spring.home.Bean1" scope="prototype">		
+            <property name="valor" value="valor Padrao"/>		
+            <property name="bean" ref="beanId" />
+        </bean>	
+        
+        <bean name="bean1" class="Spring.home.Bean1" scope="singleton">		
+            <property name="valor" value="valor Padrao"/>		
+            <property name="bean" ref="beanId" />
+        </bean>	
+        <bean id="beanId" name="bean2" class="Spring.home.Bean2" ></bean>	
+        <bean name="bean3" class="Spring.home.Bean3">		
+            <constructor-arg value="Valor"/>
+            <constructor-arg value="1"/>
+            <constructor-arg value="true"/>
+        </bean>
+        <bean name="bean4" class="Spring.home.Bean4">
+            <property name="lista">
+                <list>
+                <!-- Uma lista -->
+                    <value>Item 1</value>
+                    <value>Item 2</value>
+                    <value>Item 3</value>
+                </list>						
+            </property>
+            <property name="eventos">
+                <map>
+                    <entry key="evento1" value="true"/>
+                    <entry key="evento2" value="false"/>
+                    <!-- Essa eh uma outra forma -->
+                    <entry key="evento3"><value>true</value></entry>
+                </map>			
+            </property>
+            <property name="numeros">
+                <set>
+                <!-- uma lista que nao se repete -->
+                    <value>1</value>
+                    <value>2</value>
+                    <value>3</value>
+                </set>
+            </property>
+            <property name="propriedades">		
+                <props>
+                <!-- Properties -->
+                    <prop key="atributo1">valor1</prop>
+                    <prop key="atributo2">valor2</prop>				
+                </props>
+            </property>
+        </bean>
+        <bean name="bean5" class="Spring.home.Bean5" lazy-init="true">
+            <!-- referenciando pelo id, injetando via construtor -->
+            <constructor-arg  ref="idInterno1"/>
+            <!-- referenciando pelo name, injetando via setter -->
+            <property name="basico2" ref="interno2"/>
+        </bean>
+        <bean id="idInterno1" name="interno1" class="Spring.home.interno.Basico1">
+            <property name="id" value="1"/>
+            <property name="valor" value="valor padrao"/>
+        </bean>
+        <bean name="interno2" class="Spring.home.interno.Basico2">
+            <property name="id" value="2"/>
+            <property name="valores">
+                <list>
+                    <value>Valor 1</value>
+                    <value>Valor 2</value>
+                    <value>Valor 3</value>
+                </list>
+            </property>
+        </bean>
+        <bean name="propertiesConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+            <property name="locations">
+                <value>
+                    classpath:Spring/home/arquivo.extensao
+                </value>
+            </property>
+        </bean>
+        <bean name="arquivo" class="Spring.home.Bean1" scope="prototype">		
+            <property name="valor" value="${chave.prop1}"/>		
+            <property name="bean" ref="beanId" />
+        </bean>	
+    </beans>
+

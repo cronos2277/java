@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!-- Repare que eh colocado um xmlns no beans e o doctype foi tirado -->
+<beans xmlns="http://www.springframework.org/schema/beans"       
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context" 
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context 
+       http://www.springframework.org/schema/context/spring-context.xsd"> 
+    
+    <!-- Aqui estamos importando o arquivo, ao qual contem os dados. -->   
+	<context:property-placeholder location="classpath:Spring/home/arquivo.extensao"/>
+	
+	<!-- no valor nos interpolamos o valor pego no arquivo, aqui estamos injetando por setter -->
+	<bean name="bean1" class="Spring.home.Bean1">
+		<property name="id" value="${chave.prop2}" />
+		<property name="valor" value="${chave.prop1}" />		
+	</bean>	
+	
+	<!-- injetando por constructor, use o ${chave.prop} la no arquivo externo -->
+	<bean name="bean3" class="Spring.home.Bean3">		
+		<constructor-arg value="${chave.prop1}"/>
+		<constructor-arg value="${chave.prop2}"/>
+		<constructor-arg value="${chave.prop3}"/>
+	</bean>
+</beans>
