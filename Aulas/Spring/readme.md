@@ -492,4 +492,11 @@ Aqui nós temos uma classe que tem coleções, no caso a classe usada nas coleç
 As 3 classes são informadas como qualquer bean, mas no Bean5 existe algo novo, no caso aqui `<constructor-arg  ref="idInterno1"/>` temos o construtor referenciando o **id**, esse id faz referência a anotação mais abaixo do primeiro bean interno como podemos ver aqui `<bean id="idInterno1" name="interno1" class="Spring.home.interno.Basico1">`. Além disso esse mesmo **ref** ele pode referenciar também um **name**, no segundo objeto interno fizemos a injeção por setter e o **ref** faz referência a um **name**, o Spring se vira tanto com **id** como com **name**.
 Aqui temos o Bean5 referenciando um name `<property name="basico2" ref="interno2"/>`, no caso o interno2 que é esse beam aqui `<bean name="interno2" class="Spring.home.interno.Basico2">`. 
 
+### lazy-init e default-lazy-init
+
+#### Lazy-init
+Com o Lazy init você pode fazer com que o Bean seja inicializado apenas quando a aplicação precisar dele, por padrão o valor dele é **falso**, mas se sinalizado como **true**, o carregamento do bean apenas será feito quando for necessitado o acesso a ele, exemplo: `<bean name="bean5" class="Spring.home.Bean5" lazy-init="true">`, aqui nós aplicamos no **Bean5**, com esse valor setado agora ele tem o carregamento no modo lazy, existe um terceiro valor que seria o **default**, esse terceiro padrão ele fica dependente do valor do **default-lazy-init** da tag `<beans>`, ao qual o bean está inserido dentro. Lembrando sempre que o `lazy-init` vai sempre no bean.
+
+#### default-lazy-init
+Aqui definimos o padrão de carregamento para todos os beans dentro da nossa tag `<beans>`, como nesse exemplo a seguir: `<beans default-lazy-init="true">` o padrão é false, e o funcionamento é igual ao **lazy-init**, mas diferentente dele, esse vai na tag que engloba todos os beans e define o comportamento padrão de todos os beans, caso o **lazy-init** não seja especificado, ou caso o **lazy-init** do bean em questão esteja definido como *default*.
 
