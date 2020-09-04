@@ -692,4 +692,31 @@ Nessa estratégia nós configuramos um Bean com esse parametro: `<bean name="pro
             <property name="bean" ref="beanId" />
         </bean>	
     </beans>
+## Internacionalização - I18N
+### Básico
 
+[Arquivo XML](i18n.xml)
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+    <beans>
+
+    <!-- A classe precisa ser exatamente a abaixo para que tudo funcione. -->
+        <bean name="i18nBasico" class="org.springframework.context.support.ResourceBundleMessageSource">
+
+            <!-- no caso como temos a propriedade basename, sera procurado por setBasename e getBasename, na escrita ou leitura respectivamente. -->
+            <!-- O arquivo em questao eh o traducao.properties. -->
+            <property name="basename" value="Spring/home/i18n/traducao"/>
+        </bean>
+    </beans>
+
+Seja lá o que você for fazer, você precisa ter um doctype válido: `<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" "http://www.springframework.org/dtd/spring-beans-2.0.dtd">`, após isso informe dentro de uma estrutura do **bean** a classe para tradução `<bean name="i18nBasico" class="org.springframework.context.support.ResourceBundleMessageSource">`, no caso a classe é essa `org.springframework.context.support.ResourceBundleMessageSource`, não esqueça que a classe deve ser informada direito, para evitar problemas. Nesse exemplo básico temos um único property, que seria esse: `<property name="basename" value="Spring/home/i18n/traducao"/>`, nessa propriedade temos o arquivo **traducao.properties**, lembrando que *properties* é a extensão do arquivo. No caso aqui o Spring vai acessar a classe *ResourceBundleMessageSource* e procurar pelo método *setbasename* quando for fazer a injeção de valor e *getbasename*, quando for recuperar algum valor, se você for ver a classe em questão você perceberá a existência dessas classes, no caso a injeção será feito com base em um arquivo *.properties* em questão.
+
+#### Recuperando valores.
+
+        ApplicationContext app = new ClassPathXmlApplicationContext("/Spring/home/i18n/i18n.xml"); 
+    	MessageSource source = (MessageSource) app.getBean("i18nBasico");
+    	String message = source.getMessage("mensage.content", null, null);
+    	System.out.println(message);
+
+Como sempre usamos o `ClassPathXmlApplicationContext`, e depois acessamos o **MessageSource** como se fosse um Bean qualquer, uma vez que o mesmo está em uma estrutura de Bean `MessageSource source = (MessageSource) app.getBean("i18nBasico");`, a grande diferença vem aqui: `String message = source.getMessage("mensage.content", null, null);` o método getMessage retorna uma string, porém se faz necessário informar 3 parametros, podendo ser os dois ultimos nulos se for o caso. O primeiro seria a propriedade de dentro do arquivo *.properties*, o segundo parametro são um conjunto de argumentos para customização, e por fim o idioma em questão, como esse exemplo é básico então por hora pulamos os dois ultimos, clique aqui para acessar o arquivo [traducao.properties](traducao.properties)
