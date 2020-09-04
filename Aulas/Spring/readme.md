@@ -720,3 +720,38 @@ Seja lá o que você for fazer, você precisa ter um doctype válido: `<!DOCTYPE
     	System.out.println(message);
 
 Como sempre usamos o `ClassPathXmlApplicationContext`, e depois acessamos o **MessageSource** como se fosse um Bean qualquer, uma vez que o mesmo está em uma estrutura de Bean `MessageSource source = (MessageSource) app.getBean("i18nBasico");`, a grande diferença vem aqui: `String message = source.getMessage("mensage.content", null, null);` o método getMessage retorna uma string, porém se faz necessário informar 3 parametros, podendo ser os dois ultimos nulos se for o caso. O primeiro seria a propriedade de dentro do arquivo *.properties*, o segundo parametro são um conjunto de argumentos para customização, e por fim o idioma em questão, como esse exemplo é básico então por hora pulamos os dois ultimos, clique aqui para acessar o arquivo [traducao.properties](traducao.properties)
+
+#### Arquivos de idiomas separados
+    <bean name="i18nArquivos" class="org.springframework.context.support.ResourceBundleMessageSource">
+		<!-- Sera procurado pelo arquivo msgs_pt_BR se o sistema operacional estiver em portugues, en_US em ingles, etc... -->		
+		<property name="basename" value="Spring/home/i18n/msgs"/>
+	</bean>
+
+Aqui temos um exemplo de como funciona com arquivos externos, você também pode especificar um arquivo de mensagem de acordo com idioma do sistema operacional. Repare que no XML o bean é o mesmo que o Bean do exemplo anterior, caso não exista o arquivo para o idioma especifico ele pega o mais generico, que no caso seria esse *"Spring/home/i18n/msgs"*, o idioma escolhido é com base no sistema operacional, exceto se você deixar isso explícito com essa função aqui: `Locale.setDefault(new Locale("es","MX"));`, no caso essa linha define o espanho mexicano como idioma padrão da aplicação. Para que você tenha um arquivo específico para cada idioma, basta você adicionar no arquivo o *_idioma_PAISABREVIADO*, ou seja no exemplo acima ficaria: **msgs_pt_BR** para o arquivo de tradução do português do Brasil, **msgs_en_US** para o inglês americano, **msgs_es_MX** para espanhol mexicano por exemplo, siga sempre esse padrao para nomear o arquivo *_idioma_PAISABREVIADO*.
+
+#### Arquivo java
+    ApplicationContext app = new ClassPathXmlApplicationContext("/Spring/home/i18n/i18n.xml"); 
+    MessageSource source = (MessageSource) app.getBean("i18nArquivos");
+    String message1 = source.getMessage("mensage", null, null); //Exibindo mensagem com o idioma padrao do sistema, do arquivo msgs_pt_br
+    System.out.println(message1);
+    
+    Locale local = Locale.US; //Voce pode pegar idiomas predefinidos.
+    //Nesse exemplo passamos esse local como parametro no getMessage
+    String message2 = source.getMessage("mensage", null, local); //Exibindo mensagem commo idioma ingles, do arquivo msgs_en_US.    	
+    System.out.println(message2);
+    
+    //Aqui temos um outro exemplo, alterando o idioma de todo o sistema:
+    Locale.setDefault(new Locale("es","MX"));
+    
+    //Apartir daqui o idioma padrao eh espanhol, no caso o message1 continua sendo o padrao, uma vez que esse veio antes dessa linha.
+    String message3 = source.getMessage("mensage", null, null);
+    System.out.println(message3);
+
+`.getMessage("mensage", null, null);` => procura pelo atributo mensage dentro do arquivo de idioma escolhido, seja o *_pt_BR*, *es_MX*, ou *en_US*. Lembrando que deve existir um atributo **mensage** la dentro.
+
+`.getMessage("mensage", null, Locale.US)` => Nesse ultimo estamos explicitando que queremos a mensagem do arquivo terminado em *en_US*.
+
+Lembre-se que o acesso a esses arquivos de tradução é igual a um Bean, uma vez que o mesmo estra estruturado em bean `(MessageSource) app.getBean("i18nArquivos");`.
+
+### Locale
+Você pode criar um arquivo locale para definir o idioma da aplicação `Locale locale = new Locale("es","MX")`, lembrando que se você for criar um arquivo locale customizável no primeiro parametro você passa o idioma e no segundo o pais abreviado, esse arquivo locale pode ser usado como parametro no *getMessage* `.getMessage("mensage", null, locale)`, ou você pode usar isso para mudar o idioma padrão de toda a aplicação `Locale.setDefault(new Locale("es","MX"));`, Dentro da classe *Locale* você tem alguns padrões de países, que você pode usar ao invés de criar um novo, como por exemplo: `Locale local = Locale.US;`. Arquivos de idiomas: [msgs_pt_BR.properties](msgs_pt_BR.properties), [msgs_en_US.properties](msgs_en_US.properties), [msgs_es_MX.properties](msgs_es_MX.properties)

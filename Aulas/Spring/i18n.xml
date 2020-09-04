@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
 <beans>
-<!-- A classe precisa ser exatamente a abaixo para que tudo funcione. -->
-	<bean name="i18nBasico" class="org.springframework.context.support.ResourceBundleMessageSource">
-		<!-- no caso como temos a propriedade basename, sera procurado por setBasename e getBasename, na escrita ou leitura respectivamente. -->
-		<!-- O arquivo em questao eh o traducao.properties. -->
+	<bean name="i18nBasico" class="org.springframework.context.support.ResourceBundleMessageSource">		
 		<property name="basename" value="Spring/home/i18n/traducao"/>
 	</bean>
+	<bean name="i18nArquivos" class="org.springframework.context.support.ResourceBundleMessageSource">
+		<!-- Sera procurado pelo arquivo msgs_pt_BR se o sistema operacional estiver em portugues, en_US em ingles, etc... -->		
+		<property name="basename" value="Spring/home/i18n/msgs"/>
+	</bean>
+	
 </beans>
