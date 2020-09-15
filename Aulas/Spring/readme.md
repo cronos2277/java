@@ -755,3 +755,48 @@ Lembre-se que o acesso a esses arquivos de tradução é igual a um Bean, uma ve
 
 ### Locale
 Você pode criar um arquivo locale para definir o idioma da aplicação `Locale locale = new Locale("es","MX")`, lembrando que se você for criar um arquivo locale customizável no primeiro parametro você passa o idioma e no segundo o pais abreviado, esse arquivo locale pode ser usado como parametro no *getMessage* `.getMessage("mensage", null, locale)`, ou você pode usar isso para mudar o idioma padrão de toda a aplicação `Locale.setDefault(new Locale("es","MX"));`, Dentro da classe *Locale* você tem alguns padrões de países, que você pode usar ao invés de criar um novo, como por exemplo: `Locale local = Locale.US;`. Arquivos de idiomas: [msgs_pt_BR.properties](msgs_pt_BR.properties), [msgs_en_US.properties](msgs_en_US.properties), [msgs_es_MX.properties](msgs_es_MX.properties)
+
+## Factory
+[Arquivo XML](factory.xml)
+### Criando um Bean com base em método construtor
+#### BeanF1
+    public class BeanF1 {
+        private String valor;
+
+        public String getValor() {
+            return valor;
+        }
+
+        public void setValor(String valor) {
+            this.valor = valor;
+        }
+        
+        //O metodo factory em questao
+        public static BeanF1 metodoCriador() {
+            return new BeanF1();
+        }
+
+        @Override
+        public String toString() {		
+            return this.valor;
+        }  
+	
+    }
+
+
+#### XML
+    <?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+    <beans>
+        <bean name="factory" class="Spring.factory.BeanF1" factory-method="metodoCriador">
+            <property name="valor" value="valorExemplo"/>
+        </bean>
+    </beans>
+
+#### Explicando o factory-method
+Aqui no caso, usamos a estratégia factory para a criação e instanciação de objetos, nessa linha é possível ver isso ` <bean name="factory" class="Spring.factory.BeanF1" factory-method="metodoCriador">`, no caso para isso usamos o atributo **factory-method** e passamos como um atributo o nome do método dentro da classe que fará esse trabalho `metodoCriador`. No caso o método criador está aqui, o método criador deve ser um método de classe, ou seja um método estático:
+
+    //O metodo factory em questao
+        public static BeanF1 metodoCriador() {
+            return new BeanF1();
+        }
