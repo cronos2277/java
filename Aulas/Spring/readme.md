@@ -938,3 +938,78 @@ Repare que apenas é informado a classe e o nome do Bean, no bean que tem a clas
 
 ##### Para concluir...
 Quando esse beam for criado, será chamado o BeanF2 e esse Beam irá executar todas as instruções de seu construtor.
+
+## Herança
+
+#### XML
+[Arquivo XML](heranca.xml)
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+    <beans>
+        <bean name="pai" class="Spring.heranca.Pai" abstract="true">
+            <property name="sobrenome" value="Sobrenome Pai"/>
+        </bean>
+        <bean name="filho" class="Spring.heranca.Filho" parent="pai" abstract="false">
+            <property name="nome" value="Nome filho"/>
+        </bean>
+    </beans>
+
+#### Classe Pai
+    public abstract class Pai {
+        private String sobrenome;
+
+        public String getSobrenome() {
+            return sobrenome;
+        }
+
+        public void setSobrenome(String sobrenome) {
+            this.sobrenome = sobrenome;
+        }
+
+        @Override
+        public String toString() {
+            return "Pai [sobrenome=" + sobrenome + "]";
+        }	
+    }
+
+#### Classe Filho
+    public class Filho extends Pai{
+        private String nome;
+
+        public String getNome() {
+            return nome;
+        }
+
+        public void setNome(String nome) {
+            this.nome = nome;
+        }
+
+        @Override
+        public String toString() {
+            return "Filho [nome=" + nome + ", sobrenome="+this.getSobrenome()+"]";
+        }
+    }
+
+### Explicando
+Aqui temos um caso de herança, repare que no xml existe apenas dois atributos diferentes para o bean: `parent` e `abstract`.
+
+### Abstract
+
+    <bean name="pai" class="Spring.heranca.Pai" abstract="true">
+            <property name="sobrenome" value="Sobrenome Pai"/>
+    </bean>
+
+Aqui estamos indicando que pai é uma classe abstrata, quando você tiver uma classe abstrada e for fazer a notação dela como bean, como nesse caso: `public abstract class Pai {`, você deve informar o Spring de essa classe é abstrata, assim o Spring sabe que não pode instanciar ela. Além disso quando a classe é abstrata você não pode acessar ela de maneira alguma, logo tenha cuidado para não colocar classes desse tipo no método **.getBean** ,Aqui estamos referenciando o filho, pois o Pai é abstrato e não pode ser instanciado: 
+
+##### No método Main...
+    ApplicationContext app1 = new ClassPathXmlApplicationContext("/Spring/heranca/heranca.xml");
+    Pai bean = (Pai) app1.getBean("filho"); 
+
+### Parent
+
+    <bean name="filho" class="Spring.heranca.Filho" parent="pai" abstract="false">
+            <property name="nome" value="Nome filho"/>
+    </bean>
+
+Através do atributo **parent** indicamos qual é a classe pai, caso o seu Bean tenha alguma herança você deve usar o parent para que o Spring possa inicializar corretamente o seu Bean, além disso como essa classe é concreta essa indicação `abstract="false"` é desnecessária, o padrão desse atributo é false, logo ele poderia ser perfeitamente omitido, uma vez que a classe é concreta.

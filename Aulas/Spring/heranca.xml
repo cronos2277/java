@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+<beans>
+	<bean name="pai" class="Spring.heranca.Pai" abstract="true">
+		<property name="sobrenome" value="Sobrenome Pai"/>
+	</bean>
+	<bean name="filho" class="Spring.heranca.Filho" parent="pai" abstract="false">
+		<property name="nome" value="Nome filho"/>
+	</bean>
+</beans>
