@@ -1013,3 +1013,82 @@ Aqui estamos indicando que pai é uma classe abstrata, quando você tiver uma cl
     </bean>
 
 Através do atributo **parent** indicamos qual é a classe pai, caso o seu Bean tenha alguma herança você deve usar o parent para que o Spring possa inicializar corretamente o seu Bean, além disso como essa classe é concreta essa indicação `abstract="false"` é desnecessária, o padrão desse atributo é false, logo ele poderia ser perfeitamente omitido, uma vez que a classe é concreta.
+
+### Trabalhando com listas na Herança
+##### XML Completo
+    <?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+    <beans>
+        <bean name="pai" class="Spring.heranca.Pai" abstract="true">
+            <property name="sobrenome" value="Sobrenome Pai"/>
+        </bean>
+        <bean name="filho" class="Spring.heranca.Filho" parent="pai" abstract="false">
+            <property name="nome" value="Nome filho"/>
+        </bean>
+        
+        <bean class="Spring.heranca.AutoRelacionamento" name="abstrato" abstract="true">
+            <property name="lista">
+                <list>
+                    <value>1</value>
+                    <value>2</value>
+                    <value>3</value>
+                </list>
+            </property>
+        </bean>
+        
+        <!-- Repare que o list na classe concreta tem um atributo merge, diferente da abstrata -->
+        <bean  name="concreto" abstract="false" parent="abstrato">
+            <property name="lista">
+            <!-- A ausencia do merge faz com que a lista seja sobscrita ao inves de mesclada -->
+                <list  merge="true">
+                    <value>4</value>
+                    <value>5</value>
+                    <value>6</value>
+                </list>
+            </property>		
+        </bean>
+    </beans>
+
+#### Classe AutoRelacionamento
+    public class AutoRelacionamento {
+        private List<Integer>lista;
+
+        public List<Integer> getLista() {
+            return lista;
+        }
+
+        public void setLista(List<Integer> lista) {
+            this.lista = lista;
+        }
+
+        @Override
+        public String toString() {
+            return "AutoRelacionamento [lista=" + lista + "]";
+        }
+    }
+
+Inicialmente repare que na classe concreta sequer foi definida uma classe: `<bean  name="concreto" abstract="false" parent="abstrato">`, nesse caso o Spring pega a classe do Bean informado no parent, porém isso só funciona, primeiro porque os dois Beans usam a mesma classe e segundo porque está implicito no **parent**, caso as classes sejam diferentes ou não esteja implicita a classe com o uso do **parent**, deve-se informar o bean, além disso é valido reforçar que o abstract continua sendo desnecessário para classe concreta, mas ajuda a destacar que essa classe é concreta. Repare que tanto o Bean Pai assim como o Bean filho, ambos oriundos da mesma classe preenche o array:
+##### Classe abstrata
+    <bean class="Spring.heranca.AutoRelacionamento" name="abstrato" abstract="true">
+            <property name="lista">
+                <list>
+                    <value>1</value>
+                    <value>2</value>
+                    <value>3</value>
+                </list>
+            </property>
+        </bean>
+
+Por padrão essa lista acima será substituido, pela lista abaixo, esse é o comportamento padrão com o **Merge** ocultado.
+##### Classe concreta
+    <bean  name="concreto" abstract="false" parent="abstrato">
+            <property name="lista">            
+                <list  merge="true">
+                    <value>4</value>
+                    <value>5</value>
+                    <value>6</value>
+                </list>
+            </property>		
+        </bean>
+
+Porém como aqui o **List** possuí o atributo `merge="true"`, logo ambos as listas serão mescladas, possuindo tanto o valor do Bean pai, como do Bean filho, output com **merge**: `lista=[1, 2, 3, 4, 5, 6]`, **sem merge**:`lista=[4, 5, 6]`, ou seja com o comportamento padrão a classe concreta, ou o escopo mais próximo reescreve a lista.
