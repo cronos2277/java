@@ -7,4 +7,12 @@
 	<bean name="parametros" class="Spring.factory.BeanF1" factory-method="metodoCriador">
 		<constructor-arg value="Parametro passado como exemplo"/>
 	</bean>
+	
+	<!-- Factory usando classe construtora, apenas deve ter uma property com o valor a ser preenchido -->
+	<bean name="beanPronto" class="Spring.factory.BeanF1" factory-bean="nome-construtor">
+		<property name="valor" value="Bean Criado com a classe construtora"/>		
+	</bean>
+	
+	<!-- Repare que aqui voce passa apenas a classe construtora e mais nada, inclusive o metodo o Spring adivinha -->
+	<bean name="nome-construtor" class="Spring.factory.BeanF2" />	
 </beans>

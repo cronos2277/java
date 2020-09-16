@@ -851,3 +851,90 @@ Aqui no caso, usamos a estratégia factory para a criação e instanciação de 
             bean.setValor(parametro);
             return bean;
         }
+
+### Factory usando uma classe construtora como base.
+#### XML
+    <?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+    <beans>
+        <bean name="factory" class="Spring.factory.BeanF1" factory-method="metodoCriador">
+            <property name="valor" value="valorExemplo"/>
+        </bean>
+        <bean name="parametros" class="Spring.factory.BeanF1" factory-method="metodoCriador">
+            <constructor-arg value="Parametro passado como exemplo"/>
+        </bean>
+        
+        <!-- Factory usando classe construtora, apenas deve ter uma property com o valor a ser preenchido -->
+        <bean name="beanPronto" class="Spring.factory.BeanF1" factory-bean="nome-construtor">
+            <property name="valor" value="Bean Criado com a classe construtora"/>		
+        </bean>
+        
+        <!-- Repare que aqui voce passa apenas a classe construtora e mais nada, inclusive o metodo o Spring adivinha -->
+        <bean name="nome-construtor" class="Spring.factory.BeanF2" />	
+    </beans>
+
+#### Bean F1
+    public class BeanF1 {
+        private String valor;
+        
+        public BeanF1() {
+            System.out.println("BEAN F1");
+        }
+        
+        public String getValor() {
+            return valor;
+        }
+
+        public void setValor(String valor) {
+            this.valor = valor;
+        }
+        
+        public static BeanF1 metodoCriador() {
+            return new BeanF1();
+        }        
+        
+        public static BeanF1 metodoCriador(String parametro) {
+            BeanF1 bean = new BeanF1();
+            bean.setValor(parametro);
+            return bean;
+        }
+
+        @Override
+        public String toString() {		
+            return this.valor;
+        }       
+	
+    }
+
+#### Bean F2
+
+    public class BeanF2 {	
+	    public BeanF2() {
+		    System.out.println("BEAN F2");
+	    }	
+    }
+
+#### Como funciona:
+Aqui abaixo temos a parte do xml que irá conter o bean com o seu valor inicializado, repare que a única coisa que tem de diferente é o atributo `factory-bean`, esse atributo deve conter o bean que terá a classe que ira construir-lo, no caso seria o bean *nome-construtor*.
+
+##### Bean com o atributo factory-bean
+    <bean name="beanPronto" class="Spring.factory.BeanF1" factory-bean="nome-construtor">
+            <property name="valor" value="Bean Criado com a classe construtora"/>		
+    </bean>
+
+Uma vez definido, iremos definir o bean que tem a classe construtora: 
+
+##### Bean Construtor
+    <bean name="nome-construtor" class="Spring.factory.BeanF2" />
+
+Repare que apenas é informado a classe e o nome do Bean, no bean que tem a classe construtora, no caso será instanciado essa segunda classe e executada as instruções no construtores, o conteúdo dessa segunda classe pouco importa, veja que a classe BeanF2 apenas tem o construtor que da log no console.
+
+##### BeanF2
+    public class BeanF2 {	
+	    public BeanF2() {
+		    System.out.println("BEAN F2");
+	    }	
+    }
+
+##### Para concluir...
+Quando esse beam for criado, será chamado o BeanF2 e esse Beam irá executar todas as instruções de seu construtor.
