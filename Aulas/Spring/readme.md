@@ -800,3 +800,54 @@ Aqui no caso, usamos a estratégia factory para a criação e instanciação de 
         public static BeanF1 metodoCriador() {
             return new BeanF1();
         }
+
+### Método criador com parametros
+#### O mesmo BeanF1
+    public class BeanF1 {
+        private String valor;
+
+        public String getValor() {
+            return valor;
+        }
+
+        public void setValor(String valor) {
+            this.valor = valor;
+        }
+        
+        public static BeanF1 metodoCriador() {
+            return new BeanF1();
+        }
+        
+        //A novidade esta nessa sobrecarga aqui
+        public static BeanF1 metodoCriador(String parametro) {
+            BeanF1 bean = new BeanF1();
+            bean.setValor(parametro);
+            return bean;
+        }
+
+        @Override
+        public String toString() {		
+            return this.valor;
+        }		
+    }
+
+#### XML
+    <?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+    <beans>
+        <bean name="factory" class="Spring.factory.BeanF1" factory-method="metodoCriador">
+            <property name="valor" value="valorExemplo"/>
+        </bean>
+        <bean name="parametros" class="Spring.factory.BeanF1" factory-method="metodoCriador">
+            <constructor-arg value="Parametro passado como exemplo"/>
+        </bean>
+    </beans>
+
+#### Método criador com parametros.
+ A grande diferença está aqui: `<constructor-arg value="Parametro passado como exemplo"/>`, ao invés de usar propriedades você usa um **constructor-arg** desse para cada argumento que o método exigir. Se houver dois parametros no métodos, você precisará informar duas propriedades dessa, no caso o método exige apenas um único argumento do tipo *String* e com nome de *paramtro* para o parametro, segue abaixo o método construtor:
+
+    public static BeanF1 metodoCriador(String parametro) {
+            BeanF1 bean = new BeanF1();
+            bean.setValor(parametro);
+            return bean;
+        }

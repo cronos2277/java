@@ -4,4 +4,7 @@
 	<bean name="factory" class="Spring.factory.BeanF1" factory-method="metodoCriador">
 		<property name="valor" value="valorExemplo"/>
 	</bean>
+	<bean name="parametros" class="Spring.factory.BeanF1" factory-method="metodoCriador">
+		<constructor-arg value="Parametro passado como exemplo"/>
+	</bean>
 </beans>
