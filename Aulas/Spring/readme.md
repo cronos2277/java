@@ -1092,3 +1092,99 @@ Por padrão essa lista acima será substituido, pela lista abaixo, esse é o com
         </bean>
 
 Porém como aqui o **List** possuí o atributo `merge="true"`, logo ambos as listas serão mescladas, possuindo tanto o valor do Bean pai, como do Bean filho, output com **merge**: `lista=[1, 2, 3, 4, 5, 6]`, **sem merge**:`lista=[4, 5, 6]`, ou seja com o comportamento padrão a classe concreta, ou o escopo mais próximo reescreve a lista.
+
+## Inicializando valores com Spring
+### XML Completo
+    <?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+    <beans>
+        <bean name="init1" class="Spring.init.InitBean1" init-method="metodoInicio">
+            <property name="valor" value="Exemplo de valor 1"/>
+        </bean>
+        <bean name="init2" class="Spring.init.InitBean2">
+            <property name="valor" value="Exemplo de valor 2"/>
+        </bean>
+    </beans>
+
+### App.java
+    public class App 
+        {
+            public static void main( String[] args )
+            {
+                ApplicationContext app1 = new ClassPathXmlApplicationContext("/Spring/init/init.xml");
+                InitBean1 bean1 = (InitBean1) app1.getBean("init1");	
+                InitBean2 bean2 = (InitBean2) app1.getBean("init2");
+                System.out.println(bean1);
+                System.out.println(bean2);
+            }
+        }
+
+### init-method
+    <bean name="init1" class="Spring.init.InitBean1" init-method="metodoInicio">
+		<property name="valor" value="Exemplo de valor 1"/>
+	</bean>
+
+#### init-method
+Aqui você informa o método que deve ser executado assim que o Spring inicializa, no caso depois de inicializado o Bean, esse método é executado, lembrando que esse método nesse exemplo não recebe parametros e não retorna valores.
+
+##### Classe InitBean1
+    public class InitBean1 {
+        private double Id;
+        private String valor;
+        public double getId() {
+            return Id;
+        }
+        public void setId(double id) {
+            Id = id;
+        }
+        public String getValor() {
+            return valor;
+        }
+        public void setValor(String valor) {
+            this.valor = valor;
+        }
+
+        //Aqui esta o metodo em questao
+        public void metodoInicio() { 
+            System.out.println("Metodo de geracao de id executado ao iniciar o bean: InitBean1");
+            this.Id = Math.random();
+        }
+        
+        @Override
+        public String toString() {
+            return "InitBean1 [Id=" + Id + ", valor=" + valor + "]";
+        }	
+    }
+
+ ### Implementando uma interface
+ Ao invés de usar a propriedade `init-method` você também pode usar uma interface para isso como esse exemplo abaixo:
+ #### Classe com a Interface implementada
+    import org.springframework.beans.factory.InitializingBean;
+    public class InitBean2 implements InitializingBean{
+        private double Id;
+        private String valor;
+        public double getId() {
+            return Id;
+        }
+        public void setId(double id) {
+            Id = id;
+        }
+        public String getValor() {
+            return valor;
+        }
+        public void setValor(String valor) {
+            this.valor = valor;
+        }	
+        
+        @Override
+        public String toString() {
+            return "InitBean2 [Id=" + Id + ", valor=" + valor + "]";
+        }
+        public void afterPropertiesSet() throws Exception {
+            System.out.println("Metodo de geracao de id executado ao iniciar o bean: InitBean2");
+            this.Id = Math.random();		
+        }
+    }
+
+#### Interface: InitializingBean
+Essa interface exige a implementação desse método: `public void afterPropertiesSet() throws Exception`, a interface em questão vem daqui `org.springframework.beans.factory.InitializingBean`, você deve importar essa interface se for usa-la, mas recomenda-se fazer por anotação em XML para reduzir o acoplamento.
