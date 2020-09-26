@@ -1190,6 +1190,7 @@ Aqui você informa o método que deve ser executado assim que o Spring inicializ
 Essa interface exige a implementação desse método: `public void afterPropertiesSet() throws Exception`, a interface em questão vem daqui `org.springframework.beans.factory.InitializingBean`, você deve importar essa interface se for usa-la, mas recomenda-se fazer por anotação em XML para reduzir o acoplamento.
 
 ## Validator
+[Validator XML](./verification/verification.xml)
 #### XML
     <?xml version="1.0" encoding="UTF-8"?>
     <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
@@ -1202,6 +1203,7 @@ Essa interface exige a implementação desse método: `public void afterProperti
 #### Observação:
 Repare que nada é feito do XML.
 
+[Check.java](verification/Check.java)
 #### Bean.java
     import org.springframework.validation.Errors;
     import org.springframework.validation.ValidationUtils;
@@ -1272,6 +1274,7 @@ Esse objeto tem origem em `org.springframework.validation.ValidationUtils`, dent
 ##### ValidationUtils.rejectIfEmptyOrWhitespace
 O primeiro parametro exige um objeto do tipo **Errors**, no segundo exige uma String contendo o nome da variavel a ser validade e no terceiro e ultimo parametro o código do erro, ou seja a mensagem a ser exibida.
 
+[Classe com metodo Main](verification/Runner.java)
 #### Classe com Método Main
     import org.springframework.context.ApplicationContext;
     import org.springframework.context.support.ClassPathXmlApplicationContext;
