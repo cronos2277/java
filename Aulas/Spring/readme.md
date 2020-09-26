@@ -1188,3 +1188,126 @@ Aqui você informa o método que deve ser executado assim que o Spring inicializ
 
 #### Interface: InitializingBean
 Essa interface exige a implementação desse método: `public void afterPropertiesSet() throws Exception`, a interface em questão vem daqui `org.springframework.beans.factory.InitializingBean`, você deve importar essa interface se for usa-la, mas recomenda-se fazer por anotação em XML para reduzir o acoplamento.
+
+## Validator
+#### XML
+    <?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+    <beans>
+        <bean name="check" class="Spring.verification.Check">
+            <constructor-arg  value="0"/>
+            <constructor-arg  value="asas"/>
+        </bean>	
+    </beans>
+#### Observação:
+Repare que nada é feito do XML.
+
+#### Bean.java
+    import org.springframework.validation.Errors;
+    import org.springframework.validation.ValidationUtils;
+    import org.springframework.validation.Validator;
+
+    public class Check implements Validator {
+        private long id;
+        private String value;
+        public Check(long id, String value) {
+            this.id = id;
+            this.value = value;
+        }
+        
+        public boolean supports(Class<?> clazz) {		
+            return Check.class.equals(clazz);
+        }
+
+        public void validate(Object target, Errors errors) {
+            ValidationUtils.rejectIfEmptyOrWhitespace(errors,"value", "erro.vazio");
+            if(id < 1) {
+                errors.rejectValue("id", "ID Invalido");
+            }
+        }
+
+        @Override
+        public String toString() {
+            return "Bean [id=" + id + ", value=" + value + "]";
+        }
+
+        public long getId() {
+            return id;
+        }
+
+        public void setId(long id) {
+            this.id = id;
+        }
+
+        public String getValue() {
+            return value;
+        }
+
+        public void setValue(String value) {
+            this.value = value;
+        }
+    }
+
+### Como deve ser a classe?
+Para você usar o sistema de validação do Spring, você deve inicialmente implementar essa classe `Validator` oriunda de `org.springframework.validation.Validator`, essa interface tem dois métodos:
+
+#### public boolean supports(Class<?> clazz)
+`public boolean supports(Class<?> clazz)` => Como você pode ter diferentes validadores, o Spring vai usar esse método pra saber se pode aplicar este validador ao objeto anotado com **@Valid**. Se forem compatíveis ele aplica sua validação, senão ele a ignora.
+
+#### public void validate(Object target, Errors errors)
+`public void validate(Object target, Errors errors)` => Aqui você coloca a sua regra para validação, nesse caso temos dois objetos, um deles é passado por parametro como objeto do tipo **Errors**, no caso o segundo. Além disso você também pode usar o **ValidationUtils**.
+
+### Errors
+Essa classe vem de `org.springframework.validation.Errors`, a partir dessa classe você pode lançar erros com o metodo `.rejectValue("nome_variavel", "Mensagem Erro")`, como por exemplo:
+
+    if(id < 1) {
+		errors.rejectValue("id", "ID Invalido");
+	} 
+
+Nesse caso se o id for menor que 1, logo é lançado esse erro.
+
+### ValidationUtils
+Esse objeto tem origem em `org.springframework.validation.ValidationUtils`, dentro desse objeto singleton existe diversos métodos uteis para validação, como esse `.rejectIfEmptyOrWhitespace(errors,"value", "erro.vazio");`, como por exemplo: `ValidationUtils.rejectIfEmptyOrWhitespace(errors,"value", "erro.vazio");`
+
+##### ValidationUtils.rejectIfEmptyOrWhitespace
+O primeiro parametro exige um objeto do tipo **Errors**, no segundo exige uma String contendo o nome da variavel a ser validade e no terceiro e ultimo parametro o código do erro, ou seja a mensagem a ser exibida.
+
+#### Classe com Método Main
+    import org.springframework.context.ApplicationContext;
+    import org.springframework.context.support.ClassPathXmlApplicationContext;
+    import org.springframework.validation.BeanPropertyBindingResult;
+    import org.springframework.validation.Errors;
+
+
+    public class Runner {
+
+        public static void main(String[] args) {		
+                    ApplicationContext app1 = new ClassPathXmlApplicationContext("Spring/verification/verification.xml");
+                    Check bean1 = (Check) app1.getBean("check");		    	
+                    System.out.println(bean1);
+                    Errors erros = new BeanPropertyBindingResult(bean1,"check");
+                    bean1.validate(bean1, erros);
+                    for(Object erro: erros.getAllErrors()) {
+                        System.out.println(erro);
+                    }
+        }
+    }
+
+##### Errors erros = new BeanPropertyBindingResult(bean1,"check"); 
+Você verifica erros de validação dessa forma, aonde esta o *bean1* é o local ao qual você deve informar a instancia do Bean a ser analizado, o segundo parametro, aonde esta **"check"** você deve informar o nome do Bean no XML, no caso `<bean name="check" class="Spring.verification.Check">`.
+
+##### bean1.validate(bean1, erros);
+No caso nós estamos executando nesse trecho esse código aqui: `public void validate(Object target, Errors errors)`.
+
+##### Pegando todos os erros, após a instanciação e a execução do método validate.
+    for(Object erro: erros.getAllErrors()) {
+        System.out.println(erro);
+    }
+
+#### Exemplo de erro: Output
+    Bean [id=0, value=]
+    Field error in object 'check' on field 'value': rejected value []; codes [erro.vazio.check.value,erro.vazio.value,erro.vazio.java.lang.String,erro.vazio]; arguments []; default message [null]
+    Field error in object 'check' on field 'id': rejected value [0]; codes [ID Invalido.check.id,ID Invalido.id,ID Invalido.long,ID Invalido]; arguments []; default message [null]
+
+##### O Tipo do Erro.
+Um erro lançado pelo Spring não é um erro do tipo **Exception**, logo se faz necessário você dar um *throw* caso você deseje isso.

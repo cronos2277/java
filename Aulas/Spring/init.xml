@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+<beans>
+	<bean name="init1" class="Spring.init.InitBean1" init-method="metodoInicio">
+		<property name="valor" value="Exemplo de valor 1"/>
+	</bean>
+	<bean name="init2" class="Spring.init.InitBean2">
+		<property name="valor" value="Exemplo de valor 2"/>
+	</bean>
+</beans>
