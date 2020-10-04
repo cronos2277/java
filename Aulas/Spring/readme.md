@@ -1314,3 +1314,165 @@ No caso nós estamos executando nesse trecho esse código aqui: `public void val
 
 ##### O Tipo do Erro.
 Um erro lançado pelo Spring não é um erro do tipo **Exception**, logo se faz necessário você dar um *throw* caso você deseje isso.
+
+## Persistencia
+### Import
+Inicialmente se formos trabalhar com o Maven precisamos importar, o módulo do Spring para acesso ao banco de dados:
+#### Importando o módulo usando o Maven
+    <!-- https://mvnrepository.com/artifact/org.springframework/spring-jdbc -->
+	<dependency>	
+	    <groupId>org.springframework</groupId>
+	    <artifactId>spring-jdbc</artifactId>
+	    <version>5.2.8.RELEASE</version>
+	</dependency>
+
+#### Importando o driver do banco de dados
+No caso esse driver é para o funcionamento do banco de dados PostGres, cada banco de dados tem um driver diferente
+##### postgresql
+    <!-- https://mvnrepository.com/artifact/org.postgresql/postgresql -->
+	<dependency>
+	    <groupId>org.postgresql</groupId>
+	    <artifactId>postgresql</artifactId>
+	    <version>42.2.16</version>
+	</dependency>	
+
+##### Que deve ser incluído no XML:
+    <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>Spring</groupId>
+    <artifactId>home</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <name>home</name>
+    <url>http://maven.apache.org</url>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>   
+    </properties>
+
+    <dependencies>		
+        <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>3.8.1</version>
+        <scope>test</scope>
+        </dependency>
+        
+        <!-- DEPENDÊNCIAS DO SPRING -->
+        <!-- https://mvnrepository.com/artifact/org.springframework/spring-core -->
+        <dependency>
+        <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+            <version>5.2.8.RELEASE</version>
+        </dependency>	
+        <!-- https://mvnrepository.com/artifact/org.springframework/spring-beans -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-beans</artifactId>
+            <version>5.2.8.RELEASE</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.springframework/spring-aop -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-aop</artifactId>
+            <version>5.2.8.RELEASE</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.springframework/spring-expression -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-expression</artifactId>
+            <version>5.2.8.RELEASE</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.springframework/spring-context -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>5.2.8.RELEASE</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.springframework/spring-jdbc -->
+        <dependency>	
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jdbc</artifactId>
+            <version>5.2.8.RELEASE</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.postgresql/postgresql -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.2.16</version>
+        </dependency>	
+    </dependencies>	
+    </project>
+
+### Usando no XML
+[Persistence XML](persistencia/persistence.xml)
+
+[Arquivo com metodo main](persistencia/Main.java)
+#### XML
+    <?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+    <beans>
+        <bean name="conexao" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+            <property name="driverClassName" value="org.postgresql.Driver"/>
+            <property name="url" value="jdbc:postgresql://localhost:5432/postgres"/>
+            <property name="username" value="postgres"/>
+            <property name="password" value="123456"/>
+        </bean>
+        <bean name="dao" class="org.springframework.jdbc.core.JdbcTemplate" lazy-init="false">
+            <property name="dataSource" ref="conexao" />
+            <property name="lazyInit" value="false" />
+        </bean>
+    </beans>
+
+#### Explicando
+Repare que ambos são definidos como bean.
+##### org.springframework.jdbc.datasource.DriverManagerDataSource
+    <bean name="conexao" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+            <property name="driverClassName" value="org.postgresql.Driver"/>
+            <property name="url" value="jdbc:postgresql://localhost:5432/postgres"/>
+            <property name="username" value="postgres"/>
+            <property name="password" value="123456"/>
+    </bean>
+
+Aqui nós defimos as confugurações de acesso com o banco de dados, esse Bean fará a conexão com o banco de dados, repare que a estrutura é como um bean qualquer, porém a classe carregada é própria do Spring, que é a: `org.springframework.jdbc.datasource.DriverManagerDataSource`, não esqueça que você precisa fazer dois imports para que isso funcione, um para o driver do banco de dados e outro que é o package que contém essa classe **DriverManagerDataSource**.
+
+`<property name="driverClassName" value="org.postgresql.Driver"/>` => Aqui é feito o carregamento do banco de dados, no caso o PostGres, repare que a string para carregamento é semelhante ao do JDBC.
+
+`<property name="url" value="jdbc:postgresql://localhost:5432/postgres"/>` => Aqui temos um path até o banco de dados, no caso estamos acessando o banco de dados padrão do Postgres, na url *localhost* e na porta *5432*.
+
+`<property name="username" value="postgres"/>` => Aqui temos a informação de username sendo passada para o bean.
+
+`<property name="password" value="123456"/>` => Aqui é passado a senha.
+
+##### org.springframework.jdbc.core.JdbcTemplate
+    <bean name="dao" class="org.springframework.jdbc.core.JdbcTemplate" lazy-init="false">
+		<property name="dataSource" ref="conexao" />
+		<property name="lazyInit" value="false" />
+	</bean>
+
+Aqui seria o equivalente a classe que se conecta a classe *DAO*. Essa classe `org.springframework.jdbc.core.JdbcTemplate` será usada aqui e posteriomente na execução de operações de CRUD no banco de dado.
+
+`<property name="dataSource" ref="conexao" />` => Aqui devemos informar um *datasource*, que no caso seria o bean de nome *conexao* acima. No caso devemos passar a referencia do bean para a propriedade *dataSource*.
+
+`<property name="lazyInit" value="false" />` => Aqui fazemos um carregamento do tipo *Eager*.
+
+#### Executando
+    import org.springframework.context.ApplicationContext;
+    import org.springframework.context.support.ClassPathXmlApplicationContext;
+    import org.springframework.jdbc.core.JdbcTemplate;
+
+    public class Main {
+        public static void main(String[] args) {
+            ApplicationContext app = new ClassPathXmlApplicationContext("/Spring/persistence/persistence.xml");
+            JdbcTemplate jdbc = (JdbcTemplate) app.getBean("dao");	
+            System.out.println(jdbc);
+        }
+    }
+
+##### Explicando
+Repare que é importado a mesma classe que no XML, como nesse exemplo `org.springframework.jdbc.core.JdbcTemplate`. Porém na execução como em qualquer beam você faz o cast nessa linha aqui:
+
+     JdbcTemplate jdbc = (JdbcTemplate) app.getBean("dao");	
