@@ -1467,8 +1467,7 @@ Aqui seria o equivalente a classe que se conecta a classe *DAO*. Essa classe `or
     public class Main {
         public static void main(String[] args) {
             ApplicationContext app = new ClassPathXmlApplicationContext("/Spring/persistence/persistence.xml");
-            JdbcTemplate jdbc = (JdbcTemplate) app.getBean("dao");	
-            System.out.println(jdbc);
+            JdbcTemplate jdbc = (JdbcTemplate) app.getBean("dao");	            
         }
     }
 
@@ -1476,3 +1475,46 @@ Aqui seria o equivalente a classe que se conecta a classe *DAO*. Essa classe `or
 Repare que é importado a mesma classe que no XML, como nesse exemplo `org.springframework.jdbc.core.JdbcTemplate`. Porém na execução como em qualquer beam você faz o cast nessa linha aqui:
 
      JdbcTemplate jdbc = (JdbcTemplate) app.getBean("dao");	
+
+### Executando o código.
+#### Código completo
+    import java.util.List;
+    import java.util.Map;
+
+    import org.springframework.context.ApplicationContext;
+    import org.springframework.context.support.ClassPathXmlApplicationContext;
+    import org.springframework.jdbc.core.JdbcTemplate;
+
+    public class Main {
+
+        public static void main(String[] args) {
+            ApplicationContext app = new ClassPathXmlApplicationContext("/Spring/persistence/persistence.xml");
+            JdbcTemplate jdbc = (JdbcTemplate) app.getBean("dao");	
+            jdbc.execute("create table if not exists valor (id serial primary key,numero decimal(10,2) not null)");
+            
+            int rowAffected = jdbc.update("insert into valor(numero) values (?)",Math.random());
+            System.out.println(rowAffected);
+            
+            List<Map<String,Object>> listas = jdbc.queryForList("Select * from valor");
+            System.out.println(listas);
+            
+
+        }
+
+    }
+
+#### Método execute
+Esse método pode ser encontrado aqui `jdbc.execute("create table if not exists valor (id serial primary key,numero decimal(10,2) not null)")`, repare que esse código não retorna nenhuma linha, uma vez que é um comando DDL. O método execute tem justamente essa finalidade de executar códigos que não retornem nada, uma vez que esse método tem um retorno void e aceita apenas um único parametro, não permitindo por exemplo tratamento de query, ou seja esse método é aconselhável para comandos que não tenham retornam e não exijam parametros.
+
+#### Método update
+Esse método pode ser encontrado aqui `int rowAffected = jdbc.update("insert into valor(numero) values (?)",Math.random())`, esse método é útil caso você queira saber quantas linhas foram afetadas, uma vez que o retorno desse método é um *Integer*, que é o número de linhas afetadas. Esse método aceita dois parametros, *primeiro*: a query a ser executada, *segundo*: um array de objetos que será usado para substituir cada **?** da query, sendo o primeiro elemento do array equivalente ao primeiro interrogação, o segundo ao segundo interrogação, etc... 
+
+#### Método queryForList
+Esse método pode ser encontrado aqui: `List<Map<String,Object>> listas = jdbc.queryForList("Select * from valor")`, com relação aos de entrada parametros ele, ele funciona como o método update, cada parametro informado ou cada parametro de um array objeto com correspondencia ao interrogação apartir do segundo argumento e sendo o primeiro a query a ser executada, porém a diferença está no retorno, no caso esse método retorna um `List<Map<String,Object>>` ao invés de um Inteiro como no método anterior. Dentro desse retorno você tem: Cada elemento do *List* equivale a uma tabela e dentro do *List* você *Map* que estão relacionados a cada coluna e valor na tabela do banco de dados. Por exemplo essa query: `create table if not exists valor (id serial primary key,numero decimal(10,2) not null)`
+
+    List => contém dados da tabela valor;
+    id => chave de maps interno do list e com valor correspondente um para ocorrência existente. Por exemplo: id=1, id=2, etc...
+    numero => Mesma coisa no map teremos várias chaves numero, mas cada um com o valor equivalente a ocorrência no banco de dados, tudo dentro de uma List
+
+##### Exemplo de output imprimindo o System.out.println o código acima
+[{id=1, numero=0.71}, {id=2, numero=0.18}, {id=3, numero=0.37}, {id=4, numero=0.03}, {id=5, numero=0.48}, {id=6, numero=0.58}, {id=7, numero=0.56}]
