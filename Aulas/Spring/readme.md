@@ -1503,6 +1503,7 @@ Repare que é importado a mesma classe que no XML, como nesse exemplo `org.sprin
 
     }
 
+### Metodos-JDBC
 #### Método execute
 Esse método pode ser encontrado aqui `jdbc.execute("create table if not exists valor (id serial primary key,numero decimal(10,2) not null)")`, repare que esse código não retorna nenhuma linha, uma vez que é um comando DDL. O método execute tem justamente essa finalidade de executar códigos que não retornem nada, uma vez que esse método tem um retorno void e aceita apenas um único parametro, não permitindo por exemplo tratamento de query, ou seja esse método é aconselhável para comandos que não tenham retornam e não exijam parametros.
 
@@ -1518,3 +1519,181 @@ Esse método pode ser encontrado aqui: `List<Map<String,Object>> listas = jdbc.q
 
 ##### Exemplo de output imprimindo o System.out.println o código acima
 [{id=1, numero=0.71}, {id=2, numero=0.18}, {id=3, numero=0.37}, {id=4, numero=0.03}, {id=5, numero=0.48}, {id=6, numero=0.58}, {id=7, numero=0.56}]
+
+## DAO
+### Arquivos
+[Actions.java](dao/Actions.java)
+
+[Bean.java](dao/Bean.java)
+
+[DAO.java](dao/DAO.java)
+
+[Main.java](dao/Main.java)
+
+[Arquivo XML](dao/persistence.xml)
+
+### Arquivo XML
+    <?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+    <beans>
+        <bean name="conexao" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+            <property name="driverClassName" value="org.postgresql.Driver"/>
+            <property name="url" value="jdbc:postgresql://localhost:5432/postgres"/>
+            <property name="username" value="postgres"/>
+            <property name="password" value="123456"/>
+        </bean>
+        <bean name="dao" class="org.springframework.jdbc.core.JdbcTemplate" lazy-init="false">
+            <property name="dataSource" ref="conexao" />
+            <property name="lazyInit" value="false" />
+        </bean>
+        <bean name="bean" class="Spring.dao.DAO">
+            <property name="JdbcTemplate" ref="dao"/>
+        </bean>
+    </beans>
+
+#### A diferenca esta aqui: 
+    <bean name="bean" class="Spring.dao.DAO">
+            <property name="JdbcTemplate" ref="dao"/>
+    </bean>
+
+##### Repare que esse XML acima faz referência a esse:
+    <bean name="dao" class="org.springframework.jdbc.core.JdbcTemplate" lazy-init="false">
+            <property name="dataSource" ref="conexao" />
+            <property name="lazyInit" value="false" />
+    </bean>
+
+##### Que por fim o bean acima faz referência a esse:
+    <bean name="conexao" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="org.postgresql.Driver"/>
+        <property name="url" value="jdbc:postgresql://localhost:5432/postgres"/>
+        <property name="username" value="postgres"/>
+        <property name="password" value="123456"/>
+    </bean>
+
+##### XML
+[Arquivo XML](dao/persistence.xml)
+
+### Interface
+#### Aqui criamos uma Interface com os métodos que será executado no método main:
+    import java.util.List;
+    public interface Actions<Model> {
+        void saveOrUpdate(Model model);
+        void delete(int id);
+        List<Model> getOne(int id);
+        List<Model> getAll();
+    }
+#### Arquivo
+[Actions.java](dao/Actions.java)
+### Bean
+#### Classe
+    public class Bean {
+        private int id = 0;
+        private String name;
+        public int getId() {
+            return id;
+        }
+        public void setId(int id) {
+            this.id = id;
+        }
+        public String getName() {
+            return name;
+        }
+        public void setName(String name) {
+            this.name = name;
+        }
+        @Override
+        public String toString() {
+            return "Bean [id=" + id + ", name=" + name + "]";
+        }
+        @Override
+        public int hashCode() {
+            final int prime = 31;
+            int result = 1;
+            result = prime * result + id;
+            return result;
+        }
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj)
+                return true;
+            if (obj == null)
+                return false;
+            if (getClass() != obj.getClass())
+                return false;
+            Bean other = (Bean) obj;
+            if (id != other.id)
+                return false;
+            return true;
+        }	
+    }
+#### Arquivo
+[Bean.java](dao/Bean.java)
+### Método Main
+#### Arquivo Java    
+    import javax.swing.JOptionPane;
+
+    import org.springframework.context.ApplicationContext;
+    import org.springframework.context.support.ClassPathXmlApplicationContext;
+    import org.springframework.jdbc.core.JdbcTemplate;
+
+    public class Main {
+        public static void main(String[] args) {
+            ApplicationContext app = new ClassPathXmlApplicationContext("/Spring/dao/persistence.xml");
+            Actions jdbc = (Actions) app.getBean("bean");		
+            Bean bean = new Bean();
+            //bean.setName(JOptionPane.showInputDialog("Novo nome"));
+            //jdbc.saveOrUpdate(bean);		
+            System.out.println(jdbc.getOne(2));
+        }
+    }
+
+#### Explicando o Main
+No caso o método acima executa com base na interface `Actions jdbc = (Actions) app.getBean("bean");`, isso porque o DAO ele implementa a interface de Actions: `public class DAO extends JdbcDaoSupport implements Actions<Bean>{` abaixo
+
+### Método DAO
+#### Arquivo
+[DAO](dao/DAO.java)
+#### Código Java
+    import java.util.List;
+    import org.springframework.jdbc.core.support.JdbcDaoSupport;
+    public class DAO extends JdbcDaoSupport implements Actions<Bean>{        
+        public void saveOrUpdate(Bean model) {
+            this.checkTable();
+            if(model.getId() == 0) {
+                this.getJdbcTemplate().update("insert into tabela(name) values (?)",model.getName());
+                System.out.println("Adding...");
+            }else {
+                this.getJdbcTemplate().update("update tabela set name = ? where id = ?",model.getName(),model.getId());
+                System.out.println("Updating...");
+            }		
+        }
+
+        public void delete(int id) {
+            this.checkTable();
+            this.getJdbcTemplate().update("delete from tabela where id = ?",id);	
+            System.out.println("Deleting...");
+        }
+
+        public List<Bean> getOne(int id) {
+            this.checkTable();
+            return (List) this.getJdbcTemplate().queryForList("select * from tabela where id = ?",id);
+        }
+
+        @SuppressWarnings("unchecked")
+        public List<Bean> getAll() {
+            this.checkTable();
+            return (List) this.getJdbcTemplate().queryForList("select * from tabela");		
+        }
+        
+        private void checkTable() {
+            this.getJdbcTemplate().execute(""
+                    + "create table if not exists tabela (id serial primary key, name varchar(50) not null)"
+                    );
+        }
+    }
+
+#### Explicando
+No caso esse Dao é do tipo Action também, pois implementa a interface `public class DAO extends JdbcDaoSupport implements Actions<Bean>`, logo isso é possível: `Actions jdbc = (Actions) app.getBean("bean");`, no caso aqui é dado um cast de modo que o usuário usa os métodos, para conseguir as informações que desejam no banco de dados. Além disso essa classe extende de `JdbcDaoSupport`, que está localizado aqui `import org.springframework.jdbc.core.support.JdbcDaoSupport;`, e essa classe possuí esse método dentre outros `getJdbcTemplate()`
+
+#### getJdbcTemplate
+Esse método ele retorna um objeto que tem outros métodos e permite com que seja feito a interação de maneira simplificada com o banco de dados, mais informações sobre esse métodos aqui [Clique aqui para ver.](readme.md#Metodos-JDBC), porém o uso deve ser encadeado com o **getJdbcTemplate** como por exemplo: `getJdbcTemplate().execute()`.
