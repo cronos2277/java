@@ -55,7 +55,7 @@ public class Database {
 			if(this.ids.size() != this.names.size()) throw new java.lang.ExceptionInInitializerError("Error on charge list: Wrong on ids and names size");
 			if(this.ids.size() != this.records.size()) throw new java.lang.ExceptionInInitializerError("Error on charge list: Wrong on ids and records size");
 			this.size = this.ids.size();
-			System.out.print("Database charged");
+			System.out.println("Database charged");
 		}catch(Exception e) {
 			System.err.print("Problem on reading databases: "+e.getMessage());			
 		}		

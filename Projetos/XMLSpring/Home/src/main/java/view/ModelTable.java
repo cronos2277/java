@@ -44,7 +44,7 @@ public class ModelTable extends AbstractTableModel {
 	
 	@Override
 	public boolean isCellEditable(int rowIndex, int columnIndex) {
-	    return (columnIndex > 0)?true:false;
+	    return false;
 	}	
 
 	public Object getValueAt(int rowIndex, int columnIndex) {		
