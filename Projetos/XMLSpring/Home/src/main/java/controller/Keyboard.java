@@ -3,6 +3,8 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.Date;
 import model.FakerData;
+
+import javax.swing.JFrame;
 import javax.swing.JTable;
 
 import model.FakerData;
@@ -43,7 +45,7 @@ public class Keyboard extends KeyAdapter{
 				case RIGHT: this.update();break;				
 				case DOWN: this.update();break;
 				case F2: this.change();break;
-				case F5: this.refresh();break;
+				case F5: this.refresh("Refreshing screen");break;
 				case DELETE:this.remove();break;				
 			}			
 			
@@ -61,8 +63,11 @@ public class Keyboard extends KeyAdapter{
 		
 	}
 	
-	private void refresh() {
-		
+	private void refresh(String message) {
+		this.database.charge();
+		JFrame frame = (JFrame) App.spring.getBean(JFrame.class);		
+		frame.dispose();
+		App.main(new String[] {message});
 	}
 	
 	private void generator() {
@@ -70,7 +75,7 @@ public class Keyboard extends KeyAdapter{
 		Date date = this.faker.getDate();
 		this.database.insert(name,date);
 		System.out.println("Row Created!");
-		this.refresh();
+		this.refresh("New value was added, updating screen");
 	}
 	
 	private void change() {		
@@ -78,13 +83,13 @@ public class Keyboard extends KeyAdapter{
 		Date date = this.faker.getDate();
 		this.database.update(this.id, name, date);
 		System.out.println("Changed id:"+this.id+",name: "+this.name);
-		this.refresh();
+		this.refresh("Some value was updating, updating screen");
 	}
 	
 	private void remove() {
 		Mouse mouse = App.spring.getBean(Mouse.class);
 		this.database.delete(mouse.getInt());
 		System.out.println("Deleted id:"+this.id+",name: "+this.name);
-		this.refresh();
+		this.refresh("Some value was deleted, updating screen");
 	}
 }

@@ -24,7 +24,7 @@ public class Button implements ActionListener {
 	
 	public void actionPerformed(ActionEvent event) {
 		switch(this.getCode(event)) {
-			case Button.REFRESH: this.refresh();break;
+			case Button.REFRESH: this.refresh("Refreshing screen");break;
 			case Button.GENERATOR: this.generator();break;
 			case Button.CHANGE: this.change();break;
 			case Button.REMOVE:this.remove();break;
@@ -51,20 +51,18 @@ public class Button implements ActionListener {
 		}		
 	}
 	
-	private void refresh(){
+	private void refresh(String message){
 		this.database.charge();
-		//JFrame frame = (JFrame) App.spring.getBean(JFrame.class);		
-		//frame.dispose();		
-		//frame.repaint();
-		//frame.validate();
-		//App.main(new String[]{"On Button"});
+		JFrame frame = (JFrame) App.spring.getBean(JFrame.class);		
+		frame.dispose();
+		App.main(new String[] {message});
 	}
 	
 	private void generator() {		
 		String name = this.faker.getName();
 		Date date = this.faker.getDate();
 		this.database.insert(name,date);		
-		
+		this.refresh("New value was added, updating screen");
 	}
 	
 	private void change() {
@@ -72,10 +70,12 @@ public class Button implements ActionListener {
 		String name = this.faker.getName();
 		Date date = this.faker.getDate();
 		this.database.update(mouse.getInt(), name, date);
+		this.refresh("Some value was updating, updating screen");
 	}
 	
 	private void remove() {
 		Mouse mouse = App.spring.getBean(Mouse.class);
 		this.database.delete(mouse.getInt());
+		this.refresh("Some value was deleted, updating screen");
 	}
 }

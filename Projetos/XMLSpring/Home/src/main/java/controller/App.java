@@ -10,6 +10,7 @@ public class App
     		System.out.println("Initiallizing... ");    		
     	}else {
     		for(String arg:args) {
+    			App.spring = new ClassPathXmlApplicationContext("model/spring.xml");
     			System.out.println(arg);
     		}
     		
