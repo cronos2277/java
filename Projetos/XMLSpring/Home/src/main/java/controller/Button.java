@@ -61,7 +61,6 @@ public class Button implements ActionListener {
 	}
 	
 	private void generator() {		
-		//Window window = (Window) App.spring.getBean(Window.class);
 		String name = this.faker.getName();
 		Date date = this.faker.getDate();
 		this.database.insert(name,date);		

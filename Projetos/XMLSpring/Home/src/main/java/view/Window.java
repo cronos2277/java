@@ -9,6 +9,7 @@ import javax.swing.JTable;
 import controller.Mouse;
 import controller.Button;
 import controller.Database;
+import controller.Keyboard;
 
 public class Window{
 	private JFrame frame;	
@@ -24,14 +25,16 @@ public class Window{
 	private BorderLayout layout;
 	private Button buttonsEvent;
 	private Mouse mouse;
+	private Keyboard keyboard;
 	
-	public Window(JFrame frame, ModelTable model,Database database, Button buttonEvent, JTable table,Mouse mouse) {	
+	public Window(JFrame frame, ModelTable model,Database database, Button buttonEvent, JTable table,Mouse mouse,Keyboard keyboard) {	
 		this.frame = frame;
 		this.model = model;
 		this.database = database;
 		this.buttonsEvent = buttonEvent;
 		this.table = table;
 		this.mouse = mouse;
+		this.keyboard = keyboard;
 		this.window();		
 		this.charge();		
 		this.panels();		
@@ -47,6 +50,7 @@ public class Window{
 		this.frame.setLayout(this.layout);		
 		this.table.setModel(model);
 		this.table.addMouseListener(mouse);
+		this.table.addKeyListener(keyboard);
 		frame.getContentPane().add(BorderLayout.CENTER,this.table);		
 	}	
 	

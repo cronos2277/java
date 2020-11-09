@@ -5,6 +5,9 @@
 	<bean name="frame" class="javax.swing.JFrame"/>
 	<bean name="faker" class="model.FakerData"/>
 	<bean name="mouse" class="controller.Mouse"/>
+	<bean name="keyboard" class="controller.Keyboard">
+		<constructor-arg ref="faker"/>
+	</bean>
 	
 	<bean name="button" class="controller.Button">		
 		<constructor-arg ref="database"/>
@@ -20,6 +23,7 @@
 		<constructor-arg ref="button"/>
 		<constructor-arg ref="table"/>
 		<constructor-arg ref="mouse" />
+		<constructor-arg ref="keyboard"/>
 	</bean>
 	
 	<bean name="conexao" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
