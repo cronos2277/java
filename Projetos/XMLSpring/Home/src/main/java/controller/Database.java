@@ -39,7 +39,7 @@ public class Database {
 	
 	public int insert(String name, Date recorded) {
 		try {
-			String sql = "insert into cliente (name,recorded) values (?,?);";
+			String sql = "insert into "+this.tableName+" (name,recorded) values (?,?);";
 			return jdbc.update(sql,new Object[] {name, recorded});
 		}catch(Exception e) {
 			System.err.println("Problem on insert into database: "+e.getMessage());
@@ -47,13 +47,34 @@ public class Database {
 		}
 	}
 	
+	public int delete(int id) {
+		try {
+			String sql = "delete from "+this.tableName+" where id = ?";
+			return jdbc.update(sql,new Object[] {id});
+		}catch(Exception ex) {
+			System.err.println("Problem on deleting into database: "+ex.getMessage());
+			return -1;
+		}
+	}
+	
+	public int update(int id,String name,Date date) {
+		try {
+			String sql = "update "+this.tableName+" set name = ? , recorded = ? where id = ?";
+			System.out.println(date);
+			return jdbc.update(sql,new Object[]{name,date,id});
+		}catch(Exception ex) {
+			System.err.println("Problem on updating into database: "+ex.getMessage());
+			return -1;
+		}
+	}
+	
 	public void charge(){
 		try {			
-			this.ids = jdbc.queryForList("select id from "+this.tableName,Integer.class);		
-			this.names = jdbc.queryForList("select name from "+this.tableName,String.class);
-			this.records = jdbc.queryForList("select recorded from "+this.tableName,Date.class);
+			this.ids = jdbc.queryForList("select id from "+this.tableName+" order by id",Integer.class);		
+			this.names = jdbc.queryForList("select name from "+this.tableName+" order by id",String.class);
+			this.records = jdbc.queryForList("select recorded from "+this.tableName+" order by id",Date.class);
 			if(this.ids.size() != this.names.size()) throw new java.lang.ExceptionInInitializerError("Error on charge list: Wrong on ids and names size");
-			if(this.ids.size() != this.records.size()) throw new java.lang.ExceptionInInitializerError("Error on charge list: Wrong on ids and records size");
+			if(this.ids.size() != this.records.size()) throw new java.lang.ExceptionInInitializerError("Error on charge list: Wrong on ids and records size");			
 			this.size = this.ids.size();
 			System.out.println("Database charged");
 		}catch(Exception e) {

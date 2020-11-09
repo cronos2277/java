@@ -1,12 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
 <beans>
-	<bean name="button" class="controller.Button"/>
+	<bean name="table" class="javax.swing.JTable"/>
+	<bean name="frame" class="javax.swing.JFrame"/>
+	<bean name="faker" class="model.FakerData"/>
+	<bean name="mouse" class="controller.Mouse"/>
+	
+	<bean name="button" class="controller.Button">		
+		<constructor-arg ref="database"/>
+		<constructor-arg ref="faker"/>				
+	</bean>
+	
 	<bean name="modelTable" class="view.ModelTable"/>
+	
 	<bean name="window" class="view.Window">
+		<constructor-arg ref="frame"/>
 		<constructor-arg ref="modelTable"/>
 		<constructor-arg ref="database"/>
 		<constructor-arg ref="button"/>
+		<constructor-arg ref="table"/>
+		<constructor-arg ref="mouse" />
 	</bean>
 	
 	<bean name="conexao" class="org.springframework.jdbc.datasource.DriverManagerDataSource">

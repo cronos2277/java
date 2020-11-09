@@ -15,6 +15,10 @@ public class ModelTable extends AbstractTableModel {
 	public static final int NAME = 1;
 	public static final int DATE = 2;	
 	
+	public ModelTable() {
+		super();
+	}
+	
 	public int getRowCount() {		
 		return this.people.size();
 	};
@@ -89,6 +93,11 @@ public class ModelTable extends AbstractTableModel {
 	
 	public void add(int id, String name, Date date) {
 		this.people.add(new Person(id,name,date));
+		super.fireTableDataChanged();
+	}
+	
+	@Override
+	public void fireTableDataChanged() {		
 		super.fireTableDataChanged();
 	}
 }

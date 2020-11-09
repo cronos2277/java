@@ -6,12 +6,12 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTable;
-
+import controller.Mouse;
 import controller.Button;
 import controller.Database;
 
 public class Window{
-	private JFrame frame = new JFrame(title);	
+	private JFrame frame;	
 	private static String title = "Janela";
 	private JTable table;	
 	private ModelTable model;
@@ -20,20 +20,22 @@ public class Window{
 	private JButton generate;
 	private JButton remove;
 	private JButton change;
+	private JButton refresh;
 	private BorderLayout layout;
 	private Button buttonsEvent;
+	private Mouse mouse;
 	
-	public Window(ModelTable model,Database database, Button buttonEvent) {		
+	public Window(JFrame frame, ModelTable model,Database database, Button buttonEvent, JTable table,Mouse mouse) {	
+		this.frame = frame;
 		this.model = model;
 		this.database = database;
 		this.buttonsEvent = buttonEvent;
+		this.table = table;
+		this.mouse = mouse;
 		this.window();		
-		this.updateTable();
 		this.charge();		
-		this.panels();
-		this.generateButton();
-		this.changeButton();
-		this.removeButton();
+		this.panels();		
+		this.loadButtons();
 	}
 	
 	private void window() {		
@@ -42,14 +44,10 @@ public class Window{
 		frame.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 		frame.setVisible(true);
 		this.layout = new BorderLayout();
-		this.frame.setLayout(this.layout);
-		
-	}	
-	
-	private void updateTable() {				
-		this.table = new JTable(this.model);		
-		frame.getContentPane().add(BorderLayout.CENTER,this.table);
-			
+		this.frame.setLayout(this.layout);		
+		this.table.setModel(model);
+		this.table.addMouseListener(mouse);
+		frame.getContentPane().add(BorderLayout.CENTER,this.table);		
 	}	
 	
 	public void add(int id, String name, Date date) {
@@ -69,34 +67,22 @@ public class Window{
 		this.panel.setSize(800, 100);				
 		frame.getContentPane().add(BorderLayout.SOUTH,this.panel);
 	}
-
-	private void generateButton() {		
-		this.generate = new JButton("Generate Data");		
-		this.generate.setSize(50, 50);
-		this.generate.setLocation(0, 0);
-		this.generate.setVisible(true);
-		this.generate.setBackground(Color.GREEN);
-		this.generate.addActionListener(this.buttonsEvent);
-		this.panel.add(generate);		
-	}
 	
-	private void changeButton() {		
-		this.change = new JButton("Change Data");		
-		this.change.setSize(50, 50);
-		this.change.setLocation(0, 0);
-		this.change.setVisible(true);
-		this.change.setBackground(Color.YELLOW);
-		this.change.addActionListener(this.buttonsEvent);
-		this.panel.add(change);		
-	}
+	public void loadButtons() {
+		this.setButton(this.refresh, "Refresh (F5)","refresh",Color.CYAN);
+		this.setButton(this.generate, "Generate (Enter)","generator",Color.GREEN);
+		this.setButton(this.change, "Change (F2)","change",Color.YELLOW);
+		this.setButton(this.remove, "Remove (Del)","remove",Color.RED);
+	}	
 	
-	private void removeButton() {		
-		this.remove = new JButton("Remove Data");		
-		this.remove.setSize(50, 50);
-		this.remove.setLocation(0, 0);
-		this.remove.setVisible(true);
-		this.remove.setBackground(Color.RED);
-		this.remove.addActionListener(this.buttonsEvent);
-		this.panel.add(remove);		
+	private void setButton(JButton button,String label, String name ,Color color) {		
+		button = new JButton(label);		
+		button.setSize(50, 50);
+		button.setLocation(0, 0);
+		button.setVisible(true);
+		button.setBackground(color);
+		button.setName(name);
+		button.addActionListener(this.buttonsEvent);
+		this.panel.add(button);		
 	}	
 }
