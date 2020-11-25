@@ -94,6 +94,8 @@ Essa classe contém as definições que deve ser usada no target, ou seja é com
         String valor();
         String ref = "Referencia +";
     }
+
+Usa o `@Target(METHOD)` de `java.lang.annotation.ElementType.METHOD`
 #### local de uso:
     @MetodoRuntime(valor = "lklkl")
         public int metodo(@ParameterRuntime(num = 9) int parametro) {
@@ -118,7 +120,7 @@ Tem duas anotações essa explicação refere-se a `@MetodoRuntime(valor = "lklk
 	}
 
 ##### Method
-Quando você for trabalhar reflexão com métodos, deve usar a classe **Method** oriundo de: `import java.lang.reflect.Method;`, no caso é pego todos métodos que essa classe que está sendo analisada tem `Method[] methods = clazz.getDeclaredMethods();` e após isso feito as interações. Aqui pegamos o valor do atributo **valor** da anotação `method.getAnnotation(MetodoRuntime.class).valor());`, no caso especificamente esse:
+Quando você for trabalhar reflexão com métodos, deve usar a classe **Method** oriundo de: `java.lang.reflect.Method;`, no caso é pego todos métodos que essa classe que está sendo analisada tem `Method[] methods = clazz.getDeclaredMethods();` e após isso feito as interações. Aqui pegamos o valor do atributo **valor** da anotação `method.getAnnotation(MetodoRuntime.class).valor());`, no caso especificamente esse:
 
     @Retention(RUNTIME) 
     @Target(METHOD)
@@ -128,6 +130,9 @@ Quando você for trabalhar reflexão com métodos, deve usar a classe **Method**
     }
 
 Se você precisar pegar qualquer valor passado para uma anotação, após pego todos os métodos, você pode usar o método **getAnnotation()**, que aceita como argumento a classe da anotação que você quer pegar, no caso o **MetodoRuntime.class** seria o arquivo de classe compilada da anotação **MetodoRuntime**, válido lembrar que o argumento será sempre a classe da sua anotação, com ponto e o método que você quer pegar, nesse caso é sempre válido lembrar que uma anotação é uma interface, ou seja poderia ser uma constante ou um método contendo o valor que o usuário da anotação informou. 
+
+### Verificação para Construtores
+[Anotação Construtor](ConstrutorRuntime.java)
 #### Anotação para construtores
     package annotations;
     import static java.lang.annotation.ElementType.CONSTRUCTOR;
@@ -141,6 +146,8 @@ Se você precisar pegar qualquer valor passado para uma anotação, após pego t
         String valor() default "valor";
     }
 
+Usa o `@Target(CONSTRUCTOR)` de `java.lang.annotation.ElementType.CONSTRUCTOR`.
+
 #### Local de uso
     @ConstrutorRuntime
 	public ClasseExemplo() {
@@ -148,8 +155,7 @@ Se você precisar pegar qualquer valor passado para uma anotação, após pego t
 	}
 
 Como você pode ver, existe uma anotação específica para construtores.
-#### Método para fazer checagem de construtores
-    //Metodo que vefica se tem a anotacao no construtor e o seu valor.
+#### Método para fazer checagem de construtores    
 	public void anotacaoConstructor() {
 		System.out.println();
 		Constructor[] constructors = clazz.getDeclaredConstructors();
@@ -165,4 +171,88 @@ Como você pode ver, existe uma anotação específica para construtores.
 	}
 
 ##### getDeclaredConstructors() 
-Segue a mesma idéia dos métodos, lembrando que construtores aceitam sobrecarga, logo, assim como métodos, sempre deve ser armazenados inicialmente em arrays, sendo feito isso aqui: `clazz.getDeclaredConstructors();`, após uma varredura feita com o foreach, assim como foi feito com os métodos acima `for(Constructor constructor:constructors)`, no caso o construtor tem um método semelhante ao de um método, o funcionamento é bem parecido mesmo no que tange a reflexão. A parte interessante vem aqui: `System.out.printf("Qual o valor do 'ConstructorRuntime'? %s",constructor.getAnnotation(ConstrutorRuntime.class));`, no caso temos o **%s** que formata em String o argumento do método *printf*, pois bem, toda a classe Java herda de `Java.Lang.Object` e nessa classe está implementada o `toString()`, que permite transformar um objeto em string quando o mesmo for tratado como String e nesse caso, devido a essa característica, será impresso um array no formato chave valor o atributo e o seu respectivo dado.
+Segue a mesma idéia dos métodos, lembrando que construtores aceitam sobrecarga, logo, assim como métodos, sempre deve ser armazenados inicialmente em arrays, sendo feito isso aqui: `clazz.getDeclaredConstructors();`, após uma varredura feita com o foreach, assim como foi feito com os métodos acima `for(Constructor constructor:constructors)`, no caso o construtor tem um método semelhante ao de um método, o funcionamento é bem parecido mesmo no que tange a reflexão. A parte interessante vem aqui: `System.out.printf("Qual o valor do 'ConstructorRuntime'? %s",constructor.getAnnotation(ConstrutorRuntime.class));`, no caso temos o **%s** que formata em String o argumento do método *printf*, pois bem, toda a classe Java herda de `Java.Lang.Object` e nessa classe está implementada o `toString()`, que permite transformar um objeto em string quando o mesmo for tratado como String e nesse caso, devido a essa característica, será impresso um array no formato chave valor o atributo e o seu respectivo dado. Para pegar um array de construtores, você precisa criar um array de `Constructor` que é oriundo de: `java.lang.reflect.Constructor;`, de resto se assemelha a métodos.
+
+### Verificação para Atributos
+[Anotação para atributos](FieldRuntime.java)
+#### Anotação de Campos
+    package annotations;
+    import static java.lang.annotation.ElementType.FIELD;
+    import static java.lang.annotation.RetentionPolicy.RUNTIME;
+    import java.lang.annotation.Retention;
+    import java.lang.annotation.Target;
+
+    @Retention(RUNTIME)
+    @Target(FIELD)
+    public @interface FieldRuntime {
+        int numero1();
+        int numero2() default 2;
+    }
+
+`@Target(FIELD)` de `java.lang.annotation.ElementType.FIELD`
+
+#### Uso
+    @FieldRuntime(numero1 = 1)
+	    public int valor;
+
+Como não foi informado o numero2, logo ele assume o valor padrão que é o valor 2, definido aqui: `int numero2() default 2;`, no caso o *default* torna o campo opicional.
+#### Método verificador
+    public void anotacaoCampo() {
+		System.out.println();
+		Field[] fields = clazz.getFields();
+		System.out.println(fields.length+" campo(s) tem essa anotacao de atributos");
+		for(Field field:fields) {
+			System.out.printf("O construtor %s tem uma anotacao RUNTIME", field);
+			System.out.println();
+			System.out.printf("Possui a anotacao 'FieldRuntime'? %b",field.getAnnotation(FieldRuntime.class));
+			System.out.println();
+			System.out.printf("Qual o primeiro valor do 'FieldRuntime'? %s",field.getAnnotation(FieldRuntime.class).numero1());
+			System.out.println();
+			System.out.printf("Qual o segundo valor do 'FieldRuntime'? %s",field.getAnnotation(FieldRuntime.class).numero2());
+		}
+		System.out.println();
+	}
+
+#### Field
+Identico aos métodos e construtores, os campos você pega da mesma forma: `Field[] fields = clazz.getFields();`, no caso estamos armazenando em um array do tipo `Field`, oriundo de `import java.lang.reflect.Field;`, a forma de se pegar também usa o getAnnotation e você deve passar de argumento o arquivo class da anotação, no caso temos o esse trecho aqui: `System.out.printf("Qual o segundo valor do 'FieldRuntime'? %s",field.getAnnotation(FieldRuntime.class).numero2());`, que não foi definido em lugar algum, porém nesse caso assume-se o valor padrão, conforme definido [aqui](#anotação-de-campos), como se trata de um array também temos um atributo de tamanho `System.out.println(fields.length+" campo(s) tem essa anotacao de atributos");`, isso vale para qualquer array apresentado aqui. Aqui pegamos o valor de numero 1 = `field.getAnnotation(FieldRuntime.class).numero1();` e aqui o de numero2 `field.getAnnotation(FieldRuntime.class).numero2();`, que uma vez não definido, usa-se o valor padrão mesmo.
+
+### Verificação para argumentos
+[Anotação para argumentos](ParameterRuntime.java)
+#### Classe de anotação para argumentos
+    package annotations;
+    import static java.lang.annotation.ElementType.PARAMETER;
+    import static java.lang.annotation.RetentionPolicy.RUNTIME;
+    import java.lang.annotation.Retention;
+    import java.lang.annotation.Target;
+
+    @Retention(RUNTIME)
+    @Target(PARAMETER)
+    public @interface ParameterRuntime {
+        int num() default 0;
+    }
+
+`@Target(PARAMETER)` de `java.lang.annotation.ElementType.PARAMETER`
+
+#### Uso
+    @MetodoRuntime(valor = "lklkl")
+	public int metodo(@ParameterRuntime(num = 9) int parametro) {
+		return parametro;
+	}
+
+Detalhe importante, agora estamos analizando essa parte aqui: `@ParameterRuntime(num = 9) int parametro`, que no caso seria uma anotação de argumento, que no caso refere-se a argumento de método, mas poderia ser de construtor também.
+#### Método Verificador de argumentos
+
+	public void anotacaoParametro() {
+		System.out.println();
+		Method[] methods = clazz.getDeclaredMethods();
+		Parameter[] params = methods[0].getParameters();
+		System.out.printf("O metodo '%s' tem %s atributo anotado", methods[0].getName(),params.length);
+		System.out.println();
+		for(Parameter param:params) {
+			System.out.printf("O metodo %s tem a anotacao %s.",MetodoRuntime.class.getName(),ParameterRuntime.class.getName());
+			System.out.println();
+			System.out.printf("O nome do parametro %s com o valor %s",param.getName(),param.getDeclaredAnnotation(ParameterRuntime.class).num());
+		}
+	}
+    
+Aqui é um pouco diferente do visto acima, uma vez que os argumentos estão dentro de métodos ou construtores, nesse caso inicialmente pegamos todos os métodos: `Method[] methods = clazz.getDeclaredMethods();`, então com todos os métodos pegos, apenas em cima do primeiro, no caso o `methods[0]` desse array, analisamos todos os argumentos que esse método tem `Parameter[] params = methods[0].getParameters();`, no caso foi criado um array de `Parameter`, sendo esse oriundo de `java.lang.reflect.Parameter`. No caso quando lidar-mos com argumentos, devemos ter ciência que lidaremos um um laço quadrático, ou seja um laço dentro de outro laço, o primeiro sendo para os métodos e o segundo para os parametros dentro de cada método. Para pegarmos o nome e valor do parametro usamos a seguinte estratégia, para pegar o nome `getName()` e valor `getDeclaredAnnotation(ParameterRuntime.class).num()`, sendo o `ParameterRuntime.class` o arquivo class da anotação e o `.num()` o valor definido [aqui](#classe-de-anotação-para-argumentos).
