@@ -131,6 +131,10 @@ Quando você for trabalhar reflexão com métodos, deve usar a classe **Method**
 
 Se você precisar pegar qualquer valor passado para uma anotação, após pego todos os métodos, você pode usar o método **getAnnotation()**, que aceita como argumento a classe da anotação que você quer pegar, no caso o **MetodoRuntime.class** seria o arquivo de classe compilada da anotação **MetodoRuntime**, válido lembrar que o argumento será sempre a classe da sua anotação, com ponto e o método que você quer pegar, nesse caso é sempre válido lembrar que uma anotação é uma interface, ou seja poderia ser uma constante ou um método contendo o valor que o usuário da anotação informou. 
 
+##### invoke
+No caso poderia ser chamado o método envocando eles dentro do laço for usando `method.invoke(obj, args)`. Para mais informações: [invoke](https://docs.oracle.com/javase/tutorial/reflect/member/methodInvocation.html)
+
+
 ### Verificação para Construtores
 [Anotação Construtor](ConstrutorRuntime.java)
 #### Anotação para construtores
@@ -172,6 +176,9 @@ Como você pode ver, existe uma anotação específica para construtores.
 
 ##### getDeclaredConstructors() 
 Segue a mesma idéia dos métodos, lembrando que construtores aceitam sobrecarga, logo, assim como métodos, sempre deve ser armazenados inicialmente em arrays, sendo feito isso aqui: `clazz.getDeclaredConstructors();`, após uma varredura feita com o foreach, assim como foi feito com os métodos acima `for(Constructor constructor:constructors)`, no caso o construtor tem um método semelhante ao de um método, o funcionamento é bem parecido mesmo no que tange a reflexão. A parte interessante vem aqui: `System.out.printf("Qual o valor do 'ConstructorRuntime'? %s",constructor.getAnnotation(ConstrutorRuntime.class));`, no caso temos o **%s** que formata em String o argumento do método *printf*, pois bem, toda a classe Java herda de `Java.Lang.Object` e nessa classe está implementada o `toString()`, que permite transformar um objeto em string quando o mesmo for tratado como String e nesse caso, devido a essa característica, será impresso um array no formato chave valor o atributo e o seu respectivo dado. Para pegar um array de construtores, você precisa criar um array de `Constructor` que é oriundo de: `java.lang.reflect.Constructor;`, de resto se assemelha a métodos.
+
+##### newInstance
+No caso dos construtores, você pode instanciar um novo objeto através de um construtor usando dentro do laço `ClasseExemplo ex = (ClasseExemplo) constructor.newInstance(ClasseExemplo.class);`, nesse caso seria criado uma nova instancia, usando como base o construtor pego, para mais detalhes: [doc](https://docs.oracle.com/javase/tutorial/reflect/member/ctorInstance.html) e um [artigo](https://www.geeksforgeeks.org/constructor-newinstance-method-in-java-with-examples/)
 
 ### Verificação para Atributos
 [Anotação para atributos](FieldRuntime.java)
@@ -256,3 +263,46 @@ Detalhe importante, agora estamos analizando essa parte aqui: `@ParameterRuntime
 	}
     
 Aqui é um pouco diferente do visto acima, uma vez que os argumentos estão dentro de métodos ou construtores, nesse caso inicialmente pegamos todos os métodos: `Method[] methods = clazz.getDeclaredMethods();`, então com todos os métodos pegos, apenas em cima do primeiro, no caso o `methods[0]` desse array, analisamos todos os argumentos que esse método tem `Parameter[] params = methods[0].getParameters();`, no caso foi criado um array de `Parameter`, sendo esse oriundo de `java.lang.reflect.Parameter`. No caso quando lidar-mos com argumentos, devemos ter ciência que lidaremos um um laço quadrático, ou seja um laço dentro de outro laço, o primeiro sendo para os métodos e o segundo para os parametros dentro de cada método. Para pegarmos o nome e valor do parametro usamos a seguinte estratégia, para pegar o nome `getName()` e valor `getDeclaredAnnotation(ParameterRuntime.class).num()`, sendo o `ParameterRuntime.class` o arquivo class da anotação e o `.num()` o valor definido [aqui](#classe-de-anotação-para-argumentos).
+
+### Anotação de Classe
+[Arquivo Exemplo](TypeRuntime.java)
+#### Anotação TypeRuntime
+    package annotations;
+    import static java.lang.annotation.ElementType.TYPE;
+    import static java.lang.annotation.RetentionPolicy.RUNTIME;
+    import java.lang.annotation.Retention;
+    import java.lang.annotation.Target;
+
+    @Retention(RUNTIME)
+    @Target(TYPE)
+    public @interface TypeRuntime {
+        double num() default 0;
+    }
+
+Repare que aqui usamos o **Type**, que apesar de ser contra-intuitivo o mesmo deve ser usado em classes, esse se origina de: `java.lang.annotation.ElementType.TYPE`
+
+#### Exemplo de Uso
+    @TypeRuntime(num = 5) // A anotação fica aqui.
+    public class ClasseExemplo {
+        // O tipo aceito é double, logo é possível colocar valor inteiro também.
+    }
+
+#### Método verificador
+    public void anotacaoClasse() {
+		System.out.println();
+		TypeRuntime[] types = clazz.getDeclaredAnnotationsByType(TypeRuntime.class);
+		System.out.println(types.length+" classe(s) tem essa anotacao de classe");
+		for(TypeRuntime type:types) {
+			System.out.printf("Essa classe tem a %s, uma anotacao RUNTIME", TypeRuntime.class.getName());
+			System.out.println();
+			System.out.printf("Possui a anotacao 'TypeRuntime'? %b",type.num());
+			System.out.println();
+			System.out.println("Qual o valor do 'TypeRuntime'? "+type.num());						
+		}		
+	}
+
+Aqui a diferença já é um pouco maior com relação aos anteriores, primeiro que as anotações de classe, são anotações de tipos e o seu armazenamento devem ser em estruturas do tipo `TypeRuntime` oriundo de: `java.lang.reflect.Type`, esse processo é feito aqui `TypeRuntime[] types = clazz.getDeclaredAnnotationsByType(TypeRuntime.class);`, lembrando que o argumento para o método `getDeclaredAnnotationsByType` deve ser o arquivo class da sua anotação de classe. Também a propriedade *lenght* e o atributo você pega da seguinte forma: Dessa forma você pega o nome do atributo `TypeRuntime.class.getName()`, nesse caso o TypeRuntime é a anotação de classe criada. e claro dentro do laço a propriedade definida [aqui](#anotação-typeruntime)
+
+### Ainda sobre o Runtime Policy
+No caso todos as anotações trabalham com atributos, métodos, construtores, classes publico, você pode ter limitações ou problemas para acessa-los se eles tiverem um escopo mais restrito.
+Para mais informações sobre arquivos [.class](https://docs.oracle.com/javase/8/docs/api/java/lang/Class.html), arquivo que contém os [métodos verificadores](Check.java), a [classe de exemplo na integra](ClasseExemplo.java)
