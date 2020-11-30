@@ -252,6 +252,14 @@ No caso sempre que possível use o **ApplicationContext**, uma vez que este é m
 
 repare que os dois instanciam de `new ClassPathXmlApplicationContext("/Spring/home/ApplicationContext.xml");`. A String informada ali corresponde ao nome do XML aonde tem essas configurações e o Path para esse arquivo, instanciando a classe `ApplicationContext app = new ClassPathXmlApplicationContext` você inicia os Beans mapeados e para acessar os beans `app.getBean("bean3")`, com esse método você acessa o bean, uma vez acessado o bean você ja pode usar os setters e getters desse bean sem se preocupar com erros do tipo **NullPointerException**, uma vez que os mesmos serão inicializados com um valor padrão.
 
+### ClassPathXmlApplicationContext
+Você também pode usa-lo caso queira controlar o fluxo do Bean:
+
+        ClassPathXmlApplicationContext classPath = new ClassPathXmlApplicationContext("Springann/annotations/ApplicationContext.xml");
+    	ApplicationContext app = classPath;
+    	Bean1 bean = (Bean1) app.getBean("bean1");    
+
+Dessa forma você consegue trabalhar o ciclo do bean se for o caso, o `ClassPathXmlApplicationContext` te da opções que vão além do `ApplicationContext` e você pode manter uma instância do `ClassPathXmlApplicationContext` se for o caso, com ele você pode por exemplo destruit um beam com o método `close()`, por exemplo : `classPath.close()`, para um gerenciamento de bean mais minuncioso pode ser interessante manter a instancia de `ClassPathXmlApplicationContext`, podendo ser moldado para um `ApplicationContext` se for o caso, como feito nessa linha: `ApplicationContext app = classPath`
 ### Collections SET e LIST
 Aqui nós temos alguns exemplos de collections, no caso do **SET** e do **MAP**, você precisa informar um property que tenha o nome do atributo e dentro do property iniciar o **SET** ou o **LIST** com os valores que você deseja que seja inicializados.
 
@@ -1697,3 +1705,187 @@ No caso esse Dao é do tipo Action também, pois implementa a interface `public 
 
 #### getJdbcTemplate
 Esse método ele retorna um objeto que tem outros métodos e permite com que seja feito a interação de maneira simplificada com o banco de dados, mais informações sobre esse métodos aqui [Clique aqui para ver.](readme.md#Metodos-JDBC), porém o uso deve ser encadeado com o **getJdbcTemplate** como por exemplo: `getJdbcTemplate().execute()`.
+
+## Annotations
+
+### Adições no arquivo POM.XML
+Inicialmente foram adicionado bibliotecas para que as anotações funcionem, essas anotações precisam desses novos imports para funcionar.
+
+        <!-- Spring annotations -->
+        <dependency>
+            <groupId>javax.annotation</groupId>
+            <artifactId>javax.annotation-api</artifactId>
+            <version>1.3.2</version>
+        </dependency>
+
+### Exemplo básico
+    <?xml version="1.0" encoding="UTF-8"?>
+    <beans xmlns="http://www.springframework.org/schema/beans"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"       
+        xmlns:context="http://www.springframework.org/schema/context"
+        
+        xsi:schemaLocation="http://www.springframework.org/schema/beans 
+                        http://www.springframework.org/schema/beans/spring-beans.xsd
+                        http://www.springframework.org/schema/context 
+                        http://www.springframework.org/schema/context/spring-context.xsd">
+        <context:annotation-config/>
+        <bean name='bean1' class='Springann.annotations.Bean1'/>
+        <bean name='bean2' class='Springann.annotations.Bean2'>
+            <constructor-arg value="VALOR BEAN INTERNO"/>
+        </bean>
+    </beans>
+
+Apesar de usar a anotação, aqui nesse exemplo isso é usado de maneira parcial ao menos, a relação entre o *bean1* e o *bean2* e o ciclo de vida dos beans será feito por anotação, ou seja, delegar um pouco as anotações algumas responsabilidades, aumentando um pouco o acoplamento do bean, mas simplificando ela. [Arquivo de exemplo](./basico-ann/spring-ann-basico.xml).
+
+#### Como o XML com suporte a anotações funciona?
+Para que as anotações funcionem, precisa que seja informado o context, isso é feito aqui `<context:annotation-config/>`, ou seja sem essa marcação dentro do `<beans>`, as anotações não funcionaram, ou seja, isso é obrigatório para o funcionamento das anotações, Porém ela não vem do nada, para isso você precisa, implementar `xmlns:context="http://www.springframework.org/schema/context"` e para essa emplementação funcione você precisa informar `xmlns="http://www.springframework.org/schema/beans"` e `xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"`,
+o **xmlns** serve para informar o *namespace*, com base nisso também precisamos implementar a url dos arquivos *XSD* ,**xmlns:xsi** logo se faz necessário e por fim `xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"`, uma vez que esteja implementado ai deve-se implementar `xmlns:context="http://www.springframework.org/schema/context"`, para funcionar o `<context:annotation-config/>`. Aqui abaixo temos a importação dos arquivos *XSD*:
+
+     xsi:schemaLocation="http://www.springframework.org/schema/beans 
+                        http://www.springframework.org/schema/beans/spring-beans.xsd
+                        http://www.springframework.org/schema/context 
+                        http://www.springframework.org/schema/context/spring-context.xsd"
+
+Dessa forma a tag beans deve ficar assim:
+
+    <beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"       
+       xmlns:context="http://www.springframework.org/schema/context"       
+       xsi:schemaLocation="http://www.springframework.org/schema/beans 
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/context 
+                           http://www.springframework.org/schema/context/spring-context.xsd">
+    </beans>
+
+Repare que ainda assim precisa definir no *XML* as definições dos *Beans*:
+
+    <bean name='bean1' class='Springann.annotations.Bean1'/>
+	<bean name='bean2' class='Springann.annotations.Bean2'>
+		<constructor-arg value="VALOR BEAN INTERNO"/>
+	</bean>
+#### Classe bean2    
+    import javax.annotation.PostConstruct;
+    import javax.annotation.PreDestroy;
+
+    public class Bean2 {
+        private String valor;
+        public Bean2(String valor) {
+            this.setValor(valor);
+        }
+        public String getValor() {
+            return "Valor do bean interno é: " +valor;
+        }
+        public void setValor(String valor) {
+            this.valor = valor;
+        }
+        
+        @PostConstruct
+        public void exibir() {
+            System.out.println("Executando @PostConstruct do Bean Interno");
+        }
+        
+        @PreDestroy
+        public void destroir() {
+            System.out.println("Executando @PreDestroy do Bean Interno");
+        }
+    }
+
+#### Bean1
+    import javax.annotation.PostConstruct;
+    import javax.annotation.PreDestroy;
+    import org.springframework.beans.factory.annotation.Autowired;
+    import org.springframework.stereotype.Component;
+
+    @Component
+    public class Bean1 {
+        private long id;
+        private String value;
+        
+        @Autowired
+        private Bean2 bean2;
+        
+        public long getId() {
+            return id;
+        }
+        public void setId(long id) {
+            this.id = id;
+        }
+        public String getValue() {
+            return value;
+        }
+        public void setValue(String value) {
+            this.value = value;
+        }
+        
+        @PostConstruct
+        public void exibir() {
+            System.out.println("Executando @PostConstruct do Bean Externo");
+        }
+        
+        @PreDestroy
+        public void destroir() {
+            System.out.println("Executando @PreDestroy do Bean Externo");
+        }
+        
+        public Bean2 getBean() {
+            return bean2;
+        }
+        public void setBean(Bean2 bean) {
+            this.bean2 = bean;
+        }
+        
+        @Override
+        public String toString() {
+            return this.bean2.getValor();
+        }
+        
+    }
+
+##### @Component
+Aqui indica que se trata de um Bean, mas da maneira mais genérica possível, para esse exemplo básico não faz muita diferença [Documentação](https://docs.spring.io/spring-framework/docs/2.5.x/javadoc-api/org/springframework/stereotype/Component.html):
+
+    De acordo com a própria definição dos criadores: Ela representa um componente (bean) que é detectado automaticamente quando trabalhamos com configurações baseadas em annotations e busca de caminhos de classes.
+
+#### @Autowired
+Essa anotação é usada quando você quer colocar um bean dentro do outro:
+Isso dentro do **Bean1**:
+
+     @Autowired
+    private Bean2 bean2;
+
+Significa isso:
+
+    <bean name="bean2" class="package.Bean2" />			
+    <bean name="bean1" class="package.Bean1">			
+		<property name="bean2" ref="bean2" />
+	</bean>	
+
+Em casos mais simples é possível usar sem a anotação `@Qualifier`, mas caso haja mais de um *bean* com a mesma origem ou até mesmo de origem diferente dentro do bean, se faz necessário usar o `@Qualifier` para evitar ambiguidades. Nesse caso aonde o `@Autowired` está sem a anotação `@Qualifier` abaixo, ele procura no *XML* um bean que tem esse tipo e usa esse bean para iniciar esse valor interno. O `@Autowire` vem de `org.springframework.beans.factory.annotation.Autowired`, já o `@Component` vem de `import org.springframework.stereotype.Component`.
+
+#### @PostConstruct e @PreDestroy
+
+##### Classe com método Main
+    public class App 
+    {
+        public static void main( String[] args )
+        {
+            ClassPathXmlApplicationContext classPath = new ClassPathXmlApplicationContext("Springann/annotations/spring-ann-basico.xml");
+            ApplicationContext app = classPath;
+            Bean1 bean = (Bean1) app.getBean("bean1");    	
+            System.out.println(bean);    	
+            classPath.close();    	
+        }
+    }
+
+Aqui é executado todo a aplicação, nesse caso o objeto instanciado será armazenado em *classPath*: `ClassPathXmlApplicationContext classPath = new ClassPathXmlApplicationContext("Springann/annotations/spring-ann-basico.xml");` e depois criado um *AplicationContext* `ApplicationContext app = classPath;`, a grande diferença ocorre aqui: `classPath.close();`, quando o método é encerrado.
+
+##### Explicando:
+ As anotações **@PostConstruct** e **@PreDestroy**, vem respectivamente de: `javax.annotation.PostConstruct` e `javax.annotation.PreDestroy`, essas anotações estaram disponíveis após a implementação dos da biblioteca `javax.annotation-api`. Essas duas anotações estão relacionadas ao ciclo de vida de um bean, o **@PostConstruct** é executado após o construtor ao passo que o **@PreDestroy** é executado após a morte do bean. Output da aplicação:
+    
+    Executando @PostConstruct do Bean Interno
+    Executando @PostConstruct do Bean Externo
+    Valor do bean interno é: VALOR BEAN INTERNO
+    Executando @PreDestroy do Bean Externo
+    Executando @PreDestroy do Bean Interno
+
+O **@PreDestroy** foi executado, quando foi executado esse método aqui: `classPath.close()`, repare que ele matou todos os beans, ou seja na prática, o método marcado com a anotação **@PreDestroy** seria um destrutor para o bean, ao passo que o **@PostConstruct** é executado já após o construtor, util para checar valores inicializados, por exemplo ou quando for necessário executar alguma coisa, depois que o *Bean* for inicializado.
