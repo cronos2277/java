@@ -1889,3 +1889,324 @@ Aqui é executado todo a aplicação, nesse caso o objeto instanciado será arma
     Executando @PreDestroy do Bean Interno
 
 O **@PreDestroy** foi executado, quando foi executado esse método aqui: `classPath.close()`, repare que ele matou todos os beans, ou seja na prática, o método marcado com a anotação **@PreDestroy** seria um destrutor para o bean, ao passo que o **@PostConstruct** é executado já após o construtor, util para checar valores inicializados, por exemplo ou quando for necessário executar alguma coisa, depois que o *Bean* for inicializado.
+
+## AOP 
+Existe uma forma de programação que é a Orientação a aspectos, que incluem deteminadas vantagens, no caso você precisar ter uma classe *Advice*, que contém os métodos a ser executados em determinados eventos e a classe a ser assistida, segue a [pasta contendo os arquivos de exemplo](./aop_basico).
+
+### Importando as Bibliotecas
+Caso você use o Maven, você deve importar as dependencias abaixo, ou se for o caso importar as bibliotecas do **aspectj** no maven:
+
+    <dependency>
+	    <groupId>org.springframework</groupId>
+	    <artifactId>spring-aspects</artifactId>
+	    <version>5.2.8.RELEASE</version>
+	</dependency>
+
+Com isso o `import org.aspectj.lang.annotation.*;` fica disponível.
+
+### No XML
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <beans xmlns="http://www.springframework.org/schema/beans"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"       
+        xmlns:context="http://www.springframework.org/schema/context"
+        xmlns:aop="http://www.springframework.org/schema/aop"
+        
+        xsi:schemaLocation="http://www.springframework.org/schema/beans 
+                            http://www.springframework.org/schema/beans/spring-beans.xsd
+                            http://www.springframework.org/schema/context 
+                            http://www.springframework.org/schema/context/spring-context.xsd
+                            http://www.springframework.org/schema/aop
+                            http://www.springframework.org/schema/aop/spring-aop.xsd">
+                            
+        <aop:aspectj-autoproxy/>	
+        <bean name="aop" class="Springann.aop.Advice" />
+        <bean name="concreta" class="Springann.aop.Concreta" />	
+    </beans>
+
+No caso deve ser adicionado essa linha `xmlns:aop="http://www.springframework.org/schema/aop"` para que essa expressão também funciona `<aop:aspectj-autoproxy/>`, além disso no `xsi:schemaLocation` deve ter essas linhas:
+
+    http://www.springframework.org/schema/aop
+    http://www.springframework.org/schema/aop/spring-aop.xsd"
+
+#### <aop:aspectj-autoproxy/>
+Essa é parte que habilita o aspectj e informa ao spring que a orientação a aspecto será usado, no entanto o bean de advice deve estar imediamente abaixo dele, caso o bean abaixo dele não seja um advice pode dar problemas:
+
+    <aop:aspectj-autoproxy/>	
+    <bean name="aop" class="Springann.aop.Advice" />
+    <bean name="concreta" class="Springann.aop.Concreta" />	
+
+O exemplo acima funciona o exemplo abaixo não:
+
+    <aop:aspectj-autoproxy/>	
+    <bean name="concreta" class="Springann.aop.Concreta" />	
+    <bean name="aop" class="Springann.aop.Advice" />
+
+#### Classe advice
+ A classe [Advice](aop_basico/Advice.java) é aonde estará programado os gatilhos, no caso a classe [Advice](aop_basico/Advice.java) vai assistir uma classe e se os eventos programados do Pointcut for acionado, ai é executado o método anotato pelo Pointcut, nesse trecho abaixo é informado a classe de [Advice](aop_basico/Advice.java).
+
+    <aop:aspectj-autoproxy/>	
+    <bean name="aop" class="Springann.aop.Advice" />
+
+##### Classe Advice
+Que tem o conteúdo:
+
+    import org.aspectj.lang.annotation.After;
+    import org.aspectj.lang.annotation.AfterReturning;
+    import org.aspectj.lang.annotation.AfterThrowing;
+    import org.aspectj.lang.annotation.Aspect;
+    import org.aspectj.lang.annotation.Before;
+
+    @Aspect
+    public class Advice {
+        
+        @Before("execution(public void antes())")
+        public void before() {
+            System.out.println("Executando o metodo referente ao @Before");
+        }
+        
+        @After("execution(public * dep*())")
+        public void after() {
+            System.out.println("Executando o metodo referente ao @After");
+        }
+        
+        @AfterReturning("execution(public void depois(boolean))")
+        public void afterReturning() {
+            System.out.println("Executando o metodo referente ao @AfterReturning");
+        }
+        
+        @AfterThrowing("execution( * * (..))")
+        public void afterErrors() {
+            System.out.println("Executando o metodo referente ao @AfterThrowing");
+        }	
+        
+    }
+
+#### Classe Concreta
+Essa classe acima, assiste essa classe:
+
+    public class Concreta implements Contrato{
+	
+        public Concreta() {
+            System.out.println("Executando o construtor");
+        }
+        
+        public void antes() {
+            System.out.println("Executando o metodo antes");		
+        }
+
+        public void depois() {
+            System.out.println("Executando o metodo depois");		
+        }
+
+        public void erro() {
+            System.out.println("Executando o metodo de erro");		
+            throw new java.lang.RuntimeException("Erro provocado pelo metodo de erro");
+        }
+
+        public void depois(boolean b) {
+            System.out.println("Executando o metodo depois");		
+        }	
+    }  
+
+#### Interface Contrato
+Ao qual tem essa interface implementada, até agora:
+
+    public interface Contrato {
+        public void antes();
+        public void depois();
+        public void erro();
+        public void depois(boolean b);	
+    }
+
+#### Classe com o Main
+
+    public class App 
+    {
+        public static void main( String[] args )
+        {
+            ClassPathXmlApplicationContext classPath = new ClassPathXmlApplicationContext("Springann/aop/config.xml");
+            ApplicationContext app = classPath;
+            Contrato bean = (Contrato) app.getBean("concreta");   	            
+            classPath.close();    	
+        }
+    }
+### Explicando as anotações básicas da classe Advice
+#### @Aspect
+Toda e qualquer classe Advice deve conter essa anotação, essa é a base, é o que indica a JVM que se trata de uma classe Advice, como no exemplo abaixo:
+
+    @Aspect
+    public class Advice {
+
+Essa anotação indica que se trata de uma classe advice, visto nesse exemplo [aqui](#classe-advice).
+
+#### Pointcut
+Pointcut são expressões que permite executar ações, no caso se as condições impostas pelo Pointcut forem acionadas, o método ao qual contém a anotação é executado:
+
+    @Before("execution(public void antes())")
+    public void before() 
+        
+    @After("execution(public * dep*())")
+    public void after()
+        
+    @AfterReturning("execution(public void depois(boolean))")
+    public void afterReturning()
+        
+    @AfterThrowing("execution( * * (..))")
+    public void afterErrors() 
+
+##### execution
+Aqui temos um exemplo de pointcut `execution` que faz com que o método seja executo, quando o método dentro dos parenteses forem executados, existem outros exemplos envolvendo o `target` ou o `@Target` que será explicado melhor a frente. O `execution` aceita como parametro a assinatura de métodos, por exemplo: `@AfterReturning("execution(public void depois(boolean))")`, nesse caso o `execution(public void depois(boolean))`, que significa que quando um método público e sem retorno com o nome de depois e que aceita um argumento booleano for executado, logo isso servirá de gatilho para que o método `public void afterReturning()` seja executado, porém é possível criar pointcuts mais genéricos, por exemplo esse `execution( * * (..))`, que significa que qualquer que seja o método executado, esse pointcut será ativado. você deve usar ` * * `, quando precisar executar qualquer método, no caso, isso `(..)` significa que um método que tenha pelo menos um argumento seja executada, se estiver no contexto dessa expressão `execution( * * (..))`, caso a função não deva ter parametros se usa `execution( * * ())` ou seja sem os ` .. `.
+
+##### Expressões com * ? \ + .
+
+` * ` => Significa zero ou mais caracter após a expressão, no caso serve como um coringa.
+
+`+` => Significa que deva ter um ou mais caracter após a expressão.
+
+`?` => Siginifica que deva ter zero ou no máximo 1 string após a expressão.
+
+` . ` => significa o exato um caracter qualquer aonde está o ponto.
+
+` \ ` => a expressão deve seguir a regex.
+
+Exemplo `execution(public * dep*())` no caso entre o `public` e o `dep` deve ter zero ou mais caracteres entre eles, no caso ali caberia um `int` ou um `void` ou um `Object`, etc... ou seja com base no primeiro asterisco, isso indica que a assinatura do método deve-se começar por `public` e ser seguido por `dep`, avançando na expressão o `dep*` siginifica com base na posição, que o método deve ter em seu nome alguma relação com *dep* ao começo do nome, podendo ser: *dep1*, *dep_2* ou *dep* por exemplo devido ao asteriscos, podendo ter o comportamento modificado se mudar o metacaracter, porém esse exemplo não engloba: *_dep*, *a_dep*, ou qualquer nome que tenha um caracter antes de *dep* e não contenha *dep* no seu início.
+
+#### @Before
+Essa anotação, faz com que o método seja executado **ANTES** do pointcut assistido, no caso primeiro executa esse método e depois o método ao qual está sendo monitorado, funciona igual o *Trigger Before* de um banco de dados por exemplo, ao qual executa a lógica antes do evento e depois o evento.
+
+##### Método de monitoramento 
+    @Before("execution(public void antes())")
+	public void before() {
+		System.out.println("Executando o metodo referente ao @Before");
+	}
+
+##### Método da classe concreta
+    public void antes() {
+		System.out.println("Executando o metodo antes");		
+	}
+
+
+##### Método main
+    ClassPathXmlApplicationContext classPath = new ClassPathXmlApplicationContext("Springann/aop/config.xml");
+    ApplicationContext app = classPath;
+    Contrato bean = (Contrato) app.getBean("concreta");   	
+    bean.antes();	
+    classPath.close();
+##### Output
+    Executando o construtor
+    Executando o metodo referente ao @Before
+    Executando o metodo antes
+
+Repare na sequência do output e que ele executa esse método `before` antes desse `antes`
+
+#### @After
+O After é um pouco mais complexo, no caso pode-se usar o `@After` ou o `@AfterReturning` e o `@AfterThrowing`, no caso o `@After` é mais abrangente que os outros dois, pois incluem as duas situações, assim sendo:
+
+`@AfterReturning` => Dispara apenas quando a execução do método ocorre de maneira normal.
+
+`@AfterThrowing` => Dispara apenas quando a execução do método gera uma exceção.
+
+`@After` => Executa quando o erro ocorre e quando o erro não ocorre, ou seja abrange os dois outros *afters*.
+
+#### Chamando o @After
+##### Método concreto
+    public void depois() {
+		System.out.println("Executando o metodo depois");		
+	}
+
+##### Método com a anotação @After
+    @After("execution(public * dep*())")
+	public void after() {
+		System.out.println("Executando o metodo referente ao @After");
+	}
+
+##### Método Main
+    ClassPathXmlApplicationContext classPath = new ClassPathXmlApplicationContext("Springann/aop/config.xml");
+    ApplicationContext app = classPath;
+    Contrato bean = (Contrato) app.getBean("concreta");   	
+    bean.depois();
+    classPath.close(); 
+
+##### Output 
+    Executando o construtor
+    Executando o metodo depois
+    Executando o metodo referente ao @After
+
+##### Explicando:
+Repare que diferente do `@Before` esse método executou depois do método assistido, pois como explicado tanto no erro ou no acerto esse método é executado, quando qualquer método tenha como nome os caracteres iniciados por *dep* conforme o pointcut `"execution(public * dep*())"`, porém atente-se ao detalhe de que esse método não deve ter parametros, pois se tiver um parametro que seja, o mesmo não será executado.
+
+#### Chamando o @AfterReturning
+Esse será executado após o método, apenas se tudo der certo.
+
+##### Método Concreto
+    public void depois(boolean b) {
+		System.out.println("Executando o metodo depois");		
+	}	
+
+##### Método com a anotação @AfterReturning
+    @AfterReturning("execution(public void depois(boolean))")
+	public void afterReturning() {
+		System.out.println("Executando o metodo referente ao @AfterReturning");
+	}
+
+##### Método Main
+    ClassPathXmlApplicationContext classPath = new ClassPathXmlApplicationContext("Springann/aop/config.xml");
+    ApplicationContext app = classPath;
+    Contrato bean = (Contrato) app.getBean("concreta");   	
+    bean.depois(true);
+    classPath.close(); 
+
+##### Output
+    Executando o construtor
+    Executando o metodo depois
+    Executando o metodo referente ao @AfterReturning
+
+##### Explicando
+Repare que o método aqui tem assinatura diferente do `@After` acima, no caso o mesmo foi executado pois não houve exceções.
+
+#### @After com exceções
+##### Método Concreto, lançando erro
+    public void erro() {
+		System.out.println("Executando o metodo de erro");		
+		throw new java.lang.RuntimeException("Erro provocado pelo metodo de erro");
+	}
+
+##### Método com a anotação @AfterThrowing
+    @AfterThrowing("execution( * * (..))")
+	public void afterErrors() {
+		System.out.println("Executando o metodo referente ao @AfterThrowing");
+	}	
+
+##### Método Main
+     public static void main( String[] args )
+    {
+    	ClassPathXmlApplicationContext classPath = new ClassPathXmlApplicationContext("Springann/aop/config.xml");
+    	ApplicationContext app = classPath;
+    	Contrato bean = (Contrato) app.getBean("concreta");   	
+    	bean.erro();
+    	classPath.close();    	
+    }
+##### Output
+    Executando o construtor
+    Executando o metodo de erro
+    Executando o metodo referente ao @AfterThrowing
+    Exception in thread "main" java.lang.RuntimeException: Erro provocado pelo metodo de erro
+        at Springann.aop.Concreta.erro(Concreta.java:19)
+        at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+        at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+        at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+        at java.lang.reflect.Method.invoke(Method.java:498)
+        at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:344)
+        at org.springframework.aop.framework.ReflectiveMethodInvocation.invokeJoinpoint(ReflectiveMethodInvocation.java:198)
+        at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163)
+        at org.springframework.aop.aspectj.AspectJAfterThrowingAdvice.invoke(AspectJAfterThrowingAdvice.java:62)
+        at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
+        at org.springframework.aop.interceptor.ExposeInvocationInterceptor.invoke(ExposeInvocationInterceptor.java:95)
+        at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
+        at org.springframework.aop.framework.JdkDynamicAopProxy.invoke(JdkDynamicAopProxy.java:212)
+        at com.sun.proxy.$Proxy8.erro(Unknown Source)
+        at Springann.aop.App.main(App.java:13)
+
+##### Explicando
+Repare que o método foi executado devido ao metodo [lançar um erro](#método-concreto-lançando-erro), existe forma do método não parar a execução e de tratar esse erro, mas isso é mais avançado.
