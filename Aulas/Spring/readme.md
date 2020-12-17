@@ -1942,6 +1942,7 @@ O exemplo acima funciona o exemplo abaixo não:
     <bean name="concreta" class="Springann.aop.Concreta" />	
     <bean name="aop" class="Springann.aop.Advice" />
 
+[XML](aop_basico/config.xml)
 #### Classe advice
  A classe [Advice](aop_basico/Advice.java) é aonde estará programado os gatilhos, no caso a classe [Advice](aop_basico/Advice.java) vai assistir uma classe e se os eventos programados do Pointcut for acionado, ai é executado o método anotato pelo Pointcut, nesse trecho abaixo é informado a classe de [Advice](aop_basico/Advice.java).
 
@@ -1981,7 +1982,7 @@ Que tem o conteúdo:
         }	
         
     }
-
+[Advice](aop_avancado/Advice.java)
 #### Classe Concreta
 Essa classe acima, assiste essa classe:
 
@@ -2009,6 +2010,7 @@ Essa classe acima, assiste essa classe:
         }	
     }  
 
+[Concreta](aop_basico/Concreta.java)
 #### Interface Contrato
 Ao qual tem essa interface implementada, até agora:
 
@@ -2019,6 +2021,7 @@ Ao qual tem essa interface implementada, até agora:
         public void depois(boolean b);	
     }
 
+[Contrato](aop_basico/Contrato.java)
 #### Classe com o Main
 
     public class App 
@@ -2031,6 +2034,8 @@ Ao qual tem essa interface implementada, até agora:
             classPath.close();    	
         }
     }
+
+[App.java](aop_avancado/App.java)
 ### Explicando as anotações básicas da classe Advice
 #### @Aspect
 Toda e qualquer classe Advice deve conter essa anotação, essa é a base, é o que indica a JVM que se trata de uma classe Advice, como no exemplo abaixo:
@@ -2210,3 +2215,270 @@ Repare que o método aqui tem assinatura diferente do `@After` acima, no caso o 
 
 ##### Explicando
 Repare que o método foi executado devido ao metodo [lançar um erro](#método-concreto-lançando-erro), existe forma do método não parar a execução e de tratar esse erro, mas isso é mais avançado.
+
+### Exemplo mais avançados de AOP
+Segue os [exemplos envolvendo AOP](./aop_avancado):
+
+#### Advice
+    import org.aspectj.lang.ProceedingJoinPoint;
+    import org.aspectj.lang.annotation.After;
+    import org.aspectj.lang.annotation.AfterReturning;
+    import org.aspectj.lang.annotation.AfterThrowing;
+    import org.aspectj.lang.annotation.Around;
+    import org.aspectj.lang.annotation.Aspect;
+    import org.aspectj.lang.annotation.Before;
+
+    @Aspect
+    public class Advice {
+        
+        @Around(value = "execution (public void durante())")
+        public void during(ProceedingJoinPoint point){		
+            double loteria = Math.random();
+            System.out.println("Loteria: "+loteria);
+            if(loteria < 0.5)
+                System.out.println("Executando o @Around, o durante esta sem parametros: Travou aqui");
+            else
+                try {
+                    System.out.println("Executando o @Around, o durante esta sem parametros: Avancando...");
+                    point.proceed();
+                } catch (Throwable e) {				
+                    e.printStackTrace();
+                }
+        }
+        
+        @Around("execution(public void durante(boolean))")
+        public void duringParam(ProceedingJoinPoint point) {
+            Object[] args = point.getArgs();
+            boolean advance = false;
+            for(Object arg: args) {
+                advance = (Boolean) arg;
+            }
+            if(advance) {
+                try {
+                    System.out.println("Executando o @Around, o durante esta com parametro verdadeiro: Avancando...");
+                    point.proceed();
+                } catch (Throwable e) {				
+                    e.printStackTrace();
+                }
+            }else {
+                System.out.println("Executando o @Around, o durante esta com parametro falso: Travou aqui");
+            }
+        }
+        
+        @Before(value = "@target(Springann.aop.avancado.Anotado)")
+        public void annotation() {
+            System.out.println("@Before: Executando o metodo com @target sem os argumentos.");
+        }
+        
+        @After(value="target(Springann.aop.avancado.Classe)")
+        public void target() {
+            System.out.println("@After: Executando o método com 'target'");
+        }
+        
+        @AfterReturning(pointcut = "args(param)",returning="java.lang.Double")
+        public void returning(double param) {
+            System.out.println("@AfterReturning, valor do parametro informado: "+param);
+        }
+        
+        @AfterThrowing(pointcut="@target(Springann.aop.avancado.Anotado)", throwing="erro")
+        public void throwing(Exception erro) {
+            System.out.println("@AfterThrowing, Erro tratado: "+erro.getMessage());
+        }
+    }
+
+#### Interface Anotado
+
+    import static java.lang.annotation.RetentionPolicy.RUNTIME;
+    import java.lang.annotation.Retention;
+
+    @Retention(RUNTIME)
+    public @interface Anotado {}
+
+#### Classe concreta
+
+    @Anotado
+    public class Classe{
+        
+        public Classe() {
+            System.out.println("Executando Construtor");		
+        }
+        
+        public void erro(){
+            System.out.println("Executando o metodo de erro");		
+            throw new java.lang.RuntimeException("Erro provocado pelo metodo de erro");
+        }	
+
+        public void durante() {
+            System.out.println("Executando o durante sem parametros");
+        }	
+        
+        public void durante(boolean b) {
+            System.out.println("Executando o durante com parametros");
+        }
+        
+        public double retorno(double arg) {
+            double random = Math.random() * arg;
+            System.out.println("Metodo retorno: "+random);
+            return random;
+        }	
+                
+    }
+
+#### config.xml
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <beans xmlns="http://www.springframework.org/schema/beans"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"       
+        xmlns:context="http://www.springframework.org/schema/context"
+        xmlns:aop="http://www.springframework.org/schema/aop"
+        
+        xsi:schemaLocation="http://www.springframework.org/schema/beans 
+                            http://www.springframework.org/schema/beans/spring-beans.xsd
+                            http://www.springframework.org/schema/context 
+                            http://www.springframework.org/schema/context/spring-context.xsd
+                            http://www.springframework.org/schema/aop
+                            http://www.springframework.org/schema/aop/spring-aop.xsd">
+                            
+        <aop:aspectj-autoproxy/>	
+        <bean name="aop" class="Springann.aop.avancado.Advice" />
+        <bean name="classe" class="Springann.aop.avancado.Classe" />	
+    </beans>
+
+#### App.java
+
+    import org.springframework.context.ApplicationContext;
+    import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+    public class App 
+    {
+        public static void main( String[] args )
+        {
+            ClassPathXmlApplicationContext classPath = new ClassPathXmlApplicationContext("Springann/aop/avancado/config.xml");
+            ApplicationContext app = classPath;
+            Classe bean = (Classe) app.getBean("classe");  	
+            bean.erro();
+            classPath.close();    	
+        }
+    }
+
+### Pointcuts @target, target, args
+
+#### @Target
+Esse pointcut faz refencia a uma anotação:
+
+    @Before(value = "@target(Springann.aop.avancado.Anotado)")
+        public void annotation() {
+            System.out.println("@Before: Executando o metodo com @target sem os argumentos.");
+        }
+
+Basicamente você informa dentro do `@target` o path + a classe que contem a anotação e todo o método que possui essa anotação será monitorada, ao exemplo de:
+
+    @Anotado
+    public class Classe{
+
+No caso como a classe está anotada, graças ao `@target`, qualquer método será monitorado, o `value=` é uma outra forma de passar o pointcut, caso você queira fazer mais ajustes, nesse caso tanto o `@Before(value = "@target(Springann.aop.avancado.Anotado)")` como o `@Before("@target(Springann.aop.avancado.Anotado)")` são válidos. [Ver classe de Anotação](#interface-anotado).
+
+#### target
+Nessa você informa a classe alvo, no caso a classe alvo desse target terão todos os seus métodos monitorados:
+
+     @After(value="target(Springann.aop.avancado.Classe)")
+        public void target() {
+            System.out.println("@After: Executando o método com 'target'");
+        }
+
+A mesma lógica que o `@target`, se você quer monitorar apenas uma classe, usar o `target` é mais interessante, agora se você quer monitorar **N** classes, pode-se usar de composição ou da estratétia de do `@target`. Também estaria certo se fosse ` @After("target(Springann.aop.avancado.Classe)")`, porém dessa forma você não passa outros parametros a anotação, além do pointcut. Cuidado para não confundir, o `@Before`,`@Around` e o `@After` usam **value**, mas os métodos específicos do **After** usam `pointcut=` como propriedade.
+
+#### args
+
+    @AfterReturning(pointcut = "args(param)",returning="java.lang.Double")
+    public void returning(double param) {
+        System.out.println("@AfterReturning, valor do parametro informado: "+param);
+    }
+
+o `@AfterReturning` ao invés do `value=` temos o `pointcut=`, o args é uma outra forma de pointcut, assim como o `@target`, `target` e o `execution`, porém essa estratégia é para métodos que recebem argumentos e o mesmo precise ser tratado de alguma forma, nesse caso o valor passado para `args()` deve ter o mesmo nome do informado na assinatura do método abaixo, ou seja: Isso `args(param)` deve ser condizente com isso `public void returning(double param)`, repare que no args estamos dizendo ao Spring que o param é o parametro informado no método de dentro do método o mesmo será tratado como feito aqui `System.out.println("@AfterReturning, valor do parametro informado: "+param);`, exemplo:
+
+##### Métod Main
+    import org.springframework.context.ApplicationContext;
+    import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+    public class App 
+    {
+        public static void main( String[] args )
+        {
+            ClassPathXmlApplicationContext classPath = new ClassPathXmlApplicationContext("Springann/aop/avancado/config.xml");
+            ApplicationContext app = classPath;
+            Classe bean = (Classe) app.getBean("classe");  	
+            bean.retorno(1);
+            classPath.close();    	
+        }
+    }
+
+##### Output
+
+    Executando Construtor
+    @Before: Executando o metodo com @target sem os argumentos.
+    Metodo retorno: 0.030492221825531463
+    @AfterReturning, valor do parametro informado: 1.0
+    @After: Executando o método com 'target'
+
+##### Explicando @AfterReturning
+No caso aqui foi pego o valor passado aqui `bean.retorno(1);` e processado aqui `System.out.println("@AfterReturning, valor do parametro informado: "+param);` e exibido aqui `@AfterReturning, valor do parametro informado: 1.0`, ou seja esse pointcut é interessante caso você queira fazer uma interceptação nos argumentos recebidos, além disso você pode usar esse atributo `returning="java.lang.Double"` para informar o valor que o método deve retornar, ou seja se o método não retornar o que está aqui `returning="java.lang.Double"`, esse método não será executado caso também não retorne o tipo informado no `returning=`, ou seja o método deve ter como retorno um *double* para funcionar. O `returning=` é um atributo exclusivo de `@AfterReturning`.
+
+#### Tratando erros na classe Advice
+
+    @AfterThrowing(pointcut="@target(Springann.aop.avancado.Anotado)", throwing="erro")
+    public void throwing(Exception erro) {
+        System.out.println("@AfterThrowing, Erro tratado: "+erro.getMessage());
+    }
+
+o `@AfterThrowing` também tem um argumento `pointcut`, porém temos isso `throwing="erro"`. Aqui em `throwing` você informa a variável que vai receber qualquer erro pego pelo método que está sendo observado, lembrando que isso `throwing="erro"` deve ser condizente com isso `public void throwing(Exception erro)`, da mesma forma que ocorre entre o `returning` e o `@AfterReturning`.
+
+##### Método Main
+
+    import org.springframework.context.ApplicationContext;
+    import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+    public class App 
+    {
+        public static void main( String[] args )
+        {
+            ClassPathXmlApplicationContext classPath = new ClassPathXmlApplicationContext("Springann/aop/avancado/config.xml");
+            ApplicationContext app = classPath;
+            Classe bean = (Classe) app.getBean("classe");  	
+            bean.erro();
+            classPath.close();    	
+        }
+    }
+
+##### Output
+
+    Executando Construtor
+    @Before: Executando o metodo com @target sem os argumentos.
+    Executando o metodo de erro
+    @AfterThrowing, Erro tratado: Erro provocado pelo metodo de erro
+    @After: Executando o método com 'target'
+    Exception in thread "main" java.lang.RuntimeException: Erro provocado pelo metodo de erro
+        at Springann.aop.avancado.Classe.erro(Classe.java:12)
+        at Springann.aop.avancado.Classe$$FastClassBySpringCGLIB$$122d658a.invoke(<generated>)
+        at org.springframework.cglib.proxy.MethodProxy.invoke(MethodProxy.java:218)
+        at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.invokeJoinpoint(CglibAopProxy.java:771)
+        at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163)
+        at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:749)
+        at org.springframework.aop.aspectj.AspectJAfterThrowingAdvice.invoke(AspectJAfterThrowingAdvice.java:62)
+        at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:175)
+        at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:749)
+        at org.springframework.aop.aspectj.AspectJAfterAdvice.invoke(AspectJAfterAdvice.java:47)
+        at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:175)
+        at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:749)
+        at org.springframework.aop.framework.adapter.MethodBeforeAdviceInterceptor.invoke(MethodBeforeAdviceInterceptor.java:56)
+        at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:175)
+        at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:749)
+        at org.springframework.aop.interceptor.ExposeInvocationInterceptor.invoke(ExposeInvocationInterceptor.java:95)
+        at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
+        at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:749)
+        at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:691)
+        at Springann.aop.avancado.Classe$$EnhancerBySpringCGLIB$$42d1b5e5.erro(<generated>)
+        at Springann.aop.avancado.App.main(App.java:13)
+
+##### Explicando
+Esse método `bean.erro();` disparou este `public void throwing(Exception erro)` que foi executado aqui `@AfterThrowing, Erro tratado: Erro provocado pelo metodo de erro`, logo esse parametro erro dessa assinatura `public void throwing(Exception erro)` faz referencia ao erro lançado pela classe, uma vez que esse método está monitorando via anotação, como pode-se ver aqui: `pointcut="@target(Springann.aop.avancado.Anotado)"`, ou seja qualquer método dessa classe, se der uma exceção vai chamar o método `public void throwing(Exception erro)`.

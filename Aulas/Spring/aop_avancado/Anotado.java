@@ -1,0 +1,8 @@
+package Springann.aop.avancado;
+
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
+import java.lang.annotation.Retention;
+
+@Retention(RUNTIME)
+public @interface Anotado {}
