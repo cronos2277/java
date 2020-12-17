@@ -2482,3 +2482,133 @@ o `@AfterThrowing` também tem um argumento `pointcut`, porém temos isso `throw
 
 ##### Explicando
 Esse método `bean.erro();` disparou este `public void throwing(Exception erro)` que foi executado aqui `@AfterThrowing, Erro tratado: Erro provocado pelo metodo de erro`, logo esse parametro erro dessa assinatura `public void throwing(Exception erro)` faz referencia ao erro lançado pela classe, uma vez que esse método está monitorando via anotação, como pode-se ver aqui: `pointcut="@target(Springann.aop.avancado.Anotado)"`, ou seja qualquer método dessa classe, se der uma exceção vai chamar o método `public void throwing(Exception erro)`.
+
+#### @Around
+##### Métodos de exemplo do @Around
+
+    @Around(value = "execution (public void durante())")
+	public void during(ProceedingJoinPoint point){		
+		double loteria = Math.random();
+		System.out.println("Loteria: "+loteria);
+		if(loteria < 0.5)
+			System.out.println("Executando o @Around, o durante esta sem parametros: Travou aqui");
+		else
+			try {
+				System.out.println("Executando o @Around, o durante esta sem parametros: Avancando...");
+				point.proceed();
+			} catch (Throwable e) {				
+				e.printStackTrace();
+			}
+	}
+	
+	@Around("execution(public void durante(boolean))")
+	public void duringParam(ProceedingJoinPoint point) {
+		Object[] args = point.getArgs();
+		boolean advance = false;
+		for(Object arg: args) {
+			advance = (Boolean) arg;
+		}
+		if(advance) {
+			try {
+				System.out.println("Executando o @Around, o durante esta com parametro verdadeiro: Avancando...");
+				point.proceed();
+			} catch (Throwable e) {				
+				e.printStackTrace();
+			}
+		}else {
+			System.out.println("Executando o @Around, o durante esta com parametro falso: Travou aqui");
+		}
+	}
+
+##### Explicando
+O `@Around` é um pouco mais complexo que o `@After` e o `@Before`, uma vez que o `@Around` executa em paralelo ao método observado. No caso temos o objeto `ProceedingJoinPoint` que vem de `org.aspectj.lang.ProceedingJoinPoint`, esse objeto faz a interceptação dos valores recebidos pelo metodo observado, dentro dele, dois métodos se destacam: 
+
+`.getArgs()` => Retorna um array de Objetos contendo todos os argumentos do método, através dele pode-se interceptar os argumentos recebidos no método observado, porém como se trata de um array, se faz necessário fazer uma varredura e como se trata de um Objeto se faz necessário fazer um cast, para ter acesso ao valor interceptado, como nesse caso abaixo:
+
+    Object[] args = point.getArgs();
+    boolean advance = false;
+	for(Object arg: args) {
+	    advance = (Boolean) arg;
+    }
+
+No caso o valor interceptado é notoriamente um booleano, além disso tem apenas um único argumento o método, ao qual faz a escrita da variável *advance*.
+
+`.proceed()` => Informa que o método pode continuar a sua execução, no caso se esse método não for chamado o método executado tem a sua execuçao suspensa, pense nesse método como os next() dos chain of responsability. Esse método exige um tratamento com try-catch da exceção `Throwable`, como exemplificado abaixo:
+
+    if(advance) {
+        try {
+            System.out.println("Executando o @Around, o durante esta com parametro verdadeiro: Avancando...");
+            point.proceed();
+        } catch (Throwable e) {				
+            e.printStackTrace();
+	}
+
+##### Um exemplo mais didático:
+
+    @Around(value = "execution (public void durante())")
+	public void during(ProceedingJoinPoint point){		
+		double loteria = Math.random();
+		System.out.println("Loteria: "+loteria);
+		if(loteria < 0.5)
+			System.out.println("Executando o @Around, o durante esta sem parametros: Travou aqui");
+		else
+			try {
+				System.out.println("Executando o @Around, o durante esta sem parametros: Avancando...");
+				point.proceed();
+			} catch (Throwable e) {				
+				e.printStackTrace();
+			}
+	}
+
+Repare que apesar desse método observar métodos se parametros, como visto aqui: `@Around(value = "execution (public void durante())")`, lembrando sempre que o exception funciona normalmente dentro de um atributo *value* assim como no atributo *pointcut* dos `@AfterReturning` e `@AfterThrowing`, também seria válido se fosse: `@Around("execution (public void durante())")`, porém o método relacionado a ele tem como assinatura um objeto do tipo `ProceedingJoinPoint` como visto abaixo:
+
+    @Around(value = "execution (public void durante())")
+	public void during(ProceedingJoinPoint point){	
+
+Esse método ele executa aleatóriamente o `.proceed()` ou não de acordo com o número aleatório de `double loteria = Math.random();` sendo essa condição:
+
+###### Caso seja menor que 0.5
+
+    if(loteria < 0.5)
+			System.out.println("Executando o @Around, o durante esta sem parametros: Travou aqui");
+
+###### Output True
+
+    Executando Construtor
+    Loteria: 0.11948580659555863
+    Executando o @Around, o durante esta sem parametros: Travou aqui
+
+###### Caso maior que 0.5
+
+    else
+        try {
+            System.out.println("Executando o @Around, o durante esta sem parametros: Avancando...");
+            point.proceed();
+        } catch (Throwable e) {				
+            e.printStackTrace();
+        }
+
+###### Output False
+
+    Executando Construtor
+    Loteria: 0.8649151073830073
+    Executando o @Around, o durante esta sem parametros: Avancando...
+    @Before: Executando o metodo com @target sem os argumentos.
+    Executando o durante sem parametros
+    @After: Executando o método com 'target'
+
+###### No main
+
+    public class App 
+    {
+        public static void main( String[] args )
+        {
+            ClassPathXmlApplicationContext classPath = new ClassPathXmlApplicationContext("Springann/aop/avancado/config.xml");
+            ApplicationContext app = classPath;
+            Classe bean = (Classe) app.getBean("classe");  	
+            bean.durante();
+            classPath.close();    	
+        }
+    }
+
+Usando o `@Around` pode se interceptar o método no ato da execução, assim como o seu `@Before` e `@After` associado a ele, bastando para isso criar uma lógica para a execução do `.proceed()`
