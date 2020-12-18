@@ -2286,6 +2286,8 @@ Segue os [exemplos envolvendo AOP](./aop_avancado):
         }
     }
 
+[Advice](aop_avancado/Advice.java)
+
 #### Interface Anotado
 
     import static java.lang.annotation.RetentionPolicy.RUNTIME;
@@ -2294,6 +2296,7 @@ Segue os [exemplos envolvendo AOP](./aop_avancado):
     @Retention(RUNTIME)
     public @interface Anotado {}
 
+[Anotado](aop_avancado/Anotado.java)
 #### Classe concreta
 
     @Anotado
@@ -2324,6 +2327,7 @@ Segue os [exemplos envolvendo AOP](./aop_avancado):
                 
     }
 
+[Classe Concreta](aop_avancado/Classe.java)
 #### config.xml
 
     <?xml version="1.0" encoding="UTF-8"?>
@@ -2344,6 +2348,7 @@ Segue os [exemplos envolvendo AOP](./aop_avancado):
         <bean name="classe" class="Springann.aop.avancado.Classe" />	
     </beans>
 
+[XML](aop_avancado/config.xml)
 #### App.java
 
     import org.springframework.context.ApplicationContext;
@@ -2361,6 +2366,7 @@ Segue os [exemplos envolvendo AOP](./aop_avancado):
         }
     }
 
+[Classe com Main](aop_avancado/App.java)
 ### Pointcuts @target, target, args
 
 #### @Target
@@ -2612,3 +2618,190 @@ Esse método ele executa aleatóriamente o `.proceed()` ou não de acordo com o 
     }
 
 Usando o `@Around` pode se interceptar o método no ato da execução, assim como o seu `@Before` e `@After` associado a ele, bastando para isso criar uma lógica para a execução do `.proceed()`
+
+### Pointcuts Avançado
+[Pasta](./aop-composition/)
+
+[Advice](./aop-composition/Advice.java)
+
+    import org.aspectj.lang.annotation.AfterReturning;
+    import org.aspectj.lang.annotation.AfterThrowing;
+    import org.aspectj.lang.annotation.Aspect;
+    import org.aspectj.lang.annotation.Before;
+    import org.aspectj.lang.annotation.Pointcut;
+
+    @Aspect
+    public class Advice {
+
+        @Pointcut(value="target(Springann.aop.composicao.Contrato)")
+        public boolean contrato() {
+            System.out.println("Esse metodo nao sera chamado");
+            return false;
+        }
+        
+        @Pointcut("@target(Springann.aop.composicao.Anotacao)")
+        public boolean anotacao() {
+            System.out.println("Esse metodo nao sera chamado");
+            return true;
+        }
+        
+        @Before("contrato()")
+        public void before() {
+            System.out.println("Executando o metodo com @Before");
+        }
+        
+        @AfterReturning("anotacao() && contrato()")
+        public void afterReturning() {
+            System.out.println("Executando o metodo com @AfterReturning");
+        }
+        
+        @AfterThrowing(pointcut="anotacao() || !anotacao()", throwing="erro")
+        public void afterThrowing(Exception erro) {
+            System.out.println("@AfterThrowing: Erro provocado com o:"+erro.getMessage());
+        }
+        
+    }
+
+[Classe Concreta vigiada pela classe Advice](aop-composition/Alvo.java)    
+
+    @Anotacao
+    public class Alvo implements Contrato{
+        
+        public void metodo() {		
+            System.out.println("Executando Metodo sem parametros e sem retorno");
+        }
+        
+        public void erro() {
+            throw new RuntimeException("Erro provocado!");
+        }
+
+    }
+
+[Anotacao](aop-composition/Anotacao.java)
+
+    import static java.lang.annotation.RetentionPolicy.RUNTIME;
+    import java.lang.annotation.Retention;
+
+    @Retention(RUNTIME)
+    public @interface Anotacao {
+
+    }
+
+[Interface Contrato](aop-composition/Contrato.java)
+
+    public interface Contrato {
+	    public void metodo();
+	    public void erro();
+    }
+
+[Arquivo XML](aop-composition/spring.xml)
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <beans xmlns="http://www.springframework.org/schema/beans"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"       
+        xmlns:context="http://www.springframework.org/schema/context"
+        xmlns:aop="http://www.springframework.org/schema/aop"
+        
+        xsi:schemaLocation="http://www.springframework.org/schema/beans 
+                            http://www.springframework.org/schema/beans/spring-beans.xsd
+                            http://www.springframework.org/schema/context 
+                            http://www.springframework.org/schema/context/spring-context.xsd
+                            http://www.springframework.org/schema/aop
+                            http://www.springframework.org/schema/aop/spring-aop.xsd">
+                            
+        <aop:aspectj-autoproxy/>	
+        <bean name="aop" class="Springann.aop.composicao.Advice" />	
+        <bean name="alvo" class="Springann.aop.composicao.Alvo" />	
+    </beans>
+
+[Classe com método Main](aop-composition/App.java)
+
+    import org.springframework.context.ApplicationContext;
+    import org.springframework.context.support.ClassPathXmlApplicationContext;
+    public class App 
+    {
+        public static void main( String[] args )
+        {
+            ClassPathXmlApplicationContext classPath = new ClassPathXmlApplicationContext("Springann/aop/composicao/spring.xml");
+            ApplicationContext app = classPath;
+            Contrato alvo = (Contrato) app.getBean("alvo");    	
+            if(Math.random() < 0.5)
+                alvo.erro();
+            else
+                alvo.metodo();
+            classPath.close();    	
+        }
+    }
+
+#### Exemplo básico envolvendo Pointcut
+
+##### O método com Pointcut
+    @Pointcut(value="target(Springann.aop.composicao.Contrato)")
+    public boolean contrato() {
+        System.out.println("Esse metodo nao sera chamado");
+        return false;
+    }
+
+##### Método Executador
+    @Before("contrato()")
+    public void before() {
+        System.out.println("Executando o metodo com @Before");
+    }
+
+##### Explicando
+No caso quando esse gatilho for disparado `@Pointcut(value="target(Springann.aop.composicao.Contrato)")` o pointcut ligado a ele também será disparado `@Before("contrato()")`, ou seja esse método é uma forma de se criar **pointcuts** mais complexos, no caso um `@Pointcut` está ligado ao método e toda vez que você fizer referencia a esse pointcut, você informa o método para se referenciar a ele, porém o método ligado ao pointcut não é executado a não ser que haja uma outra anotação ligado a eles.
+
+###### Output se (Math.random() < 0.5) true
+
+    Executando o metodo com @Before
+    Executando Metodo sem parametros e sem retorno
+    Executando o metodo com @AfterReturning
+
+###### Output se (Math.random() < 0.5) false
+
+    Executando o metodo com @Before
+    @AfterThrowing: Erro provocado com o:Erro provocado!
+    Exception in thread "main" java.lang.RuntimeException: Erro provocado!
+        at Springann.aop.composicao.Alvo.erro(Alvo.java:11)
+        at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+        at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+        at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+        at java.lang.reflect.Method.invoke(Method.java:498)
+        at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:344)
+        at org.springframework.aop.framework.ReflectiveMethodInvocation.invokeJoinpoint(ReflectiveMethodInvocation.java:198)
+        at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163)
+        at org.springframework.aop.aspectj.AspectJAfterThrowingAdvice.invoke(AspectJAfterThrowingAdvice.java:62)
+        at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:175)
+        at org.springframework.aop.framework.adapter.AfterReturningAdviceInterceptor.invoke(AfterReturningAdviceInterceptor.java:55)
+        at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:175)
+        at org.springframework.aop.framework.adapter.MethodBeforeAdviceInterceptor.invoke(MethodBeforeAdviceInterceptor.java:56)
+        at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:175)
+        at org.springframework.aop.interceptor.ExposeInvocationInterceptor.invoke(ExposeInvocationInterceptor.java:95)
+        at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
+        at org.springframework.aop.framework.JdkDynamicAopProxy.invoke(JdkDynamicAopProxy.java:212)
+        at com.sun.proxy.$Proxy9.erro(Unknown Source)
+        at Springann.aop.composicao.App.main(App.java:14)
+
+Também é possível colocar os pointcuts dentro de uma expressão booleana.
+
+###### Se tiver implementado a interface contrato, executa-se esse pointcut
+    @Pointcut(value="target(Springann.aop.composicao.Contrato)")
+	public boolean contrato() {
+		System.out.println("Esse metodo nao sera chamado");
+		return false;
+	}
+
+###### Se tiver a anotacao na classe alvo executa	
+	@Pointcut("@target(Springann.aop.composicao.Anotacao)")
+	public boolean anotacao() {
+		System.out.println("Esse metodo nao sera chamado");
+		return true;
+	}
+
+Como visto [aqui](#pointcuts-avançado) é possível combinar diferente pointcuts através de expressões booleanas, lembrando que a execução desse pointcut não significa a execução desse método, para chamar o pointcut você usa o método `@Before("contrato()")`, nesse caso será chamado os pointcuts associado ao método `contrato()` da própria classe, porém sem executar o método. 
+
+#### Pointcut AND
+Aqui nessa expressão temos o uso do **AND** `@AfterReturning("anotacao() && contrato()")` no caso se as condições para o pointcut associado a `anotacao` e `contrato`, ambas forem verdadeiras esse evento é executado.
+
+#### Pointcut OR e Negação
+Aqui nessa expressão temos o uso do **OR** em conjunto com a negação **!** ` @AfterThrowing(pointcut="anotacao() || !anotacao()", throwing="erro")`, no caso tendo `anotacao()` **ou** `||`, não `!anotacao()` tendo, esse método será executado, porém por ser o `@AfterThrowing` logo ele será executado quando der erro.
