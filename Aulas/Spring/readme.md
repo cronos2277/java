@@ -2805,3 +2805,148 @@ Aqui nessa expressão temos o uso do **AND** `@AfterReturning("anotacao() && con
 
 #### Pointcut OR e Negação
 Aqui nessa expressão temos o uso do **OR** em conjunto com a negação **!** ` @AfterThrowing(pointcut="anotacao() || !anotacao()", throwing="erro")`, no caso tendo `anotacao()` **ou** `||`, não `!anotacao()` tendo, esse método será executado, porém por ser o `@AfterThrowing` logo ele será executado quando der erro.
+
+### AOP com XML
+#### App.java
+[App.java](aop_xml/App.java)
+
+    import org.springframework.context.ApplicationContext;
+    import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+    public class App {
+        public static void main(String[] args) {
+            ClassPathXmlApplicationContext classPath = new ClassPathXmlApplicationContext("Spring/aop/spring.xml");
+            ApplicationContext app = classPath;
+            Clazz clazz = (Clazz) app.getBean("clazz");    
+            clazz.metodo();
+            classPath.close();    
+        }
+    }
+
+#### Advice.java da AOP com XML
+[Advice.java](aop_xml/Advice.java), repare que não tem nenhuma anotação na classe abaixo:
+
+    import org.aspectj.lang.ProceedingJoinPoint;
+    public class Advice {
+        
+        public void before() {
+            System.out.println("Executando método BEFORE de Advice");
+        }
+        
+        public void after() {
+            System.out.println("Executando método AFTER de Advice");
+        }
+        
+        public void around(ProceedingJoinPoint point) throws Throwable{
+            System.out.println("Executando método AROUND de Advice");
+            point.proceed();
+        }
+        
+        public boolean after_returning() {
+            System.out.println("Executando método AFTER_RETURNING de Advice");
+            return true;
+        }
+        
+        public void after_throwing(Exception erro) {
+            System.out.println("Executando método AFTER_THROWING de Advice: "+erro.getMessage());
+        }
+    }
+
+#### Classe Clazz.java
+[Clazz.java](./aop_xml/Clazz.java)
+
+    public class Clazz {
+	    public void metodo() {
+		    System.out.println("Executando o método() da classe");
+	    }
+    }
+
+#### Arquivo XML com 
+[Arquivo XML](./aop_xml/spring.xml), repare que toda a configuração está no XML e será melhor explicado.
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <beans xmlns="http://www.springframework.org/schema/beans"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"       
+        xmlns:context="http://www.springframework.org/schema/context"
+        xmlns:aop="http://www.springframework.org/schema/aop"
+        
+        xsi:schemaLocation="http://www.springframework.org/schema/beans 
+                            http://www.springframework.org/schema/beans/spring-beans.xsd
+                            http://www.springframework.org/schema/context 
+                            http://www.springframework.org/schema/context/spring-context.xsd
+                            http://www.springframework.org/schema/aop
+                            http://www.springframework.org/schema/aop/spring-aop.xsd">
+                            
+        <aop:config>
+            <aop:aspect id="aspectidxml" ref="aop">
+            
+                <!-- Pointcuts -->
+                <aop:pointcut expression="target(Spring.aop.Clazz)" id="antes" />
+                <aop:pointcut expression="execution( * * ())" id="depois" />
+                
+                <!-- Eventos -->
+                <aop:before method="before" pointcut-ref="antes"/>
+                <aop:around method="around" pointcut="execution( * * ())"/>
+                <aop:after-returning method="after_returning" pointcut="target(Spring.aop.Clazz)" returning="java.lang.Boolean"/>
+                <aop:after-throwing method="after_throwing" pointcut="target(Spring.aop.Clazz)" throwing="erro"/>
+                <aop:after method="after" pointcut-ref="depois"/>	
+
+            </aop:aspect>
+        </aop:config>
+        <bean name="aop" class="Spring.aop.Advice" />	
+        <bean name="clazz" class="Spring.aop.Clazz" />	
+    </beans>
+
+#### Explicando
+No caso do XML você substitui o `<aop:aspectj-autoproxy/>` por `<aop:config>` e dentro dessa estrutura deve conter: 
+
+##### aop:aspect
+`<aop:aspect id="aspectidxml" ref="aop">` o *ref* faz referencia ao bean, que no caso é a classe advice `<bean name="aop" class="Spring.aop.Advice" />`, no caso do campo *ref* você deve informar o nome do Bean que corresponde a classe Advice, recomenda-se colocar um *id* no *aspect*.
+
+##### Pointcut
+
+     <!-- Pointcuts -->
+    <aop:pointcut expression="target(Spring.aop.Clazz)" id="antes" />
+    <aop:pointcut expression="execution( * * ())" id="depois" />
+
+###### expression
+Para criar um *pointcut* você precisa pelo menos de 2 parametros no `aop:pointcut`, o primeiro um que vai aceitar a expressão, que aceita expressões iguais ao `@Pointcut`, como a exemplo `expression="target(Spring.aop.Clazz)"` ou `expression="execution( * * ())"` além disso se faz necessário ter um id, que será usado para referenciar o pointcut, ao exemplo de:
+
+    <aop:before method="before" pointcut-ref="antes"/>
+     <aop:after method="after" pointcut-ref="depois"/>
+
+###### pointcut como parametro
+Você também pode colocar o pointcut direto no método advice a exemplo de `pointcut="execution( * * ())"` ou `pointcut="target(Spring.aop.Clazz)"`.
+
+    <aop:around method="around" pointcut="execution( * * ())"/>
+    <aop:after-returning method="after_returning" pointcut="target(Spring.aop.Clazz)" returning="java.lang.Boolean"/>
+    <aop:after-throwing method="after_throwing" pointcut="target(Spring.aop.Clazz)" throwing="erro"/>
+
+##### Colocando Before, After e Around no XML.
+
+###### @Before
+    <aop:before method="before" pointcut-ref="antes"/>
+
+Esse XML substitui a anotação `@Before`.
+###### @Around
+    <aop:around method="around" pointcut="execution( * * ())"/>
+
+Esse XML substitui a anotação `@Around`.
+
+###### @AfterReturning    
+    <aop:after-returning method="after_returning" pointcut="target(Spring.aop.Clazz)" returning="java.lang.Boolean"/>
+
+Esse XML substitui a anotação `@AfterReturning`.
+
+###### @AfterThrowing
+    <aop:after-throwing method="after_throwing" pointcut="target(Spring.aop.Clazz)" throwing="erro"/>
+
+Esse XML substitui a anotação `@AfterThrowing`.
+
+###### @After
+    <aop:after method="after" pointcut-ref="depois"/>	
+
+Esse XML substitui a anotação `@After`.
+
+###### Explicando
+Repare que todas as propriedades têm o `method` no caso o método carregado vem da classe especificada aqui `<aop:aspect id="aspectidxml" ref="aop">`, que no caso se refere a esse bean `<bean name="aop" class="Spring.aop.Advice" />`, que cuja a classe pode ser avaliada [aqui](#advicejava-da-aop-com-xml).

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"       
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       
+       xsi:schemaLocation="http://www.springframework.org/schema/beans 
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/context 
+                           http://www.springframework.org/schema/context/spring-context.xsd
+                           http://www.springframework.org/schema/aop
+                           http://www.springframework.org/schema/aop/spring-aop.xsd">
+                          
+	<aop:config>
+		<aop:aspect id="aspectidxml" ref="aop">
+		
+			<!-- Pointcuts -->
+			<aop:pointcut expression="target(Spring.aop.Clazz)" id="antes" />
+			<aop:pointcut expression="execution( * * ())" id="depois" />
+			
+			<!-- Eventos -->
+			<aop:before method="before" pointcut-ref="antes"/>
+			<aop:around method="around" pointcut="execution( * * ())"/>
+			<aop:after-returning method="after_returning" pointcut="target(Spring.aop.Clazz)" returning="java.lang.Boolean"/>
+			<aop:after-throwing method="after_throwing" pointcut="target(Spring.aop.Clazz)" throwing="erro"/>
+			<aop:after method="after" pointcut-ref="depois"/>			
+		</aop:aspect>
+	</aop:config>
+	<bean name="aop" class="Spring.aop.Advice" />	
+	<bean name="clazz" class="Spring.aop.Clazz" />	
+</beans>
