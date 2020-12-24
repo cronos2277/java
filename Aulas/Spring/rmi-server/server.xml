@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"            
+       xsi:schemaLocation="http://www.springframework.org/schema/beans 
+                           http://www.springframework.org/schema/beans/spring-beans.xsd">
+                           
+         <!-- Bem que sera acessado pelo cliente -->                  
+        <bean id="identificador" class="Spring.rmi.server.Classe" />
+        
+        <!-- Configuração do bean que sera passado ao cliente -->       
+        <bean class="org.springframework.remoting.rmi.RmiServiceExporter">
+        	<property name="serviceName" value="Target-Contrato"/>
+        	<property name="service" ref="identificador"/>
+        	<property name="serviceInterface" value="Spring.rmi.server.Contrato"/>
+        	<property name="registryPort" value="1199" />
+        </bean>            
+</beans>

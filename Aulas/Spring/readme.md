@@ -2950,3 +2950,172 @@ Esse XML substitui a anotação `@After`.
 
 ###### Explicando
 Repare que todas as propriedades têm o `method` no caso o método carregado vem da classe especificada aqui `<aop:aspect id="aspectidxml" ref="aop">`, que no caso se refere a esse bean `<bean name="aop" class="Spring.aop.Advice" />`, que cuja a classe pode ser avaliada [aqui](#advicejava-da-aop-com-xml).
+
+## RMI
+**RMI (Remote Method Invocation)** é uma forma de você acessar um objeto remotamente, ou seja o servidor fornece um objeto e você o pega do sistema servidor, ou seja você instancia através do Spring o objeto em uma máquina *(cliente)* e pode usar em outra *(servidor)* de maneira remota.
+
+### Configurando servidor
+[Arquivos](./rmi-server/)
+#### Interface Contrato do RMI
+[Contrato](rmi-server/Contrato.java)
+
+    import java.util.Date;
+
+    public interface Contrato {
+        public Date getDate();
+        public double aleatorio();
+    }
+
+Você vai precisar de uma interface, no caso essa interface será usada pelo **cliente** e pelo **servidor**, através dessa interface o servidor sabe o que será enviado e o cliente sabe o que será recebido.
+
+#### Classe concreta RMI
+[Classe concreta](rmi-server/Classe.java)
+
+    import java.util.Date;
+    public class Classe implements Contrato{
+	
+        private static double numero = Math.random();	
+        private Date data = new Date();
+
+        public double aleatorio() {		
+            return Classe.numero;
+        }
+        
+        public Date getDate() {		
+            return this.data;
+        }
+
+    }
+
+Essa classe vai implementar a interface e criar devidamente o objeto no servidor, uma vez que o objeto esteja criado, poderá então ser enviado ao sistema cliente.
+
+#### Classe com o método main
+[ServerInit](./rmi-server/ServerInit.java)
+
+    import org.springframework.context.ApplicationContext;
+    import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+    public class ServerInit 
+    {
+        public static void main( String[] args )
+        {
+            ApplicationContext app1 = new ClassPathXmlApplicationContext("/Spring/rmi/server/server.xml");    
+            Contrato bean = (Contrato) app1.getBean("identificador");	
+            System.out.println("Data: "+bean.getDate());
+            System.out.println("Aleatorio: " + bean.aleatorio());
+            System.out.println("Servidor está ouvindo...");
+        }
+    }
+
+Caso esteja tudo certo com o XML a aplicação vai ficar ouvindo na porta especificada no xml, que será melhor detalhado abaixo, na url também informada no xml e caso haja algum acesso o objeto será enviado, de todo esse procedimento o que você precisa fazer é até aqui:
+
+    ApplicationContext app1 = new ClassPathXmlApplicationContext("/Spring/rmi/server/server.xml");        
+
+De resto está tudo certinho, essa linha de código é o trecho que carrega o spring e ao menos essa linha precisa ser chamada para que o servidor funcione, uma vez carregado o spring ai é só esperar.
+
+#### Finalmente o XML para configuração do RMI Server
+[server.xml](./rmi-server/server.xml)
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <beans xmlns="http://www.springframework.org/schema/beans"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"            
+        xsi:schemaLocation="http://www.springframework.org/schema/beans 
+                            http://www.springframework.org/schema/beans/spring-beans.xsd">
+                            
+            <!-- Bem que sera acessado pelo cliente -->                  
+            <bean id="identificador" class="Spring.rmi.server.Classe" />
+            
+            <!-- Configuração do bean que sera passado ao cliente -->       
+            <bean class="org.springframework.remoting.rmi.RmiServiceExporter">
+                <property name="serviceName" value="Target-Contrato"/>
+                <property name="service" ref="identificador"/>
+                <property name="serviceInterface" value="Spring.rmi.server.Contrato"/>
+                <property name="registryPort" value="1199" />
+            </bean>            
+    </beans>
+
+Como pode-se ver o **RMI** funciona com o básico do Spring, o template básico é o suficiente, além do seu bean informado aqui `<bean id="identificador" class="Spring.rmi.server.Classe" />`, você também deve criar um beam com base na classe [RmiServiceExporter](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/remoting/rmi/RmiServiceExporter.html) no XML do servidor, que vem de `org.springframework.remoting.rmi`, como visto aqui `<bean class="org.springframework.remoting.rmi.RmiServiceExporter">`.
+
+##### serviceName
+`<property name="serviceName" value="Target-Contrato"/>`, aqui você informa a url que o seu cliente precisa informar para ter acesso ao seu objeto criado, no caso para que o cliente possa acessar esse bean `<bean id="identificador" class="Spring.rmi.server.Classe" />` ele precisará digitar `rmi://IP:PORTA/Target-Contrato`, quando for solicitado o acesso da aplicação cliente a esse path, esse bean será retornado, devidamente instanciado: `<bean id="identificador" class="Spring.rmi.server.Classe" />`, claro isso se aplica a esse exemplo expecífico, esse atributo é obrigatório e o valor `value="Target-Contrato"` corresponde a esse trecho `/Target-Contrato` do path que o usuário terá que informar `rmi://IP:PORTA/Target-Contrato`.
+
+##### service
+Aqui especificamos que bean deve ser exportado caso o path definido acima seja informado, no caso de `<property name="service" ref="identificador"/>` o `ref="identificador"` faz referencia a esse bean `<bean id="identificador" class="Spring.rmi.server.Classe" />`, devido ao ID que esse bean contém, também é obrigatório, uma vez que essa parte informa ao Spring que bean será servido.
+
+##### serviceInterface
+Aqui especificamos um interface, lembrando sempre que a interface é obrigado. Essa interface informa ao Spring que tipo de objeto será exportado, também é obrigatório, além disso essa mesma interface deve estar na aplicação,cliente ou a mesma deve ter acesso a essa interface `<property name="serviceInterface" value="Spring.rmi.server.Contrato"/>`.
+
+##### registryPort
+Aqui definimos a porta **TCP** que o servidor irá ouvir, uma vez inicializado o servidor, será respondida com o bean todas as requisições com o path correto informado nessa porta, também obrigatório.
+
+### Configurando o Cliente
+O cliente é mais simples que o servidor, apenas precisar ter a classe com o método Main, a interface e o XML de configuração e está pronto.
+
+[Classe main do cliente](rmi-client/ClientInit.java)
+
+    import org.springframework.context.ApplicationContext;
+    import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+    //Importando a interface do pacote servidor
+    import Spring.rmi.server.Contrato;
+
+    public class ClientInit {
+
+        public static void main(String args[]) {
+            try {
+                ApplicationContext app1 = new ClassPathXmlApplicationContext("/Spring/rmi/client/client.xml");    
+                Contrato bean = (Contrato) app1.getBean("identificador");	
+                System.out.println(bean.getDate());
+                System.out.println("Cliente acessando:" +bean.getDate());
+                System.out.println("Numero aleatorio: "+bean.aleatorio());
+            }catch(org.springframework.beans.factory.BeanCreationException error) {
+                System.out.printf("Ocorreu o seguinte erro: %s, certifique-se que o servidor esteja escutando no Target correto",error.getMessage());
+            }
+            
+        }
+    }
+
+#### Atenção nesse ponto!
+    //Importando a interface do pacote servidor
+    import Spring.rmi.server.Contrato;
+
+Repare que se faz necessário ter a interface, é com base nela que o cliente vai identificar o objeto, no caso é [essa interface criado no também no servidor](#interface-contrato-do-rmi).
+
+#### XML do cliente RMI
+[XML Cliente](./rmi-client/client.xml)
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <beans xmlns="http://www.springframework.org/schema/beans"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"            
+        xsi:schemaLocation="http://www.springframework.org/schema/beans 
+                            http://www.springframework.org/schema/beans/spring-beans.xsd"> 
+            
+            <!-- Configuração do bean que sera passado ao cliente -->       
+            <bean id="identificador" class="org.springframework.remoting.rmi.RmiProxyFactoryBean">
+                <property name="serviceUrl" value="rmi://localhost:1199/Target-Contrato"/>        	
+                <property name="serviceInterface" value="Spring.rmi.server.Contrato" />
+            </bean>            
+    </beans>
+
+Esse bean é ainda mais básico que o Bean do servidor, no caso precisa de apenas duas propriedades, o bean deve ter essa classe [RmiProxyFactoryBean](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/remoting/rmi/RmiProxyFactoryBean.html), que é oriundo de `org.springframework.remoting.rmi`, todo o bean que acessa um objeto remoto deve usar-se dessa classe, conforme ilustrado aqui `<bean id="identificador" class="org.springframework.remoting.rmi.RmiProxyFactoryBean">`.
+
+##### serviceUrl
+Aqui é informado o servidor ao qual o cliente deve-se conectar para pegar esse bean, no caso do value `rmi://` é o protocolo que será usado, a parte do `localhost` o IP aonde está o servidor a parte `1199` é a porta que foi aberta no servidor para isso e claro após isso `Target-Contrato` o path.
+
+##### serviceInterface
+Aqui será definido a interface, que é o tipo do objeto que o cliente espera receber do servidor, ou seja aqui você informa a interface que você uso no servidor, a interface usada no cliente e no servidor devem ser a mesma, lembrando que a interface informado aqui, [deve ser a mesma da usada no servidor](#finalmente-o-xml-para-configuração-do-rmi-server).
+
+### Comparando na prática
+
+#### Output do Servidor
+    Data: Wed Dec 23 22:35:25 BRT 2020
+    Aleatorio: 0.4748476516419503
+    Servidor está ouvindo...
+#### Output do cliente
+    Wed Dec 23 22:35:25 BRT 2020
+    Cliente acessando:Wed Dec 23 22:35:25 BRT 2020
+    Numero aleatorio: 0.4748476516419503
+
+#### Explicando
+Repare que o número aleatório é o mesmo no cliente e no servidor, isso ocorre porque esse número aleatório foi implementado de maneira estática, como visto em [Classe](#classe-concreta-rmi), ou seja ambos estão usando o mesmo tipo de objeto, além disso ambos os sistemas apresentam o mesmo dado em **Data**, sendo o servidor `Data: Wed Dec 23 22:35:25 BRT 2020` e o cliente `Wed Dec 23 22:35:25 BRT 2020`, ou seja o cliente e o servidor compartilham do mesmo objeto.
+
