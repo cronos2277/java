@@ -128,6 +128,22 @@ No código, para acessar o Bean instanciado em tempo de execução:
 
 `bean.getValor()` => Pronto agora você pode acessar normalmente o seu Bean, com a instanciação sendo gerenciada pelo Spring.
 
+#### Evitando os cast...
+##### Método Main
+    public class App 
+    {
+        public static void main( String[] args )
+        {
+            ApplicationContext app1 = new ClassPathXmlApplicationContext("/Spring/init/xml/init.xml");
+            InitBean1 bean1 = app1.getBean(InitBean1.class);	
+            InitBean2 bean2 = (InitBean2) app1.getBean("init2");
+            System.out.println(bean1);
+            System.out.println(bean2);
+        }
+    }
+
+Forma sem cast `InitBean1 bean1 = app1.getBean(InitBean1.class);`, forma com cast ` InitBean2 bean2 = (InitBean2) app1.getBean("init2");`, desde a terceira versão do Spring, foi implementado o suporte a genérico e devido a isso, você pode passar como parametro a classe ao invés de passar a string contendo o nome do bean e evitando assim um problema em tempo de execução.
+
 ### Mapeando dados não primitivos.
 #### Essa é a classe **Bean2**, ao qual está contido dentro de **Bean1**.
 
@@ -3118,4 +3134,7 @@ Aqui será definido a interface, que é o tipo do objeto que o cliente espera re
 
 #### Explicando
 Repare que o número aleatório é o mesmo no cliente e no servidor, isso ocorre porque esse número aleatório foi implementado de maneira estática, como visto em [Classe](#classe-concreta-rmi), ou seja ambos estão usando o mesmo tipo de objeto, além disso ambos os sistemas apresentam o mesmo dado em **Data**, sendo o servidor `Data: Wed Dec 23 22:35:25 BRT 2020` e o cliente `Wed Dec 23 22:35:25 BRT 2020`, ou seja o cliente e o servidor compartilham do mesmo objeto.
+
+
+
 
