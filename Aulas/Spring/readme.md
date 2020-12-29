@@ -3135,6 +3135,140 @@ Aqui será definido a interface, que é o tipo do objeto que o cliente espera re
 #### Explicando
 Repare que o número aleatório é o mesmo no cliente e no servidor, isso ocorre porque esse número aleatório foi implementado de maneira estática, como visto em [Classe](#classe-concreta-rmi), ou seja ambos estão usando o mesmo tipo de objeto, além disso ambos os sistemas apresentam o mesmo dado em **Data**, sendo o servidor `Data: Wed Dec 23 22:35:25 BRT 2020` e o cliente `Wed Dec 23 22:35:25 BRT 2020`, ou seja o cliente e o servidor compartilham do mesmo objeto.
 
+### Java Configuração
+#### Classe com método Main
+[RunnerData](./java-config/RunnerData.java)
 
+    import org.springframework.jdbc.core.JdbcTemplate;
+    import java.util.List;
+    import org.springframework.context.ApplicationContext;
+    import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+    public class RunnerData {
+        public static void main(String[] args) {
+            ClassPathXmlApplicationContext classPath = new ClassPathXmlApplicationContext("Springann/datasource/persistence.xml");
+            ApplicationContext app = classPath;   	
+            JdbcTemplate jdbc = app.getBean(JdbcTemplate.class);
+            List<Object> list = jdbc.queryForList("Select name from cliente", Object.class);    
+            System.out.println("\nLista de nomes:\n");
+            for(Object obj: list) {
+                System.out.println(obj);
+            }
+            classPath.close();
+        }
+    }
 
+#### Novo arquivo XML
+[Novo XML](./java-config/persistence.xml)
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <beans
+        xmlns="http://www.springframework.org/schema/beans"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"       
+        xmlns:context="http://www.springframework.org/schema/context"
+        
+        xsi:schemaLocation="http://www.springframework.org/schema/beans 
+                            http://www.springframework.org/schema/beans/spring-beans.xsd
+                            http://www.springframework.org/schema/context 
+                            http://www.springframework.org/schema/context/spring-context.xsd">                       
+    
+        
+        <context:component-scan base-package="Springann.datasource" />
+        <bean name="dao" class="org.springframework.jdbc.core.JdbcTemplate">
+            <property name="dataSource" ref="dataSource" />
+            <property name="lazyInit" value="false" />
+        </bean>          
+    </beans>
+
+#### Antigo Arquivo XML
+
+    <beans>
+        <bean name="conexao" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+            <property name="driverClassName" value="org.postgresql.Driver"/>
+            <property name="url" value="jdbc:postgresql://localhost:5432/postgres"/>
+            <property name="username" value="postgres"/>
+            <property name="password" value="123456"/>
+        </bean>
+        <bean name="dao" class="org.springframework.jdbc.core.JdbcTemplate" lazy-init="false">
+            <property name="dataSource" ref="conexao" />
+            <property name="lazyInit" value="false" />
+        </bean>
+    </beans>
+
+#### component-scan  
+Esse trecho `<context:component-scan base-package="Springann.datasource" />`corresponde a:
+
+    <bean name="conexao" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+            <property name="driverClassName" value="org.postgresql.Driver"/>
+            <property name="url" value="jdbc:postgresql://localhost:5432/postgres"/>
+            <property name="username" value="postgres"/>
+            <property name="password" value="123456"/>
+    </bean>
+
+No caso da configuração com o *component-scan* a configuração é feita dentro de uma classe java e essa referência aqui `<property name="dataSource" ref="dataSource" />`, no caso o *ref=* faz referência a esse método `public DriverManagerDataSource dataSource() throws SQLException`, no caso de uma configuração com o *component-scan*, o método faz a conexão e com o uso do `JdbcTemplate.class` é feito o acesso ao banco de dados, como visto nesse exemplo `List<Object> list = jdbc.queryForList("Select name from cliente", Object.class); `.
+
+#### Arquivo de configuração
+[Config](./java-config/Config.java)
+
+    import java.sql.SQLException;
+    import org.springframework.context.annotation.Bean;
+    import org.springframework.context.annotation.Configuration;
+    import org.springframework.jdbc.datasource.DriverManagerDataSource;
+
+    @Configuration
+    public class Config {
+    private static final String driver = "org.postgresql.Driver";
+    private static final String url= "jdbc:postgresql://localhost:5432/postgres";
+    private static final String user = "postgres";
+    private static final String pass = "123456";
+    private DriverManagerDataSource dmds = null;
+
+        @Bean
+        public DriverManagerDataSource dataSource() throws SQLException {
+            dmds = new DriverManagerDataSource();
+            dmds.setDriverClassName(Config.driver);
+            dmds.setUrl(Config.url);
+            dmds.setUsername(Config.user);
+            dmds.setPassword(Config.pass);
+            System.out.println("DriverManagerDataSource carregado com sucesso");		
+            return dmds;
+        }       
+    }
+
+#### Output exemplo
+
+    DriverManagerDataSource carregado com sucesso
+
+    Lista de nomes:
+
+    Beth Kohler
+    Blanche McCullough
+    Deshaun Crooks
+    Mrs. Noemie Haley
+    Mr. Makenzie Willms
+    Makayla Ondricka
+    Mrs. Michale Welch
+    Gerry Hilll
+    Miss Raina Berge
+    Mrs. Sincere Ruecker
+    Myrtis Cartwright Jr.
+    Carolanne Gislason V
+    Jerrod Ullrich
+    Chaim Grady
+    Ray Marvin DVM
+    Leonardo Goodwin I
+    Casper Paucek
+    Genoveva Marvin
+    Alena Schulist
+    Miracle Rau
+    Helene Wisozk
+    Teresa Davis
+    Miss Laura O'Reilly
+    Dr. Moriah Farrell
+    Tyra Hand
+    Micaela Haley
+    Zane Hills
+    Miss Kelly Metz
+    Bobby Wiza
+    Leonel Zieme
+    Travis Gutkowski
