@@ -5,6 +5,8 @@ Documentação: [Classe Assert](http://junit.sourceforge.net/javadoc/org/junit/A
 
 2.[Arrumando](#arrumando)
 
+3.[TDD](#tdd)
+
 ## Básico
 [Calculadora](Calculadora.java)
 
@@ -89,12 +91,12 @@ No caso o TDD consiste em programar o teste antes do código, de modo que o test
 ### BeanTeste.java
 
     import org.junit.Before;
-import org.junit.Test;
-import org.junit.Assert;
+    import org.junit.Test;
+    import org.junit.Assert;
 
-public class BeanTeste {
+    public class BeanTeste {
 
-	private Bean bean;
+	    private Bean bean;
 	
         @Before
         public void setUp() {
@@ -188,3 +190,116 @@ Verifica se o nome é muito curto, ou seja se o setter aceita menos de 4 caracte
         }
 
 Ou seja com o TDD você cria o teste e com base nesse teste você vai criando a classe, sempre sendo moldado pelo teste.
+
+## AssertJ
+### No Maven
+    <!-- https://mvnrepository.com/artifact/org.assertj/assertj-core -->
+    <dependency>
+        <groupId>org.assertj</groupId>
+        <artifactId>assertj-core</artifactId>
+        <version>3.19.0</version>
+        <scope>test</scope>
+    </dependency>
+
+### Exemplo
+[Exemplo](Exemplo.java)
+
+    public class Exemplo {
+        private int id;
+        private String value;
+        
+        public int getId() {
+            return this.id;
+        }
+        
+        public void setId(int id) {		
+            if(id < 1) throw new RuntimeException();
+            this.id = id;
+        }
+
+        public String getValue() {
+            return value;
+        }
+
+        public void setValue(String value) {
+            if(value == null) throw new NullPointerException();
+            if(value == "" || value.trim().length() == 0) throw new NullPointerException();
+            if(value.matches("\\d+")) throw new RuntimeException();
+            this.value = value;
+        }
+    }
+
+
+### Teste
+[ExemploTeste](ExemploTeste.java)
+
+    import org.junit.Before;
+    import org.junit.Test;
+
+    //Novidade
+    import org.assertj.core.api.Assertions;
+
+    public class ExemploTeste {
+        
+        private Exemplo exemplo;
+        @Before
+        public void init() {
+            this.exemplo = new Exemplo();
+        }
+        
+        @Test
+        public void validId() {
+            this.exemplo.setId(1);
+            Assertions.assertThat(this.exemplo.getId())
+            .isGreaterThan(0)
+            .isNotNull();
+        }
+        
+        @Test(expected = RuntimeException.class)
+        public void notNegativeId() {
+            this.exemplo.setId(-1);		
+        }
+        
+        @Test(expected = RuntimeException.class)
+        public void notZeroId() {
+            this.exemplo.setId(0);
+        }
+        
+        @Test
+        public void validValue() {
+            this.exemplo.setValue("abcd");
+            Assertions.assertThat(this.exemplo.getValue())
+            .hasSizeGreaterThan(3)
+            .isNotNull()
+            .isNotEmpty();		
+        }
+        
+        @Test(expected = NullPointerException.class)
+        public void notNullValue() {
+            this.exemplo.setValue(null);
+        }
+        
+        @Test(expected = NullPointerException.class)
+        public void notEmptyValue() {
+            this.exemplo.setValue("");
+        }
+        
+        @Test(expected = RuntimeException.class)
+        public void notDigitsValue() {
+            this.exemplo.setValue("12345");		
+        }
+    }
+
+Existe também o `Assertions` que permite fazer testes mais avançados, no caso o método `assertThat` permitem encadear métodos, segue a [Documentação](https://joel-costigliola.github.io/assertj/), para usar-lo, depois de implementado no arquivo *pom.xml* importa-se essa biblioteca `import org.assertj.core.api.Assertions;`.
+
+Testando com um valor válido
+
+     @Test
+        public void validId() {
+            this.exemplo.setId(1);
+            Assertions.assertThat(this.exemplo.getId())
+            .isGreaterThan(0)
+            .isNotNull();
+        }
+
+Se não der nenhum problema em inserir 1 como ID, o teste continua, com essa biblioteca você pode fazer testes mais avançados.
