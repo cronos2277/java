@@ -450,3 +450,119 @@ Nesse exemplo é verificado se foi executado nessa ordem o `setId` com o argumen
 `Mockito.times(N)` => Verifica se foi executado *N* vezes determindo método, nesse exemplo o `setValue` com o argumento sendo `"Exemplo"`. Se a quantidade de vezes for menor ou mais ao *N*, o teste reprova.
 
 `Mockito.never()` => Verifica se não foi executado, reprova caso seja executado o método uma ou mais vezes.
+
+## JUNIT 5
+[Arquivo Modelo](Classe.java)
+
+[JUnit Básico](JUNIT5B.java)
+
+[JUnit Avançado](JUNIT5A.java)
+### Exemplo Básico
+    
+    import org.junit.jupiter.api.Test;
+    import org.junit.jupiter.api.Assertions;
+
+    public class JUNIT5B {
+        private static Classe classe;
+
+        static {
+            classe = new Classe();
+        }
+        
+        @Test	
+        public void isNotZero() {
+            Assertions.assertThrows(IllegalArgumentException.class, () -> classe.setId(0));
+        }
+        
+        @Test	
+        public void isNotNegative() {
+            Assertions.assertThrows(IllegalArgumentException.class, () -> classe.setId(-1));
+        }
+        
+        @Test	
+        public void isNotEmptyOrNull() {
+            Assertions.assertThrows(IllegalArgumentException.class, () -> classe.setValue(""));
+            Assertions.assertThrows(IllegalArgumentException.class, () -> classe.setValue(null));
+        }	        
+    }
+
+Na Versão 5 do JUnit a origem tanto do assertions, assim como a anotação test devem vir de `import org.junit.jupiter.api`, é desse local que deve se fazer o import se quiser ter acesso aos recursos do JUnit 5, devido a isso se faz necessário usar também o *JDK8*, uma vez que se usa expressão lambda por exemplo. Nessa nova anotação `@TEST` não se passa a exception como parametro de *expected* e sim faz isso através desse método `Assertions.assertThrows`, aonde o primeiro argumento é a exceção que o método deve gerar ao tentar inserir aquele parametro e o segundo, uma expressão lambda de como deve ser executado o método para que se dispare a exceção no primeiro argumento, se for disparado a excepcion ao executar o método conforme informado na expressão lambda o erro é disparado.
+
+    Assertions.assertThrows(Exception.class, () -> Objeto.metodo("argumento para disparar"));
+
+### Exemplo mais avançado
+
+    import org.junit.jupiter.api.Test;
+    import org.junit.jupiter.api.TestMethodOrder;
+    import org.junit.jupiter.api.DisplayName;
+    import org.junit.jupiter.api.MethodOrderer;
+    import org.junit.jupiter.api.Assertions;
+    import org.junit.jupiter.api.BeforeEach;
+    import org.junit.jupiter.api.BeforeAll;
+    import org.junit.jupiter.api.AfterAll;
+    import org.junit.jupiter.api.AfterEach;
+    import org.junit.jupiter.api.Order;
+
+    @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+    public class JUNIT5A {
+
+        private static Classe classe;
+        
+        @BeforeAll
+        public static void beforeAll() {
+            classe = new Classe();
+        }
+        
+        @BeforeEach
+        public void beforeEach() {		
+            classe = new Classe();
+        }
+        
+        @AfterEach
+        public void afterEach() {
+            classe.kill();
+        }
+        
+        @AfterAll
+        public static void afterAll() {
+            classe.kill();
+        }
+        
+        @Test	
+        @Order(3)
+        @DisplayName("ID nao deve aceitar o valor zero")
+        public void isNotZero() {
+            Assertions.assertThrows(IllegalArgumentException.class, () -> classe.setId(0));
+        }
+        
+        @Test
+        @Order(2)
+        @DisplayName("ID nao deve aceitar valores negativos")
+        public void isNotNegative() {
+            Assertions.assertThrows(IllegalArgumentException.class, () -> classe.setId(-1));
+        }
+        
+        @Test
+        @Order(1)
+        @DisplayName("Value nao deve aceitar valores vazio ou nulo")
+        public void isNotEmptyOrNull() {
+            Assertions.assertThrows(IllegalArgumentException.class, () -> classe.setValue(""));
+            Assertions.assertThrows(IllegalArgumentException.class, () -> classe.setValue(null));
+        }	
+        
+    }
+
+`@TestMethodOrder(MethodOrderer.OrderAnnotation.class)` => A Anotação `TestMethodOrder` faz com que o teste execute em ordem de acordo com o algoritimo dessa classe `MethodOrderer.OrderAnnotation.class` que no caso é a ordem númerica, para mais detalhes: [Documentação](https://junit.org/junit5/docs/5.5.0/api/org/junit/jupiter/api/TestMethodOrder.html)
+
+#### `@Order(Integer)` 
+>O valor do pedido para o método anotado.Os métodos são ordenados com base na prioridade, onde um valor inferior tem maior prioridade do que um valor superior.Por exemplo, `Integer.MAX_VALUE` tem a prioridade mais baixa. [Documentação](https://junit.org/junit5/docs/5.4.0-M1/api/org/junit/jupiter/api/Order.html)
+
+`@BeforeAll` => Executa o método antes de todos os teste. *Esse método deve ser void e estático*.
+
+`@AfterAll` => Executa o método depois de todos teste. *Esse método deve ser void e estático*.
+
+`@BeforeEach` => Executa antes de executar cada teste. *Esse método deve ser void e de instância*.
+
+`@AfterAll` => Executa após cada teste. *Esse Método deve ser void e de instância*.
+
+`@DisplayName` => Faz com que o *JUnit* exiba esse teste na barra de ferramenta o valor passado como argumento, ao invés do nome do método.
