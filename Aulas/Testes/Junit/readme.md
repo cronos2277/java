@@ -566,3 +566,41 @@ Na Versão 5 do JUnit a origem tanto do assertions, assim como a anotação test
 `@AfterAll` => Executa após cada teste. *Esse Método deve ser void e de instância*.
 
 `@DisplayName` => Faz com que o *JUnit* exiba esse teste na barra de ferramenta o valor passado como argumento, ao invés do nome do método.
+
+### Mockito
+Para funcionar com as novas funcionalidades do JUnit 5, precisa adicionar uma nova biblioteca, ou seja mais dependencias ao pom, no caso o **mockito-junit-jupiter**.
+
+    <dependency>
+        <groupId>org.mockito</groupId>
+        <artifactId>mockito-junit-jupiter</artifactId>
+        <version>2.23.0</version>
+        <scope>test</scope>
+    </dependency>
+
+#### Classe
+
+    import org.junit.jupiter.api.DisplayName;
+    import org.junit.jupiter.api.Test;
+    import org.junit.jupiter.api.extension.ExtendWith;
+    import org.mockito.junit.jupiter.MockitoExtension;
+    import org.mockito.Mock;
+    import org.mockito.Mockito;
+
+    @ExtendWith(MockitoExtension.class)
+    public class JUNIT5C {
+
+        @Mock
+        private Classe classe;	
+        
+        @Test
+        @DisplayName("Verificando setId e setValue")
+        public void teste() {
+            this.classe.setId(1);
+            this.classe.setValue("123");
+            Mockito.verify(classe).setId(1);
+            Mockito.verify(classe).setValue("123");
+        }
+        
+    }
+
+A diferença está aqui `@ExtendWith(MockitoExtension.class)` com `@ExtendWith` que vem de `import org.junit.jupiter.api.extension.ExtendWith;` e `MockitoExtension.class` que vem de `import org.mockito.junit.jupiter.MockitoExtension;`.
